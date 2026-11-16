@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="PIPI, el koala que ayuda a los niños a aprender a leer y a dar sus primeras clases de inglés." />
+  <meta name="theme-color" content="#7ec8e3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="PIPI" />
+  <title>PIPI · Aprende jugando</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/koala.jpg" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ================= INICIO ================= -->
+    <section id="screen-home" class="screen is-active" aria-label="Inicio">
+      <header class="topbar">
+        <button id="sound-toggle" class="pill-btn" aria-label="Activar o silenciar sonido">🔊</button>
+        <button class="pill-btn pill-btn--stars" data-go="rewards" aria-label="Ver mis estrellas">
+          ⭐ <span id="home-stars">0</span>
+        </button>
+      </header>
+
+      <div class="home-hero">
+        <button id="koala-home" class="koala-holder" aria-label="Saludar a PIPI"></button>
+        <div class="speech" id="speech" aria-live="polite">
+          <p id="speech-text">¡Hola! Soy PIPI 🐨</p>
+        </div>
+      </div>
+
+      <div class="home-actions">
+        <button class="big-btn big-btn--read" data-go="menu" data-module="lectura">
+          <span class="big-btn__emoji">📖</span>
+          <span class="big-btn__text">Aprender a leer</span>
+        </button>
+        <button class="big-btn big-btn--english" data-go="menu" data-module="ingles">
+          <span class="big-btn__emoji">🌎</span>
+          <span class="big-btn__text">Inglés</span>
+        </button>
+      </div>
+
+      <button class="ghost-btn" data-go="rewards">⭐ Mis estrellas</button>
+    </section>
+
+    <!-- ================= MENÚ DE CATEGORÍAS ================= -->
+    <section id="screen-menu" class="screen" aria-label="Menú de lecciones">
+      <header class="screen-head">
+        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
+        <h2 id="menu-title">Elige</h2>
+        <span class="head-stars">⭐ <span id="menu-stars">0</span></span>
+      </header>
+      <p id="menu-subtitle" class="menu-subtitle"></p>
+      <div id="menu-grid" class="menu-grid"></div>
+    </section>
+
+    <!-- ================= ACTIVIDAD ================= -->
+    <section id="screen-activity" class="screen" aria-label="Lección">
+      <header class="screen-head">
+        <button class="icon-btn" data-back aria-label="Volver al menú">⬅</button>
+        <h2 id="activity-title">Letras</h2>
+        <span id="activity-progress" class="progress-text">1 / 1</span>
+      </header>
+
+      <div class="activity-stage" id="activity-stage"></div>
+
+      <div class="activity-controls">
+        <button id="btn-listen" class="listen-btn">🔊 Escuchar</button>
+        <div class="activity-nav">
+          <button class="icon-btn round" data-nav="prev" aria-label="Anterior">◀</button>
+          <button id="btn-star" class="star-btn">⭐ ¡Lo logré!</button>
+          <button class="icon-btn round" data-nav="next" aria-label="Siguiente">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RECOMPENSAS ================= -->
+    <section id="screen-rewards" class="screen" aria-label="Mis estrellas">
+      <header class="screen-head">
+        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
+        <h2>Mis estrellas</h2>
+        <span></span>
+      </header>
+
+      <div class="rewards-hero">
+        <div class="rewards-count"><span id="rewards-stars">0</span> ⭐</div>
+        <p class="rewards-msg" id="rewards-msg">¡Sigue jugando para ganar estrellas!</p>
+      </div>
+
+      <div id="stickers" class="stickers"></div>
+
+      <button class="ghost-btn ghost-btn--danger" id="reset-btn">Empezar de nuevo</button>
+    </section>
+
+  </div>
+
+  <script src="js/lessons.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "PIPI · Aprende jugando",
+  "short_name": "PIPI",
+  "description": "PIPI, el koala que ayuda a los niños a aprender a leer y sus primeras palabras en inglés.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#dff4ff",
+  "theme_color": "#7ec8e3",
+  "lang": "es",
+  "categories": ["education", "kids", "games"],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
