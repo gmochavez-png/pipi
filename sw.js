@@ -3,7 +3,7 @@
    Guarda la app en el teléfono para que funcione sin conexión.
    ========================================================= */
 
-var CACHE = "pipi-v7";
+var CACHE = "pipi-v9";
 
 var ASSETS = [
   "./",
@@ -12,6 +12,7 @@ var ASSETS = [
   "./css/styles.css",
   "./js/lessons.js",
   "./js/app.js",
+  "./js/chat.js",
   "./js/pipi3d.js",
   "./js/vendor/three.min.js",
   "./assets/koala.jpg",

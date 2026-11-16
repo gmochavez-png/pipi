@@ -38,6 +38,13 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - Al abrir la app se escribe el **nombre** de la niña; PIPI lo usa para saludar y felicitar.
 - El botón **⚙️ Ajustes** permite cambiar el nombre, la **frecuencia de expresiones** (pocas / normal / muchas) y el **color del pelaje** de PIPI.
 
+### 💬 Chat con PIPI
+- PIPI conversa con **respuestas escolares curadas** y busca en **Vikidia / Wikipedia**.
+- Juegos: chistes, adivinanzas, sumas, cuentos y "veo veo".
+- **Funciona sin clave** con el cerebro seguro (curado + Wikipedia + juegos).
+- **IA en la nube opcional:** en el chat toca **🔒**, PIN **1234**, y pega una **API key gratis de Google Gemini** (aistudio.google.com/app/apikey). Se guarda solo en el teléfono.
+- Incluye filtros de seguridad y modo padres.
+
 ### 🔊 Voz (ElevenLabs)
 - Los 136 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
   - Español: voz **Liz** (dulce y cálida).
@@ -126,6 +133,7 @@ pipi-app/
 ├─ css/styles.css      → diseño infantil
 ├─ js/lessons.js       → contenido educativo (editable)
 ├─ js/app.js           → lógica: navegación, voz, estrellas
+├─ js/chat.js          → chat seguro, Wikipedia/Vikidia y juegos
 ├─ js/pipi3d.js        → koala 3D (Three.js) y expresiones
 ├─ js/vendor/three.min.js → librería 3D (local, sin conexión)
 ├─ tools/              → scripts para regenerar los audios con ElevenLabs

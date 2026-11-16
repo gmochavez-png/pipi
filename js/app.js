@@ -272,6 +272,8 @@
       else if (name === "settings") { pipi3d.attach($("#koala-settings")); pipi3d.setExpression("idle"); }
       else pipi3d.hide();
     }
+
+    if (name === "chat" && window.PipiChat) window.PipiChat.enter();
   }
 
   function goHome() { show("home"); }
@@ -736,6 +738,20 @@
     renderRewards();
     populateSettings();
     bind();
+
+    window.PipiApp = {
+      isMuted: function () { return state.muted; },
+      toggleMute: function () {
+        state.muted = !state.muted;
+        saveState();
+        updateSoundBtn();
+        if (state.muted) stopAll();
+        return state.muted;
+      },
+      getName: function () { return state.name || ""; },
+      showToast: showToast
+    };
+    if (window.PipiChat) window.PipiChat.init();
 
     // Registrar service worker solo si se sirve por http(s)
     if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
