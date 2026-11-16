@@ -543,10 +543,68 @@
     });
   }
 
+  function initMic() {
+    var btn = $("#chat-mic");
+    if (!btn) return;
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { btn.hidden = true; return; }
+
+    var rec = new SR();
+    rec.lang = "es-MX";
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    rec.continuous = false;
+    var listening = false;
+    var input = $("#chat-input");
+
+    function setListening(on) {
+      listening = on;
+      btn.classList.toggle("is-listening", on);
+      btn.textContent = on ? "⏹️" : "🎤";
+      btn.setAttribute("aria-label", on ? "Detener micrófono" : "Hablar por micrófono");
+      if (input) input.placeholder = on ? "Escuchando..." : "Escribe tu pregunta...";
+    }
+
+    rec.onstart = function () { setListening(true); };
+    rec.onend = function () { setListening(false); };
+    rec.onerror = function (e) {
+      setListening(false);
+      var err = e && e.error;
+      if (err === "not-allowed" || err === "service-not-allowed") {
+        respond("No tengo permiso para el micrófono. Actívalo en el navegador. 🎤", false);
+      } else if (err === "no-speech") {
+        respond("No te escuché. Toca 🎤 y habla otra vez.", false);
+      } else if (err !== "aborted") {
+        respond("No pude escuchar. Intenta otra vez. 🎤", false);
+      }
+    };
+    rec.onresult = function (e) {
+      var text = "";
+      try { text = e.results[0][0].transcript || ""; } catch (err) {}
+      text = text.trim();
+      if (!text) return;
+      if (input) input.value = "";
+      send(text);
+    };
+
+    btn.addEventListener("click", function () {
+      if (listening) {
+        try { rec.stop(); } catch (e) {}
+        return;
+      }
+      try {
+        rec.start();
+      } catch (e) {
+        respond("No pude abrir el micrófono. Intenta otra vez. 🎤", false);
+      }
+    });
+  }
+
   function init() {
     loadSettings();
     renderQuick();
     bind();
+    initMic();
     updateMuteBtn();
   }
 

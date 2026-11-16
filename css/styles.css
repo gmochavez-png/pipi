@@ -245,6 +245,30 @@ body::before {
 }
 .chat-send:active { transform: scale(0.94); }
 
+.chat-mic {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #cfe4f5;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  font-size: 1.15rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.chat-mic.is-listening {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+  color: #fff;
+  animation: mic-pulse 1s infinite;
+}
+.chat-mic[hidden] { display: none; }
+@keyframes mic-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
 .parent-panel {
   position: absolute;
   inset: 0;

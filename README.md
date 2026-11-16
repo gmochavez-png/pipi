@@ -42,6 +42,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - PIPI conversa con **respuestas escolares curadas** y busca en **Vikidia / Wikipedia**.
 - Juegos: chistes, adivinanzas, sumas, cuentos y "veo veo".
 - **Funciona sin clave** con el cerebro seguro (curado + Wikipedia + juegos).
+- 🎤 **Micrófono:** toca 🎤 y habla; el navegador convierte tu voz en texto y PIPI responde. Solo escucha cuando tocas el botón.
 - **IA en la nube opcional:** en el chat toca **🔒**, PIN **1234**, y pega una **API key gratis de Google Gemini** (aistudio.google.com/app/apikey). Se guarda solo en el teléfono.
 - Incluye filtros de seguridad y modo padres.
 
