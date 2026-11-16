@@ -221,7 +221,7 @@
     if (active) active.scrollTop = 0;
 
     if (pipi3d) {
-      if (name === "home") pipi3d.attach($("#koala-home"));
+      if (name === "home") { pipi3d.attach($("#koala-home")); pipi3d.setExpression("idle"); }
       else if (name === "activity") pipi3d.attach($("#koala-mini"));
       else pipi3d.hide();
     }
@@ -329,15 +329,13 @@
 
     $("#activity-stage").innerHTML = buildCard(cat.kind, item, currentModule);
 
-    if (currentModule === "ingles") {
-      autoSpeak(cat.kind, item);
-    } else {
-      var card = $("#activity-stage .card");
-      var hint = document.createElement("div");
-      hint.className = "card__hint";
-      hint.textContent = "Primero inténtalo · toca 🔊 para escuchar";
-      if (card) card.appendChild(hint);
-    }
+    var card = $("#activity-stage .card");
+    var hint = document.createElement("div");
+    hint.className = "card__hint";
+    hint.textContent = "Primero inténtalo · toca 🔊 para escuchar";
+    if (card) card.appendChild(hint);
+
+    if (pipi3d) pipi3d.setExpression("thinking", 120000);
   }
 
   function goPrev() {
@@ -372,7 +370,8 @@
       burstStars();
     }
 
-    playAudio(audioBase + "ui/muy-bien.mp3", "¡Muy bien!", "es");
+    var praise = randomPraise();
+    playAudio(audioBase + "ui/" + praise.slug + ".mp3", praise.text, "es");
     if (pipi3d) pipi3d.celebrate();
 
     setTimeout(function () {
@@ -470,6 +469,23 @@
     { text: "Tócame y te hablo 🐨", slug: "tocame" }
   ];
 
+  var PRAISE = [
+    { slug: "feliz-1", text: "¡Muy bien!" },
+    { slug: "feliz-2", text: "¡Excelente!" },
+    { slug: "feliz-3", text: "¡Lo hiciste genial!" },
+    { slug: "feliz-4", text: "¡Qué bien lees!" },
+    { slug: "feliz-5", text: "¡Bravo!" },
+    { slug: "feliz-6", text: "¡Eres una campeona!" },
+    { slug: "feliz-7", text: "¡Eso es!" },
+    { slug: "feliz-8", text: "¡Genial!" },
+    { slug: "feliz-9", text: "¡Pipi está muy feliz!" },
+    { slug: "feliz-10", text: "¡Sigue así!" }
+  ];
+
+  function randomPraise() {
+    return PRAISE[Math.floor(Math.random() * PRAISE.length)];
+  }
+
   function randomPhrase() {
     return PHRASES[Math.floor(Math.random() * PHRASES.length)];
   }
@@ -477,6 +493,8 @@
   function greet() {
     var p = randomPhrase();
     $("#speech-text").textContent = p.text;
+    var moods = ["happy", "thinking", "surprised", "sleepy"];
+    if (pipi3d) pipi3d.setExpression(moods[Math.floor(Math.random() * moods.length)], 1800);
     playAudio(audioBase + "ui/" + p.slug + ".mp3", p.text, "es");
   }
 

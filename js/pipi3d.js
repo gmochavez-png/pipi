@@ -1,7 +1,7 @@
 /* =========================================================
    PIPI · Personaje 3D con Three.js
-   Koala construido con primitivas + expresiones:
-   idle, blink, talking, happy, surprised.
+   Koala con expresiones: idle, blink, talking, happy,
+   surprised, sad, thinking, sleepy.
    ========================================================= */
 
 (function () {
@@ -23,7 +23,7 @@
 
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-    camera.position.set(0, 0.28, 6.9);
+    camera.position.set(0, 0.3, 6.0);
     camera.lookAt(0, 0.02, 0);
 
     /* ---------- Luces ---------- */
@@ -51,7 +51,7 @@
     scene.add(rim);
 
     /* ---------- Materiales ---------- */
-    var fur = new THREE.MeshStandardMaterial({ color: 0x939ba8, roughness: 0.95, metalness: 0 });
+    var fur = new THREE.MeshStandardMaterial({ color: 0x8b93a2, roughness: 0.95, metalness: 0 });
     var white = new THREE.MeshStandardMaterial({ color: 0xfbfbf8, roughness: 0.9 });
     var black = new THREE.MeshStandardMaterial({ color: 0x20242b, roughness: 0.45 });
     var pink = new THREE.MeshStandardMaterial({ color: 0xf6a8c0, roughness: 1, transparent: true, opacity: 0.9 });
@@ -134,7 +134,7 @@
     var cheekR = makeCheek(1);
     koala.add(cheekL, cheekR);
 
-    /* ---------- Manitas sobre la barriga ---------- */
+    /* ---------- Manitas ---------- */
     function makePaw(side) {
       var p = new THREE.Mesh(new THREE.SphereGeometry(0.16, 24, 24), fur);
       p.scale.set(1, 0.72, 0.45);
@@ -150,29 +150,64 @@
     smile.position.set(0, -0.21, 1.0);
     koala.add(smile);
 
+    var frown = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.032, 10, 28, Math.PI), black);
+    frown.position.set(0, -0.3, 1.0);
+    frown.visible = false;
+    koala.add(frown);
+
     var mouthOpen = new THREE.Mesh(new THREE.SphereGeometry(0.15, 24, 24), mouthMat);
     mouthOpen.scale.set(1, 0.2, 0.55);
     mouthOpen.position.set(0, -0.23, 1.01);
     mouthOpen.visible = false;
     koala.add(mouthOpen);
 
-    /* ---------- Sombra suave ---------- */
+    /* ---------- Burbujas ? y Zzz ---------- */
+    function makeTextSprite(text, color) {
+      var canvas = document.createElement("canvas");
+      canvas.width = 128;
+      canvas.height = 128;
+      var ctx = canvas.getContext("2d");
+      ctx.font = "bold 92px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = color;
+      ctx.fillText(text, 64, 64);
+      var tex = new THREE.CanvasTexture(canvas);
+      var mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false });
+      var sp = new THREE.Sprite(mat);
+      sp.scale.set(0.55, 0.55, 0.55);
+      return sp;
+    }
+    var question = makeTextSprite("?", "#ffb703");
+    question.position.set(0.88, 0.95, 1.15);
+    question.visible = false;
+    koala.add(question);
+
+    var zzz = makeTextSprite("Zzz", "#6b7a8f");
+    zzz.position.set(0.88, 0.95, 1.15);
+    zzz.visible = false;
+    koala.add(zzz);
+
+    /* ---------- Sombra ---------- */
     var floor = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.ShadowMaterial({ opacity: 0.12 }));
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = -1.2;
     floor.receiveShadow = true;
     scene.add(floor);
 
-    /* ---------- Estado y expresiones ---------- */
+    /* ---------- Estado ---------- */
     var state = {
       visible: true,
       talking: false,
       expression: "idle",
       eyeY: 1,
+      eyeShift: 0,
       mouth: 0,
       headTilt: 0,
       cheek: 1,
       happyUntil: 0,
+      moodUntil: 0,
+      nextMood: performance.now() + 12000,
       nextBlink: 2200 + Math.random() * 3000,
       blinkUntil: 0
     };
@@ -181,9 +216,17 @@
 
     function setExpression(name, duration) {
       state.expression = name;
-      if (name === "happy") {
-        state.happyUntil = performance.now() + (duration || 1300);
+      var now = performance.now();
+      var until = now + (duration || 2200);
+      if (name === "idle") {
+        state.moodUntil = 0;
+        state.nextMood = now + 9000 + Math.random() * 6000;
+      } else if (name === "happy") {
+        state.happyUntil = until;
+      } else {
+        state.moodUntil = until;
       }
+      state.nextMood = Math.max(state.nextMood, until + 12000);
     }
 
     function talk(on) {
@@ -223,39 +266,62 @@
       var t = clock.getElapsedTime();
       var now = performance.now();
 
+      /* parpadeo */
       if (now > state.nextBlink && now > state.blinkUntil) {
         state.blinkUntil = now + 120;
         state.nextBlink = now + 2200 + Math.random() * 3500;
       }
       var blinking = now < state.blinkUntil;
 
-      var targetEye = 1, targetMouth = 0, targetTilt = 0, targetCheek = 1;
+      /* estado de animo automatico cuando esta idle */
+      if (!state.talking && state.expression === "idle" && now > state.nextMood) {
+        var moods = ["thinking", "sleepy", "sad", "happy"];
+        var pick = moods[Math.floor(Math.random() * moods.length)];
+        setExpression(pick, 2300);
+      }
+
+      /* objetivos */
+      var targetEye = 1, targetMouth = 0, targetTilt = 0, targetCheek = 1, targetShift = 0;
       if (state.talking) {
         targetEye = 1; targetMouth = 0.55; targetTilt = 0.03; targetCheek = 1.05;
       } else if (state.expression === "happy") {
         targetEye = 0.42; targetMouth = 0.14; targetTilt = 0.06; targetCheek = 1.14;
       } else if (state.expression === "surprised") {
         targetEye = 1.25; targetMouth = 0.7; targetTilt = -0.05; targetCheek = 1;
+      } else if (state.expression === "sad") {
+        targetEye = 0.62; targetMouth = 0; targetTilt = -0.1; targetCheek = 0.9; targetShift = -0.025;
+      } else if (state.expression === "thinking") {
+        targetEye = 0.92; targetMouth = 0; targetTilt = 0.08; targetCheek = 1; targetShift = 0.035;
+      } else if (state.expression === "sleepy") {
+        targetEye = 0.14; targetMouth = 0; targetTilt = -0.12; targetCheek = 1; targetShift = -0.01;
       } else {
         targetEye = 1; targetMouth = 0; targetTilt = 0; targetCheek = 1;
       }
       if (blinking) targetEye = 0.1;
 
       state.eyeY += (targetEye - state.eyeY) * 0.25;
+      state.eyeShift += (targetShift - state.eyeShift) * 0.15;
       state.mouth += (targetMouth - state.mouth) * 0.25;
       state.headTilt += (targetTilt - state.headTilt) * 0.12;
       state.cheek += (targetCheek - state.cheek) * 0.15;
 
       eyeL.scale.y = state.eyeY;
       eyeR.scale.y = state.eyeY;
+      eyeL.position.y = 0.2 + state.eyeShift;
+      eyeR.position.y = 0.2 + state.eyeShift;
 
       cheekL.scale.set(state.cheek, state.cheek * 0.78, 0.3);
       cheekR.scale.set(state.cheek, state.cheek * 0.78, 0.3);
 
+      /* bocas */
       var talkingNow = state.talking;
       var surprised = state.expression === "surprised";
-      smile.visible = !talkingNow && !surprised;
+      var sad = state.expression === "sad";
+
+      smile.visible = !talkingNow && !surprised && !sad;
+      frown.visible = sad && !talkingNow;
       mouthOpen.visible = talkingNow || surprised;
+
       if (talkingNow) {
         var m = 0.35 + Math.sin(t * 22) * 0.35;
         mouthOpen.scale.y = Math.max(0.12, m);
@@ -263,16 +329,36 @@
         mouthOpen.scale.y = surprised ? state.mouth : 0.2;
       }
 
+      /* burbujas */
+      question.visible = state.expression === "thinking";
+      zzz.visible = state.expression === "sleepy";
+      if (question.visible) {
+        question.position.y = 0.95 + Math.sin(t * 3) * 0.05;
+        question.material.rotation = Math.sin(t * 2) * 0.1;
+      }
+      if (zzz.visible) {
+        zzz.position.y = 0.95 + Math.sin(t * 1.6) * 0.07;
+        zzz.material.opacity = 0.6 + Math.sin(t * 2) * 0.3;
+      }
+
+      /* movimiento */
       koala.rotation.z = state.headTilt;
       koala.rotation.y = Math.sin(t * 0.55) * 0.08;
       var bob = Math.sin(t * 1.7) * 0.03;
       if (state.expression === "happy") bob += Math.abs(Math.sin(t * 9)) * 0.045;
+      if (state.expression === "sleepy") bob = Math.sin(t * 0.9) * 0.02;
       koala.position.y = bob;
 
       earL.rotation.z = -0.16 + Math.sin(t * 2.1) * 0.06;
       earR.rotation.z = 0.16 - Math.sin(t * 2.1) * 0.06;
 
+      /* fin de expresion */
       if (state.expression === "happy" && now > state.happyUntil) {
+        state.expression = "idle";
+      } else if (
+        (state.expression === "thinking" || state.expression === "sleepy" || state.expression === "sad" || state.expression === "surprised") &&
+        now > state.moodUntil
+      ) {
         state.expression = "idle";
       }
     }
