@@ -207,7 +207,8 @@
       cheek: 1,
       happyUntil: 0,
       moodUntil: 0,
-      nextMood: performance.now() + 12000,
+      moodInterval: 14000,
+      nextMood: performance.now() + 14000,
       nextBlink: 2200 + Math.random() * 3000,
       blinkUntil: 0
     };
@@ -220,13 +221,13 @@
       var until = now + (duration || 2200);
       if (name === "idle") {
         state.moodUntil = 0;
-        state.nextMood = now + 9000 + Math.random() * 6000;
+        state.nextMood = now + state.moodInterval * 0.6 + Math.random() * state.moodInterval * 0.4;
       } else if (name === "happy") {
         state.happyUntil = until;
       } else {
         state.moodUntil = until;
       }
-      state.nextMood = Math.max(state.nextMood, until + 12000);
+      state.nextMood = Math.max(state.nextMood, until + state.moodInterval);
     }
 
     function talk(on) {
@@ -236,6 +237,19 @@
     function celebrate() {
       setExpression("happy", 1500);
       state.mouth = 0;
+    }
+
+    function setMoodInterval(ms) {
+      state.moodInterval = Math.max(4000, ms || 14000);
+      state.nextMood = performance.now() + state.moodInterval;
+    }
+
+    function setFurColor(color) {
+      try { fur.color.set(color); } catch (e) {}
+    }
+
+    function getFurColor() {
+      return "#" + fur.color.getHexString();
     }
 
     function resize() {
@@ -381,6 +395,9 @@
       talk: talk,
       setExpression: setExpression,
       celebrate: celebrate,
+      setMoodInterval: setMoodInterval,
+      setFurColor: setFurColor,
+      getFurColor: getFurColor,
       renderer: renderer,
       scene: scene,
       camera: camera

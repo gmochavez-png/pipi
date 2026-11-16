@@ -3,7 +3,7 @@
    Guarda la app en el teléfono para que funcione sin conexión.
    ========================================================= */
 
-var CACHE = "pipi-v5";
+var CACHE = "pipi-v6";
 
 var ASSETS = [
   "./",
@@ -37,7 +37,12 @@ var ASSETS = [
   "./assets/audio/ui/feliz-7.mp3",
   "./assets/audio/ui/feliz-8.mp3",
   "./assets/audio/ui/feliz-9.mp3",
-  "./assets/audio/ui/feliz-10.mp3"
+  "./assets/audio/ui/feliz-10.mp3",
+  "./assets/audio/ui/en-1.mp3",
+  "./assets/audio/ui/en-2.mp3",
+  "./assets/audio/ui/en-3.mp3",
+  "./assets/audio/ui/en-4.mp3",
+  "./assets/audio/ui/en-5.mp3"
 ];
 
 self.addEventListener("install", function (event) {

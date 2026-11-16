@@ -18,10 +18,24 @@
 <body>
   <div id="app">
 
+    <!-- ================= BIENVENIDA ================= -->
+    <section id="screen-welcome" class="screen is-active" aria-label="Bienvenida">
+      <div class="welcome-hero">
+        <div id="koala-welcome" class="koala-welcome" aria-hidden="true"></div>
+        <h1 id="welcome-title" class="welcome-title">¡Hola! Soy PIPI 🐨</h1>
+        <p class="welcome-sub">¿Cómo te llamas?</p>
+        <input id="name-input" class="name-input" type="text" maxlength="20" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" />
+        <button id="start-btn" class="big-btn big-btn--read welcome-btn">¡Empezar!</button>
+      </div>
+    </section>
+
     <!-- ================= INICIO ================= -->
-    <section id="screen-home" class="screen is-active" aria-label="Inicio">
+    <section id="screen-home" class="screen" aria-label="Inicio">
       <header class="topbar">
-        <button id="sound-toggle" class="pill-btn" aria-label="Activar o silenciar sonido">🔊</button>
+        <div class="topbar-group">
+          <button id="sound-toggle" class="pill-btn" aria-label="Activar o silenciar sonido">🔊</button>
+          <button id="settings-btn" class="pill-btn" aria-label="Ajustes">⚙️</button>
+        </div>
         <button class="pill-btn pill-btn--stars" data-go="rewards" aria-label="Ver mis estrellas">
           ⭐ <span id="home-stars">0</span>
         </button>
@@ -79,6 +93,48 @@
       </div>
 
       <div id="koala-mini" class="koala-mini" aria-hidden="true"></div>
+    </section>
+
+    <!-- ================= AJUSTES ================= -->
+    <section id="screen-settings" class="screen" aria-label="Ajustes">
+      <header class="screen-head">
+        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
+        <h2>Ajustes</h2>
+        <span></span>
+      </header>
+
+      <div id="koala-settings" class="koala-settings" aria-hidden="true"></div>
+
+      <div class="settings-block">
+        <label class="settings-label" for="settings-name">Nombre</label>
+        <div class="settings-row">
+          <input id="settings-name" class="name-input" type="text" maxlength="20" autocomplete="off" autocapitalize="words" />
+          <button id="settings-save-name" class="mini-btn">Guardar</button>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <span class="settings-label">Expresiones de PIPI</span>
+        <div class="chips" id="rate-chips">
+          <button class="chip" data-rate="low">Pocas</button>
+          <button class="chip" data-rate="normal">Normal</button>
+          <button class="chip" data-rate="high">Muchas</button>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <span class="settings-label">Color de PIPI</span>
+        <div class="swatches" id="color-swatches">
+          <button class="swatch" data-color="#8b93a2" style="--c:#8b93a2" aria-label="Gris"></button>
+          <button class="swatch" data-color="#a8897a" style="--c:#a8897a" aria-label="Marrón"></button>
+          <button class="swatch" data-color="#d8d8dc" style="--c:#d8d8dc" aria-label="Blanco"></button>
+          <button class="swatch" data-color="#e7a6bd" style="--c:#e7a6bd" aria-label="Rosa"></button>
+          <button class="swatch" data-color="#8fb8de" style="--c:#8fb8de" aria-label="Azul"></button>
+          <button class="swatch" data-color="#9fd39a" style="--c:#9fd39a" aria-label="Verde"></button>
+        </div>
+      </div>
+
+      <button class="ghost-btn" id="settings-test">Probar expresión</button>
     </section>
 
     <!-- ================= RECOMPENSAS ================= -->

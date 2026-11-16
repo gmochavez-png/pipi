@@ -18,7 +18,10 @@
 
   var state = {
     done: {},      // {"lectura:letras:0": true, ...}
-    muted: false
+    muted: false,
+    name: "",
+    expressionRate: "normal",
+    furColor: "#8b93a2"
   };
 
   /* ---------------- Persistencia ---------------- */
@@ -30,6 +33,9 @@
         if (saved && typeof saved === "object") {
           state.done = saved.done && typeof saved.done === "object" ? saved.done : {};
           state.muted = !!saved.muted;
+          state.name = typeof saved.name === "string" ? saved.name.slice(0, 20) : "";
+          state.expressionRate = saved.expressionRate === "low" || saved.expressionRate === "high" ? saved.expressionRate : "normal";
+          state.furColor = typeof saved.furColor === "string" && /^#[0-9a-fA-F]{6}$/.test(saved.furColor) ? saved.furColor : "#8b93a2";
         }
       }
     } catch (e) { /* almacenamiento no disponible: seguimos en memoria */ }
@@ -37,11 +43,21 @@
 
   function saveState() {
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify({ done: state.done, muted: state.muted }));
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        done: state.done,
+        muted: state.muted,
+        name: state.name,
+        expressionRate: state.expressionRate,
+        furColor: state.furColor
+      }));
     } catch (e) { /* modo privado: no pasa nada */ }
   }
 
   function starCount() { return Object.keys(state.done).length; }
+
+  var RATE_MS = { low: 30000, normal: 14000, high: 7000 };
+  function rateMs() { return RATE_MS[state.expressionRate] || RATE_MS.normal; }
+  function childName() { return (state.name || "").trim() || "amiga"; }
 
   /* ---------------- Voz ---------------- */
   var voices = [];
@@ -145,6 +161,35 @@
     }
   }
 
+  /* Dice una frase personalizada (con el nombre). Si el telefono no tiene
+     voz, reproduce el audio grabado como respaldo. */
+  function speakPersonalized(text, fallbackUrl, fallbackText, lang) {
+    if (state.muted) return;
+    stopAll();
+    var lg = lang === "en" ? "en" : "es";
+    var voice = speechAvailable ? pickVoice(lg) : null;
+    if (!speechAvailable || !voice) {
+      playAudio(fallbackUrl, fallbackText, lg);
+      return;
+    }
+    try {
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = lg === "en" ? "en-US" : "es-MX";
+      u.rate = 0.84;
+      u.pitch = 1.08;
+      u.volume = 1;
+      u.voice = voice;
+      u.onstart = function () { setTalking(true); };
+      u.onend = function () { setTalking(false); };
+      u.onerror = function () { setTalking(false); playAudio(fallbackUrl, fallbackText, lg); };
+      window.speechSynthesis.cancel();
+      if (window.speechSynthesis.resume) { try { window.speechSynthesis.resume(); } catch (e) {} }
+      window.speechSynthesis.speak(u);
+    } catch (e) {
+      playAudio(fallbackUrl, fallbackText, lg);
+    }
+  }
+
   /* ---------------- Personaje koala (SVG) ---------------- */
   function koalaSVG() {
     return (
@@ -222,7 +267,9 @@
 
     if (pipi3d) {
       if (name === "home") { pipi3d.attach($("#koala-home")); pipi3d.setExpression("idle"); }
+      else if (name === "welcome") { pipi3d.attach($("#koala-welcome")); pipi3d.setExpression("happy", 4000); }
       else if (name === "activity") pipi3d.attach($("#koala-mini"));
+      else if (name === "settings") { pipi3d.attach($("#koala-settings")); pipi3d.setExpression("idle"); }
       else pipi3d.hide();
     }
   }
@@ -350,7 +397,8 @@
 
   function finishCategory() {
     updateStars();
-    playAudio(audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es");
+    var finishText = "¡Muy bien, " + childName() + "! Terminaste.";
+    speakPersonalized(finishText, audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es");
     if (pipi3d) pipi3d.celebrate();
     showToast("¡Muy bien! Terminaste esta lección 🎉");
     setTimeout(function () { show("menu"); }, 1500);
@@ -371,7 +419,9 @@
     }
 
     var praise = randomPraise();
-    playAudio(audioBase + "ui/" + praise.slug + ".mp3", praise.text, "es");
+    var praiseText = praise.text.replace(/{name}/g, childName());
+    speakPersonalized(praiseText, audioBase + "ui/" + praise.slug + ".mp3", praise.audioText, praise.lang);
+    showToast(praiseText + " ⭐");
     if (pipi3d) pipi3d.celebrate();
 
     setTimeout(function () {
@@ -460,26 +510,31 @@
 
   /* ---------------- Saludo del koala ---------------- */
   var PHRASES = [
-    { text: "¡Hola! Soy PIPI 🐨", slug: "hola" },
-    { text: "¿Jugamos a leer?", slug: "jugamos-leer" },
-    { text: "¡Vamos a aprender inglés!", slug: "vamos-ingles" },
-    { text: "¡Me gusta cuando sonríes!", slug: "sonries" },
-    { text: "¿Quieres una estrella? ⭐", slug: "estrella" },
-    { text: "¡Tú puedes! 💪", slug: "tu-puedes" },
-    { text: "Tócame y te hablo 🐨", slug: "tocame" }
+    { slug: "hola", text: "¡Hola, {name}! Soy PIPI 🐨", audioText: "¡Hola! Soy PIPI" },
+    { slug: "jugamos-leer", text: "¿Jugamos a leer, {name}?", audioText: "¿Jugamos a leer?" },
+    { slug: "vamos-ingles", text: "¡Vamos a aprender inglés, {name}!", audioText: "¡Vamos a aprender inglés!" },
+    { slug: "sonries", text: "¡Me gusta cuando sonríes, {name}!", audioText: "¡Me gusta cuando sonríes!" },
+    { slug: "estrella", text: "¿Quieres una estrella, {name}? ⭐", audioText: "¿Quieres una estrella?" },
+    { slug: "tu-puedes", text: "¡Tú puedes, {name}! 💪", audioText: "¡Tú puedes!" },
+    { slug: "tocame", text: "Tócame y te hablo, {name} 🐨", audioText: "Tócame y te hablo" }
   ];
 
   var PRAISE = [
-    { slug: "feliz-1", text: "¡Muy bien!" },
-    { slug: "feliz-2", text: "¡Excelente!" },
-    { slug: "feliz-3", text: "¡Lo hiciste genial!" },
-    { slug: "feliz-4", text: "¡Qué bien lees!" },
-    { slug: "feliz-5", text: "¡Bravo!" },
-    { slug: "feliz-6", text: "¡Eres una campeona!" },
-    { slug: "feliz-7", text: "¡Eso es!" },
-    { slug: "feliz-8", text: "¡Genial!" },
-    { slug: "feliz-9", text: "¡Pipi está muy feliz!" },
-    { slug: "feliz-10", text: "¡Sigue así!" }
+    { slug: "feliz-1", text: "¡Muy bien, {name}!", audioText: "¡Muy bien!", lang: "es" },
+    { slug: "feliz-2", text: "¡Excelente, {name}!", audioText: "¡Excelente!", lang: "es" },
+    { slug: "feliz-3", text: "¡Lo hiciste genial, {name}!", audioText: "¡Lo hiciste genial!", lang: "es" },
+    { slug: "feliz-4", text: "¡Qué bien lees, {name}!", audioText: "¡Qué bien lees!", lang: "es" },
+    { slug: "feliz-5", text: "¡Bravo, {name}!", audioText: "¡Bravo!", lang: "es" },
+    { slug: "feliz-6", text: "¡Eres una campeona, {name}!", audioText: "¡Eres una campeona!", lang: "es" },
+    { slug: "feliz-7", text: "¡Eso es, {name}!", audioText: "¡Eso es!", lang: "es" },
+    { slug: "feliz-8", text: "¡Genial, {name}!", audioText: "¡Genial!", lang: "es" },
+    { slug: "feliz-9", text: "¡Pipi está muy feliz, {name}!", audioText: "¡Pipi está muy feliz!", lang: "es" },
+    { slug: "feliz-10", text: "¡Sigue así, {name}!", audioText: "¡Sigue así!", lang: "es" },
+    { slug: "en-1", text: "Great job, {name}!", audioText: "Great job!", lang: "en" },
+    { slug: "en-2", text: "Excellent, {name}!", audioText: "Excellent!", lang: "en" },
+    { slug: "en-3", text: "Well done, {name}!", audioText: "Well done!", lang: "en" },
+    { slug: "en-4", text: "You are amazing, {name}!", audioText: "You are amazing!", lang: "en" },
+    { slug: "en-5", text: "Keep it up, {name}!", audioText: "Keep it up!", lang: "en" }
   ];
 
   function randomPraise() {
@@ -492,10 +547,44 @@
 
   function greet() {
     var p = randomPhrase();
-    $("#speech-text").textContent = p.text;
+    var display = p.text.replace(/{name}/g, childName());
+    $("#speech-text").textContent = display;
     var moods = ["happy", "thinking", "surprised", "sleepy"];
     if (pipi3d) pipi3d.setExpression(moods[Math.floor(Math.random() * moods.length)], 1800);
-    playAudio(audioBase + "ui/" + p.slug + ".mp3", p.text, "es");
+    speakPersonalized(display, audioBase + "ui/" + p.slug + ".mp3", p.audioText, "es");
+  }
+
+  function greetName() {
+    var display = "¡Hola, " + childName() + "! Soy PIPI";
+    $("#speech-text").textContent = display;
+    if (pipi3d) pipi3d.setExpression("happy", 2500);
+    speakPersonalized(display, audioBase + "ui/hola.mp3", "¡Hola! Soy PIPI", "es");
+  }
+
+  function startApp() {
+    var inp = $("#name-input");
+    var n = ((inp && inp.value) || "").trim().slice(0, 20);
+    if (!n) {
+      showToast("Escribe tu nombre 😊");
+      if (inp) inp.focus();
+      return;
+    }
+    state.name = n;
+    saveState();
+    show("home");
+    greetName();
+  }
+
+  function populateSettings() {
+    var inp = $("#settings-name");
+    if (inp) inp.value = state.name || "";
+    $$("#rate-chips .chip").forEach(function (c) {
+      c.classList.toggle("is-active", c.getAttribute("data-rate") === state.expressionRate);
+    });
+    $$("#color-swatches .swatch").forEach(function (s) {
+      var col = (s.getAttribute("data-color") || "").toLowerCase();
+      s.classList.toggle("is-active", col === (state.furColor || "").toLowerCase());
+    });
   }
 
   /* ---------------- Eventos ---------------- */
@@ -561,21 +650,91 @@
         showToast("¡Listo! Empezamos de nuevo.");
       }
     });
+
+    // Bienvenida: nombre
+    var startBtn = $("#start-btn");
+    if (startBtn) {
+      startBtn.addEventListener("click", startApp);
+      var nameInput = $("#name-input");
+      if (nameInput) nameInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); startApp(); }
+      });
+    }
+
+    // Ajustes
+    var settingsBtn = $("#settings-btn");
+    if (settingsBtn) settingsBtn.addEventListener("click", function () {
+      populateSettings();
+      show("settings");
+    });
+
+    var saveName = $("#settings-save-name");
+    if (saveName) saveName.addEventListener("click", function () {
+      var inp = $("#settings-name");
+      var n = ((inp && inp.value) || "").trim().slice(0, 20);
+      if (!n) { showToast("Escribe un nombre 😊"); return; }
+      state.name = n;
+      saveState();
+      var wi = $("#name-input"); if (wi) wi.value = n;
+      showToast("¡Nombre guardado!");
+    });
+
+    $$("#rate-chips .chip").forEach(function (c) {
+      c.addEventListener("click", function () {
+        state.expressionRate = c.getAttribute("data-rate");
+        saveState();
+        if (pipi3d) pipi3d.setMoodInterval(rateMs());
+        populateSettings();
+        showToast("Expresiones: " + c.textContent);
+      });
+    });
+
+    $$("#color-swatches .swatch").forEach(function (s) {
+      s.addEventListener("click", function () {
+        state.furColor = s.getAttribute("data-color");
+        saveState();
+        if (pipi3d) pipi3d.setFurColor(state.furColor);
+        populateSettings();
+      });
+    });
+
+    var testBtn = $("#settings-test");
+    if (testBtn) testBtn.addEventListener("click", function () {
+      if (!pipi3d) return;
+      var moods = ["happy", "sad", "thinking", "sleepy", "surprised"];
+      pipi3d.setExpression(moods[Math.floor(Math.random() * moods.length)], 3000);
+    });
   }
 
   /* ---------------- Inicio ---------------- */
   function init() {
     loadState();
+    currentScreen = "welcome";
 
-    var koalaHost = $("#koala-home");
+    var koalaHost = $("#koala-welcome");
     if (window.Pipi3D && window.THREE) {
       try { pipi3d = window.Pipi3D.create(koalaHost); } catch (e) { pipi3d = null; }
     }
-    if (!pipi3d) { koalaHost.innerHTML = koalaSVG(); }
+    if (!pipi3d) {
+      koalaHost.innerHTML = koalaSVG();
+      var homeHost = $("#koala-home"); if (homeHost) homeHost.innerHTML = koalaSVG();
+    }
+    if (pipi3d) {
+      pipi3d.setMoodInterval(rateMs());
+      pipi3d.setFurColor(state.furColor);
+    }
+
+    var nameInput = $("#name-input");
+    if (nameInput) nameInput.value = state.name || "";
+    if (state.name) {
+      var wt = $("#welcome-title"); if (wt) wt.textContent = "¡Hola de nuevo! 🐨";
+      var sb = $("#start-btn"); if (sb) sb.textContent = "¡Continuar!";
+    }
 
     updateStars();
     updateSoundBtn();
     renderRewards();
+    populateSettings();
     bind();
 
     // Registrar service worker solo si se sirve por http(s)

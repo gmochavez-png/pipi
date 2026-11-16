@@ -32,10 +32,14 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 ### 🐨 PIPI en 3D
 - PIPI es un koala **3D** (Three.js) con **expresiones**: parpadeo, sonrisa, habla, celebración, sorpresa, tristeza, pensativo y dormido.
 - En **Aprender a leer** y en **Inglés**, PIPI **no dice la respuesta** hasta que pulses **🔊 Escuchar**.
-- Al acertar dice **frases distintas**: "¡Excelente!", "¡Bravo!", "¡Qué bien lees!"…
+- Al acertar dice **frases distintas**, en **español e inglés**: "¡Excelente!", "¡Bravo!", "Great job!", "Well done!"…
+
+### 👧 Nombre y ajustes
+- Al abrir la app se escribe el **nombre** de la niña; PIPI lo usa para saludar y felicitar.
+- El botón **⚙️ Ajustes** permite cambiar el nombre, la **frecuencia de expresiones** (pocas / normal / muchas) y el **color del pelaje** de PIPI.
 
 ### 🔊 Voz (audios incluidos)
-- PIPI tiene **voces reales grabadas**: 131 audios en español e inglés, incluidos en la app.
+- PIPI tiene **voces reales grabadas**: 136 audios en español e inglés, incluidos en la app.
 - Así suena igual en cualquier teléfono, sin depender de las voces del sistema.
 - Si algún audio no cargara, usa la **voz del dispositivo** como respaldo.
 - Botón de sonido 🔊/🔇 para silenciar.
@@ -130,7 +134,7 @@ pipi-app/
    ├─ koala.jpg        → logo (recorte de la foto de PIPI)
    ├─ koala-source.jpg → foto original que enviaste
    ├─ icons/           → iconos de la app (192, 512, etc.)
-   └─ audio/           → 131 audios MP3 (español e inglés)
+   └─ audio/           → 136 audios MP3 (español e inglés)
 ```
 
 ---
