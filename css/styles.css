@@ -376,6 +376,32 @@ body::before {
 }
 .star-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12); }
 
+/* ---------- Mini PIPI 3D durante la actividad ---------- */
+#screen-activity { position: relative; }
+
+.koala-mini {
+  position: absolute;
+  right: 10px;
+  bottom: 150px;
+  width: 84px;
+  height: 84px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.96;
+  filter: drop-shadow(0 8px 10px rgba(70, 110, 150, 0.18));
+}
+.koala-mini canvas { display: block; width: 100% !important; height: 100% !important; }
+
+.card__hint {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #8a97a6;
+  margin-top: 4px;
+  line-height: 1.25;
+}
+
+.koala-holder canvas { display: block; }
+
 /* ---------- Recompensas ---------- */
 .rewards-hero { text-align: center; padding: 6px 0 18px; }
 .rewards-count { font-size: 3.4rem; font-weight: 900; color: #b8860b; }

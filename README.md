@@ -29,11 +29,26 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - Las estrellas desbloquean **pegatinas** (a las 5, 15, 30, 50, 80 y 100 estrellas).
 - El progreso se guarda en el propio teléfono.
 
+### 🐨 PIPI en 3D
+- PIPI es un koala **3D** hecho con **Three.js**, con **expresiones**: parpadea, sonríe, habla y celebra.
+- En **Aprender a leer**, PIPI **no dice la respuesta** hasta que pulses **🔊 Escuchar**, para que la niña lo intente primero.
+
 ### 🔊 Voz (audios incluidos)
 - PIPI tiene **voces reales grabadas**: 121 audios en español e inglés, incluidos en la app.
 - Así suena igual en cualquier teléfono, sin depender de las voces del sistema.
 - Si algún audio no cargara, usa la **voz del dispositivo** como respaldo.
 - Botón de sonido 🔊/🔇 para silenciar.
+
+---
+
+## 🌐 Enlace público
+
+La app ya está publicada en **GitHub Pages**:
+
+**https://gmochavez-png.github.io/pipi/**
+
+Ábrelo en el teléfono y añádela a la pantalla de inicio. Así funciona en
+cualquier lugar, sin depender de la computadora.
 
 ---
 
@@ -104,6 +119,8 @@ pipi-app/
 ├─ css/styles.css      → diseño infantil
 ├─ js/lessons.js       → contenido educativo (editable)
 ├─ js/app.js           → lógica: navegación, voz, estrellas
+├─ js/pipi3d.js        → koala 3D (Three.js) y expresiones
+├─ js/vendor/three.min.js → librería 3D (local, sin conexión)
 ├─ manifest.json       → datos para instalar la app
 ├─ sw.js               → modo sin conexión
 ├─ server.js           → servidor local opcional (Node.js)

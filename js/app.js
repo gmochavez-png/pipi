@@ -14,6 +14,7 @@
 
   var STORE_KEY = "pipi.progress.v2";
   var audioBase = "assets/audio/";
+  var pipi3d = null;
 
   var state = {
     done: {},      // {"lectura:letras:0": true, ...}
@@ -76,6 +77,7 @@
 
   function setTalking(on) {
     $$(".koala").forEach(function (k) { k.classList.toggle("is-talking", on); });
+    if (pipi3d) pipi3d.talk(on);
   }
 
   function speak(text, lang) {
@@ -217,6 +219,12 @@
     });
     var active = $("#screen-" + name);
     if (active) active.scrollTop = 0;
+
+    if (pipi3d) {
+      if (name === "home") pipi3d.attach($("#koala-home"));
+      else if (name === "activity") pipi3d.attach($("#koala-mini"));
+      else pipi3d.hide();
+    }
   }
 
   function goHome() { show("home"); }
@@ -321,7 +329,15 @@
 
     $("#activity-stage").innerHTML = buildCard(cat.kind, item, currentModule);
 
-    autoSpeak(cat.kind, item);
+    if (currentModule === "ingles") {
+      autoSpeak(cat.kind, item);
+    } else {
+      var card = $("#activity-stage .card");
+      var hint = document.createElement("div");
+      hint.className = "card__hint";
+      hint.textContent = "Primero inténtalo · toca 🔊 para escuchar";
+      if (card) card.appendChild(hint);
+    }
   }
 
   function goPrev() {
@@ -337,6 +353,7 @@
   function finishCategory() {
     updateStars();
     playAudio(audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es");
+    if (pipi3d) pipi3d.celebrate();
     showToast("¡Muy bien! Terminaste esta lección 🎉");
     setTimeout(function () { show("menu"); }, 1500);
   }
@@ -356,6 +373,7 @@
     }
 
     playAudio(audioBase + "ui/muy-bien.mp3", "¡Muy bien!", "es");
+    if (pipi3d) pipi3d.celebrate();
 
     setTimeout(function () {
       busy = false;
@@ -531,7 +549,11 @@
   function init() {
     loadState();
 
-    $("#koala-home").innerHTML = koalaSVG();
+    var koalaHost = $("#koala-home");
+    if (window.Pipi3D && window.THREE) {
+      try { pipi3d = window.Pipi3D.create(koalaHost); } catch (e) { pipi3d = null; }
+    }
+    if (!pipi3d) { koalaHost.innerHTML = koalaSVG(); }
 
     updateStars();
     updateSoundBtn();
