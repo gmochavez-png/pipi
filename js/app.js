@@ -136,7 +136,7 @@
   }
 
   /* Reproduce el audio real (MP3) y, si falla, usa la voz del dispositivo. */
-  function playAudio(url, fallbackText, lang) {
+  function playAudio(url, fallbackText, lang, onEnded) {
     if (state.muted) return;
     stopAudio();
     stopSpeech();
@@ -145,7 +145,11 @@
     currentAudio = a;
     a.volume = 1;
     a.onplay = function () { setTalking(true); };
-    a.onended = function () { if (currentAudio === a) { currentAudio = null; } setTalking(false); };
+    a.onended = function () {
+      if (currentAudio === a) { currentAudio = null; }
+      setTalking(false);
+      if (onEnded) onEnded();
+    };
     a.onerror = function () {
       if (currentAudio === a) { currentAudio = null; }
       setTalking(false);
@@ -163,31 +167,32 @@
 
   /* Dice una frase personalizada (con el nombre). Si el telefono no tiene
      voz, reproduce el audio grabado como respaldo. */
-  function speakPersonalized(text, fallbackUrl, fallbackText, lang) {
+  function speakPersonalized(text, fallbackUrl, fallbackText, lang, name) {
     if (state.muted) return;
     stopAll();
     var lg = lang === "en" ? "en" : "es";
-    var voice = speechAvailable ? pickVoice(lg) : null;
-    if (!speechAvailable || !voice) {
-      playAudio(fallbackUrl, fallbackText, lg);
-      return;
-    }
+    // Siempre suena el audio grabado de PIPI (fiable).
+    playAudio(fallbackUrl, fallbackText, lg, function () {
+      if (name) speakName(name, lg);
+    });
+  }
+
+  function speakName(name, lang) {
+    if (!name || state.muted || !speechAvailable) return;
+    var lg = lang === "en" ? "en" : "es";
+    var voice = pickVoice(lg);
+    if (!voice) return;
     try {
-      var u = new SpeechSynthesisUtterance(text);
+      var u = new SpeechSynthesisUtterance(name);
       u.lang = lg === "en" ? "en-US" : "es-MX";
-      u.rate = 0.84;
-      u.pitch = 1.08;
+      u.rate = 0.9;
+      u.pitch = 1.1;
       u.volume = 1;
       u.voice = voice;
       u.onstart = function () { setTalking(true); };
       u.onend = function () { setTalking(false); };
-      u.onerror = function () { setTalking(false); playAudio(fallbackUrl, fallbackText, lg); };
-      window.speechSynthesis.cancel();
-      if (window.speechSynthesis.resume) { try { window.speechSynthesis.resume(); } catch (e) {} }
       window.speechSynthesis.speak(u);
-    } catch (e) {
-      playAudio(fallbackUrl, fallbackText, lg);
-    }
+    } catch (e) {}
   }
 
   /* ---------------- Personaje koala (SVG) ---------------- */
@@ -400,7 +405,7 @@
   function finishCategory() {
     updateStars();
     var finishText = "¡Muy bien, " + childName() + "! Terminaste.";
-    speakPersonalized(finishText, audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es");
+    speakPersonalized(finishText, audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es", childName());
     if (pipi3d) pipi3d.celebrate();
     showToast("¡Muy bien! Terminaste esta lección 🎉");
     setTimeout(function () { show("menu"); }, 1500);
@@ -422,7 +427,7 @@
 
     var praise = randomPraise();
     var praiseText = praise.text.replace(/{name}/g, childName());
-    speakPersonalized(praiseText, audioBase + "ui/" + praise.slug + ".mp3", praise.audioText, praise.lang);
+    speakPersonalized(praiseText, audioBase + "ui/" + praise.slug + ".mp3", praise.audioText, praise.lang, childName());
     showToast(praiseText + " ⭐");
     if (pipi3d) pipi3d.celebrate();
 
@@ -548,19 +553,23 @@
   }
 
   function greet() {
+    if (state.muted) {
+      showToast("🔇 El sonido está apagado. Toca el altavoz.");
+      return;
+    }
     var p = randomPhrase();
     var display = p.text.replace(/{name}/g, childName());
     $("#speech-text").textContent = display;
     var moods = ["happy", "thinking", "surprised", "sleepy"];
     if (pipi3d) pipi3d.setExpression(moods[Math.floor(Math.random() * moods.length)], 1800);
-    speakPersonalized(display, audioBase + "ui/" + p.slug + ".mp3", p.audioText, "es");
+    speakPersonalized(display, audioBase + "ui/" + p.slug + ".mp3", p.audioText, "es", childName());
   }
 
   function greetName() {
     var display = "¡Hola, " + childName() + "! Soy PIPI";
     $("#speech-text").textContent = display;
     if (pipi3d) pipi3d.setExpression("happy", 2500);
-    speakPersonalized(display, audioBase + "ui/hola.mp3", "¡Hola! Soy PIPI", "es");
+    speakPersonalized(display, audioBase + "ui/hola.mp3", "¡Hola! Soy PIPI", "es", childName());
   }
 
   function startApp() {

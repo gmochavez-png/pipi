@@ -653,7 +653,7 @@ body::before {
   line-height: 1.25;
 }
 
-.koala-holder canvas { display: block; }
+.koala-holder canvas { display: block; pointer-events: none; }
 
 /* ---------- Recompensas ---------- */
 .rewards-hero { text-align: center; padding: 6px 0 18px; }

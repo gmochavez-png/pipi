@@ -3,7 +3,7 @@
    Guarda la app en el teléfono para que funcione sin conexión.
    ========================================================= */
 
-var CACHE = "pipi-v10";
+var CACHE = "pipi-v11";
 
 var ASSETS = [
   "./",
