@@ -1,0 +1,12 @@
+{
+  "name": "pipi-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "voices:list": "node --env-file=.env.local tools/list-elevenlabs-voices.mjs",
+    "voices": "node --env-file=.env.local tools/generate-elevenlabs-audio.mjs"
+  },
+  "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.79.0"
+  }
+}

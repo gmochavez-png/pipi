@@ -38,8 +38,10 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - Al abrir la app se escribe el **nombre** de la niña; PIPI lo usa para saludar y felicitar.
 - El botón **⚙️ Ajustes** permite cambiar el nombre, la **frecuencia de expresiones** (pocas / normal / muchas) y el **color del pelaje** de PIPI.
 
-### 🔊 Voz (audios incluidos)
-- PIPI tiene **voces reales grabadas**: 136 audios en español e inglés, incluidos en la app.
+### 🔊 Voz (ElevenLabs)
+- Los 136 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
+  - Español: voz **Liz** (dulce y cálida).
+  - Inglés: voz **Jessica** (juguetona y brillante).
 - Así suena igual en cualquier teléfono, sin depender de las voces del sistema.
 - Si algún audio no cargara, usa la **voz del dispositivo** como respaldo.
 - Botón de sonido 🔊/🔇 para silenciar.
@@ -126,6 +128,9 @@ pipi-app/
 ├─ js/app.js           → lógica: navegación, voz, estrellas
 ├─ js/pipi3d.js        → koala 3D (Three.js) y expresiones
 ├─ js/vendor/three.min.js → librería 3D (local, sin conexión)
+├─ tools/              → scripts para regenerar los audios con ElevenLabs
+├─ package.json        → dependencias del generador de voz
+├─ .env.local          → clave de ElevenLabs (privada, no se publica)
 ├─ manifest.json       → datos para instalar la app
 ├─ sw.js               → modo sin conexión
 ├─ server.js           → servidor local opcional (Node.js)
