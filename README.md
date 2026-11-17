@@ -12,7 +12,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 
 ### 📖 Aprender a leer (español)
 - **Letras**: A–Z (incluida la Ñ) con nombre, dibujo y palabra de ejemplo.
-- **Sílabas**: ma me mi mo mu, pa pe pi po pu, etc.
+- **Sílabas**: **ordena las sílabas** para formar palabras (mamá, casa, pelota, mariposa…).
 - **Palabras**: mamá, papá, sol, luna, gato, perro…
 - **Frases**: frases cortas para leer en voz alta.
 
@@ -27,6 +27,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 ### ⭐ Recompensas
 - Cada tarjeta que la niña marca con **"¡Lo logré!"** da una estrella.
 - Las estrellas desbloquean **pegatinas** (a las 5, 15, 30, 50, 80 y 100 estrellas).
+- Cada logro se celebra con **corazones, flores, confeti y un cartel de "¡Lo lograste!"**.
 - El progreso se guarda en el propio teléfono.
 
 ### 🐨 PIPI en 3D

@@ -48,18 +48,22 @@ window.PIPI_LESSONS = {
       },
 
       silabas: {
-        title: "Las sílabas",
-        emoji: "🔡",
-        kind: "syllables",
+        title: "Ordena las sílabas",
+        emoji: "🧩",
+        kind: "order",
         items: [
-          { big: "ma me mi mo mu", say: "ma, me, mi, mo, mu", emoji: "🐵" },
-          { big: "pa pe pi po pu", say: "pa, pe, pi, po, pu", emoji: "🐧" },
-          { big: "la le li lo lu", say: "la, le, li, lo, lu", emoji: "🐸" },
-          { big: "sa se si so su", say: "sa, se, si, so, su", emoji: "🦕" },
-          { big: "ta te ti to tu", say: "ta, te, ti, to, tu", emoji: "🐢" },
-          { big: "na ne ni no nu", say: "na, ne, ni, no, nu", emoji: "🦙" },
-          { big: "ra re ri ro ru", say: "ra, re, ri, ro, ru", emoji: "🐭" },
-          { big: "da de di do du", say: "da, de, di, do, du", emoji: "🦌" }
+          { big: "mamá", syllables: ["ma", "má"], emoji: "👩" },
+          { big: "papá", syllables: ["pa", "pá"], emoji: "👨" },
+          { big: "casa", syllables: ["ca", "sa"], emoji: "🏠" },
+          { big: "gato", syllables: ["ga", "to"], emoji: "🐱" },
+          { big: "luna", syllables: ["lu", "na"], emoji: "🌙" },
+          { big: "mesa", syllables: ["me", "sa"], emoji: "🪑" },
+          { big: "pelota", syllables: ["pe", "lo", "ta"], emoji: "⚽" },
+          { big: "zapato", syllables: ["za", "pa", "to"], emoji: "👟" },
+          { big: "tortuga", syllables: ["tor", "tu", "ga"], emoji: "🐢" },
+          { big: "ventana", syllables: ["ven", "ta", "na"], emoji: "🪟" },
+          { big: "mariposa", syllables: ["ma", "ri", "po", "sa"], emoji: "🦋" },
+          { big: "escuela", syllables: ["es", "cue", "la"], emoji: "🏫" }
         ]
       },
 

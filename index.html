@@ -42,6 +42,24 @@
       </header>
 
       <div class="home-hero">
+        <div class="home-scene" aria-hidden="true">
+          <span class="scene-sun">☀️</span>
+          <span class="scene-cloud scene-cloud--1">☁️</span>
+          <span class="scene-cloud scene-cloud--2">☁️</span>
+          <span class="scene-star scene-star--1">⭐</span>
+          <span class="scene-star scene-star--2">✨</span>
+          <span class="scene-star scene-star--3">🌟</span>
+          <span class="scene-rainbow">🌈</span>
+          <span class="scene-butterfly">🦋</span>
+          <span class="scene-flower scene-flower--1">🌸</span>
+          <span class="scene-flower scene-flower--2">🌷</span>
+          <span class="scene-heart scene-heart--1">💖</span>
+          <span class="scene-heart scene-heart--2">❤️</span>
+        </div>
+
+        <h1 id="home-greeting" class="home-greeting">¡Hola! 🐨</h1>
+        <p class="home-sub">¿Qué quieres hacer hoy?</p>
+
         <button id="koala-home" class="koala-holder" aria-label="Saludar a PIPI"></button>
         <div class="speech" id="speech" aria-live="polite">
           <p id="speech-text">¡Hola! Soy PIPI 🐨</p>
@@ -60,10 +78,11 @@
         <button class="big-btn big-btn--chat" data-go="chat">
           <span class="big-btn__emoji">💬</span>
           <span class="big-btn__text">Hablar con PIPI</span>
+          <span class="big-btn__badge">Nuevo</span>
         </button>
       </div>
 
-      <button class="ghost-btn" data-go="rewards">⭐ Mis estrellas</button>
+      <button class="ghost-btn ghost-btn--stars" data-go="rewards">⭐ Mis estrellas</button>
     </section>
 
     <!-- ================= MENÚ DE CATEGORÍAS ================= -->

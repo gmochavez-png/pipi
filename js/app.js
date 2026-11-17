@@ -59,6 +59,11 @@
   function rateMs() { return RATE_MS[state.expressionRate] || RATE_MS.normal; }
   function childName() { return (state.name || "").trim() || "amiga"; }
 
+  function updateHomeGreeting() {
+    var hg = $("#home-greeting");
+    if (hg) hg.textContent = state.name ? "¡Hola, " + state.name + "! 🐨" : "¡Hola! 🐨";
+  }
+
   /* ---------------- Voz ---------------- */
   var voices = [];
 
@@ -381,6 +386,14 @@
     $("#activity-title").textContent = cat.title;
     $("#activity-progress").textContent = (currentIndex + 1) + " / " + cat.items.length;
 
+    var starBtn = $("#btn-star");
+    if (starBtn) starBtn.style.display = cat.kind === "order" ? "none" : "";
+
+    if (cat.kind === "order") {
+      renderOrderGame(item);
+      return;
+    }
+
     $("#activity-stage").innerHTML = buildCard(cat.kind, item, currentModule);
 
     var card = $("#activity-stage .card");
@@ -388,6 +401,101 @@
     hint.className = "card__hint";
     hint.textContent = "Primero inténtalo · toca 🔊 para escuchar";
     if (card) card.appendChild(hint);
+
+    if (pipi3d) pipi3d.setExpression("thinking", 120000);
+  }
+
+  function shuffleSyllables(arr, word) {
+    var a = arr.slice();
+    var same = true;
+    for (var attempt = 0; attempt < 12; attempt++) {
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      same = a.join("") === word;
+      if (!same) break;
+    }
+    if (same && a.length > 1) {
+      var t2 = a[0]; a[0] = a[1]; a[1] = t2;
+    }
+    return a;
+  }
+
+  function renderOrderGame(item) {
+    var stage = $("#activity-stage");
+    var syllables = item.syllables || [];
+    var shuffled = shuffleSyllables(syllables, item.big);
+
+    var slotsHtml = syllables.map(function () {
+      return '<button type="button" class="order-slot" data-slot></button>';
+    }).join("");
+    var chipsHtml = shuffled.map(function (s, i) {
+      return '<button type="button" class="order-chip" data-chip="' + i + '">' + s + "</button>";
+    }).join("");
+
+    stage.innerHTML =
+      '<div class="card card--order">' +
+        '<div class="card__emoji">' + (item.emoji || "🧩") + "</div>" +
+        '<div class="card__word">' + item.big + "</div>" +
+        '<div class="order-slots" id="order-slots">' + slotsHtml + "</div>" +
+        '<div class="order-pool" id="order-pool">' + chipsHtml + "</div>" +
+        '<div class="card__hint">Toca las sílabas en orden para formar la palabra</div>' +
+      "</div>";
+
+    var slotEls = Array.prototype.slice.call(stage.querySelectorAll(".order-slot"));
+    var chipEls = Array.prototype.slice.call(stage.querySelectorAll(".order-chip"));
+    var slots = new Array(syllables.length).fill(null);
+    var filled = 0;
+
+    function placeChip(chip) {
+      if (chip.classList.contains("is-used")) return;
+      var idx = -1;
+      for (var i = 0; i < slots.length; i++) {
+        if (!slots[i]) { idx = i; break; }
+      }
+      if (idx === -1) return;
+      slots[idx] = chip;
+      chip.classList.add("is-used");
+      chip.disabled = true;
+      slotEls[idx].textContent = chip.textContent;
+      slotEls[idx].classList.add("is-filled");
+      filled++;
+      if (filled === slots.length) checkOrder();
+    }
+
+    function removeSlot(idx) {
+      var chip = slots[idx];
+      if (!chip) return;
+      slots[idx] = null;
+      chip.classList.remove("is-used");
+      chip.disabled = false;
+      slotEls[idx].textContent = "";
+      slotEls[idx].classList.remove("is-filled", "is-correct", "is-wrong");
+      filled--;
+    }
+
+    function checkOrder() {
+      var formed = slots.map(function (c) { return c ? c.textContent : ""; }).join("");
+      if (formed === item.big) {
+        slotEls.forEach(function (s) { s.classList.add("is-correct"); });
+        awardStar();
+      } else {
+        slotEls.forEach(function (s) { s.classList.add("is-wrong"); });
+        speak("Casi... inténtalo otra vez.", "es");
+        setTimeout(function () {
+          for (var i = 0; i < slots.length; i++) removeSlot(i);
+          slotEls.forEach(function (s) { s.classList.remove("is-wrong", "is-correct"); });
+        }, 900);
+      }
+    }
+
+    chipEls.forEach(function (chip) {
+      chip.addEventListener("click", function () { placeChip(chip); });
+    });
+    slotEls.forEach(function (slot, idx) {
+      slot.addEventListener("click", function () { removeSlot(idx); });
+    });
 
     if (pipi3d) pipi3d.setExpression("thinking", 120000);
   }
@@ -407,6 +515,8 @@
     var finishText = "¡Muy bien, " + childName() + "! Terminaste.";
     speakPersonalized(finishText, audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es", childName());
     if (pipi3d) pipi3d.celebrate();
+    burstStars();
+    celebrateBanner("¡Terminaste, " + childName() + "! 🏆");
     showToast("¡Muy bien! Terminaste esta lección 🎉");
     setTimeout(function () { show("menu"); }, 1500);
   }
@@ -422,8 +532,9 @@
       state.done[key] = true;
       saveState();
       updateStars();
-      burstStars();
     }
+    burstStars();
+    celebrateBanner("¡Lo lograste, " + childName() + "! 🎉");
 
     var praise = randomPraise();
     var praiseText = praise.text.replace(/{name}/g, childName());
@@ -441,8 +552,8 @@
 
   /* ---------------- Confeti ---------------- */
   function burstStars() {
-    var emojis = ["⭐", "✨", "🌟", "💫"];
-    for (var i = 0; i < 14; i++) {
+    var emojis = ["⭐", "✨", "🌟", "💫", "❤️", "💖", "💕", "🌸", "🌺", "🌷", "🎉", "🎊", "🌈", "🦋"];
+    for (var i = 0; i < 28; i++) {
       (function () {
         var s = document.createElement("span");
         s.className = "confetti";
@@ -454,6 +565,34 @@
         setTimeout(function () { s.remove(); }, 1700);
       })();
     }
+  }
+
+  function celebrateBanner(text) {
+    var el = document.createElement("div");
+    el.className = "celebrate";
+
+    var e1 = document.createElement("div");
+    e1.className = "celebrate__emoji";
+    e1.textContent = "🎉 ❤️ 🌸";
+
+    var t = document.createElement("div");
+    t.className = "celebrate__text";
+    t.textContent = text;
+
+    var e2 = document.createElement("div");
+    e2.className = "celebrate__emoji";
+    e2.textContent = "🌟 🎊 💖";
+
+    el.appendChild(e1);
+    el.appendChild(t);
+    el.appendChild(e2);
+    document.body.appendChild(el);
+
+    requestAnimationFrame(function () { el.classList.add("is-show"); });
+    setTimeout(function () {
+      el.classList.remove("is-show");
+      setTimeout(function () { el.remove(); }, 400);
+    }, 1800);
   }
 
   /* ---------------- Aviso ---------------- */
@@ -582,6 +721,7 @@
     }
     state.name = n;
     saveState();
+    updateHomeGreeting();
     show("home");
     greetName();
   }
@@ -686,6 +826,7 @@
       if (!n) { showToast("Escribe un nombre 😊"); return; }
       state.name = n;
       saveState();
+      updateHomeGreeting();
       var wi = $("#name-input"); if (wi) wi.value = n;
       showToast("¡Nombre guardado!");
     });
@@ -741,6 +882,7 @@
       var wt = $("#welcome-title"); if (wt) wt.textContent = "¡Hola de nuevo! 🐨";
       var sb = $("#start-btn"); if (sb) sb.textContent = "¡Continuar!";
     }
+    updateHomeGreeting();
 
     updateStars();
     updateSoundBtn();
