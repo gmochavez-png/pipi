@@ -21,7 +21,8 @@
     muted: false,
     name: "",
     expressionRate: "normal",
-    furColor: "#8b93a2"
+    furColor: "#8b93a2",
+    unlockedSyllableLevel: 1
   };
 
   /* ---------------- Persistencia ---------------- */
@@ -36,6 +37,7 @@
           state.name = typeof saved.name === "string" ? saved.name.slice(0, 20) : "";
           state.expressionRate = saved.expressionRate === "low" || saved.expressionRate === "high" ? saved.expressionRate : "normal";
           state.furColor = typeof saved.furColor === "string" && /^#[0-9a-fA-F]{6}$/.test(saved.furColor) ? saved.furColor : "#8b93a2";
+          state.unlockedSyllableLevel = (saved.unlockedSyllableLevel >= 1 && saved.unlockedSyllableLevel <= 4) ? saved.unlockedSyllableLevel : 1;
         }
       }
     } catch (e) { /* almacenamiento no disponible: seguimos en memoria */ }
@@ -48,7 +50,8 @@
         muted: state.muted,
         name: state.name,
         expressionRate: state.expressionRate,
-        furColor: state.furColor
+        furColor: state.furColor,
+        unlockedSyllableLevel: state.unlockedSyllableLevel
       }));
     } catch (e) { /* modo privado: no pasa nada */ }
   }
@@ -182,21 +185,21 @@
     });
   }
 
-  function speakName(name, lang) {
-    if (!name || state.muted || !speechAvailable) return;
-    var lg = lang === "en" ? "en" : "es";
-    var voice = pickVoice(lg);
-    if (!voice) return;
+  var NAME_AUDIO = { antonella: "name-antonella.mp3" };
+
+  function normalizeName(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]/g, "").trim();
+  }
+
+  function speakName(name) {
+    if (!name || state.muted) return;
+    var key = normalizeName(name);
+    var file = NAME_AUDIO[key];
+    if (!file) return;
     try {
-      var u = new SpeechSynthesisUtterance(name);
-      u.lang = lg === "en" ? "en-US" : "es-MX";
-      u.rate = 0.9;
-      u.pitch = 1.1;
-      u.volume = 1;
-      u.voice = voice;
-      u.onstart = function () { setTalking(true); };
-      u.onend = function () { setTalking(false); };
-      window.speechSynthesis.speak(u);
+      var a = new Audio(audioBase + "ui/" + file);
+      a.volume = 1;
+      a.play().catch(function () {});
     } catch (e) {}
   }
 
@@ -311,13 +314,23 @@
     grid.innerHTML = "";
     Object.keys(data.categories).forEach(function (key) {
       var cat = data.categories[key];
+      var levelMatch = key.match(/^silabas(\d+)$/);
+      var level = levelMatch ? parseInt(levelMatch[1], 10) : 0;
+      var locked = level > state.unlockedSyllableLevel;
       var btn = document.createElement("button");
-      btn.className = "menu-card menu-card--" + mod;
+      btn.className = "menu-card menu-card--" + mod + (locked ? " is-locked" : "");
       btn.innerHTML =
         '<span class="menu-card__emoji">' + cat.emoji + "</span>" +
         '<span class="menu-card__title">' + cat.title + "</span>" +
-        '<span class="menu-card__count">' + cat.items.length + " tarjetas</span>";
-      btn.addEventListener("click", function () { startCategory(mod, key); });
+        '<span class="menu-card__count">' + cat.items.length + " tarjetas</span>" +
+        (locked ? '<span class="menu-card__lock">🔒</span>' : "");
+      btn.addEventListener("click", function () {
+        if (locked) {
+          showToast("Completa el nivel anterior para desbloquear 😊");
+          return;
+        }
+        startCategory(mod, key);
+      });
       grid.appendChild(btn);
     });
 
@@ -437,10 +450,9 @@
     stage.innerHTML =
       '<div class="card card--order">' +
         '<div class="card__emoji">' + (item.emoji || "🧩") + "</div>" +
-        '<div class="card__word">' + item.big + "</div>" +
         '<div class="order-slots" id="order-slots">' + slotsHtml + "</div>" +
         '<div class="order-pool" id="order-pool">' + chipsHtml + "</div>" +
-        '<div class="card__hint">Toca las sílabas en orden para formar la palabra</div>' +
+        '<div class="card__hint">Toca 🔊 Escuchar y ordena las sílabas</div>' +
       "</div>";
 
     var slotEls = Array.prototype.slice.call(stage.querySelectorAll(".order-slot"));
@@ -513,12 +525,36 @@
   function finishCategory() {
     updateStars();
     var finishText = "¡Muy bien, " + childName() + "! Terminaste.";
-    speakPersonalized(finishText, audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es", childName());
+    speakPersonalized(finishText, audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es", null);
     if (pipi3d) pipi3d.celebrate();
     burstStars();
-    celebrateBanner("¡Terminaste, " + childName() + "! 🏆");
-    showToast("¡Muy bien! Terminaste esta lección 🎉");
-    setTimeout(function () { show("menu"); }, 1500);
+
+    var unlockedNew = false;
+    var m = (currentCat || "").match(/^silabas(\d+)$/);
+    if (m) {
+      var lvl = parseInt(m[1], 10);
+      if (lvl === state.unlockedSyllableLevel && lvl < 4) {
+        state.unlockedSyllableLevel = lvl + 1;
+        saveState();
+        unlockedNew = true;
+        celebrateTrophy("¡Nivel " + lvl + " completado!");
+        showToast("¡Nivel " + (lvl + 1) + " desbloqueado! 🏆");
+      } else if (lvl === 4) {
+        celebrateTrophy("¡Ganaste la copa!");
+        showToast("¡Completaste todos los niveles! 🏆");
+      } else {
+        celebrateBanner("¡Terminaste, " + childName() + "! 🏆");
+        showToast("¡Muy bien! Terminaste esta lección 🎉");
+      }
+    } else {
+      celebrateBanner("¡Terminaste, " + childName() + "! 🏆");
+      showToast("¡Muy bien! Terminaste esta lección 🎉");
+    }
+
+    setTimeout(function () {
+      if (unlockedNew) openModule(currentModule);
+      else show("menu");
+    }, unlockedNew ? 2600 : 1500);
   }
 
   /* ---------------- Estrella / recompensa ---------------- */
@@ -538,7 +574,7 @@
 
     var praise = randomPraise();
     var praiseText = praise.text.replace(/{name}/g, childName());
-    speakPersonalized(praiseText, audioBase + "ui/" + praise.slug + ".mp3", praise.audioText, praise.lang, childName());
+    speakPersonalized(praiseText, audioBase + "ui/" + praise.slug + ".mp3", praise.audioText, praise.lang, null);
     showToast(praiseText + " ⭐");
     if (pipi3d) pipi3d.celebrate();
 
@@ -593,6 +629,34 @@
       el.classList.remove("is-show");
       setTimeout(function () { el.remove(); }, 400);
     }, 1800);
+  }
+
+  function celebrateTrophy(text) {
+    var el = document.createElement("div");
+    el.className = "celebrate celebrate--trophy";
+
+    var tr = document.createElement("div");
+    tr.className = "trophy";
+    tr.textContent = "🏆";
+
+    var t = document.createElement("div");
+    t.className = "celebrate__text";
+    t.textContent = text;
+
+    var e = document.createElement("div");
+    e.className = "celebrate__emoji";
+    e.textContent = "🎉 ❤️ 🌸";
+
+    el.appendChild(tr);
+    el.appendChild(t);
+    el.appendChild(e);
+    document.body.appendChild(el);
+
+    requestAnimationFrame(function () { el.classList.add("is-show"); });
+    setTimeout(function () {
+      el.classList.remove("is-show");
+      setTimeout(function () { el.remove(); }, 400);
+    }, 2400);
   }
 
   /* ---------------- Aviso ---------------- */
@@ -701,7 +765,7 @@
     $("#speech-text").textContent = display;
     var moods = ["happy", "thinking", "surprised", "sleepy"];
     if (pipi3d) pipi3d.setExpression(moods[Math.floor(Math.random() * moods.length)], 1800);
-    speakPersonalized(display, audioBase + "ui/" + p.slug + ".mp3", p.audioText, "es", childName());
+    speakPersonalized(display, audioBase + "ui/" + p.slug + ".mp3", p.audioText, "es", null);
   }
 
   function greetName() {

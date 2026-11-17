@@ -12,7 +12,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 
 ### 📖 Aprender a leer (español)
 - **Letras**: A–Z (incluida la Ñ) con nombre, dibujo y palabra de ejemplo.
-- **Sílabas**: **ordena las sílabas** para formar palabras (mamá, casa, pelota, mariposa…).
+- **Sílabas**: 4 niveles (2, 3, 4 y 5 sílabas) para **ordenar sílabas** y formar palabras. La palabra **no se muestra**: se oye con 🔊 Escuchar. Al completar un nivel se gana una **copa 🏆** y se desbloquea el siguiente.
 - **Palabras**: mamá, papá, sol, luna, gato, perro…
 - **Frases**: frases cortas para leer en voz alta.
 
@@ -48,7 +48,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - Incluye filtros de seguridad y modo padres.
 
 ### 🔊 Voz (ElevenLabs)
-- Los 136 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
+- Los 137 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
   - Español: voz **Liz** (dulce y cálida).
   - Inglés: voz **Jessica** (juguetona y brillante).
 - Así suena igual en cualquier teléfono, sin depender de las voces del sistema.
@@ -149,7 +149,7 @@ pipi-app/
    ├─ koala.jpg        → logo (recorte de la foto de PIPI)
    ├─ koala-source.jpg → foto original que enviaste
    ├─ icons/           → iconos de la app (192, 512, etc.)
-   └─ audio/           → 136 audios MP3 (español e inglés)
+   └─ audio/           → 137 audios MP3 (español e inglés)
 ```
 
 ---

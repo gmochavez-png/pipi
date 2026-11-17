@@ -3,7 +3,7 @@
    Guarda la app en el teléfono para que funcione sin conexión.
    ========================================================= */
 
-var CACHE = "pipi-v12";
+var CACHE = "pipi-v14";
 
 var ASSETS = [
   "./",
@@ -43,7 +43,8 @@ var ASSETS = [
   "./assets/audio/ui/en-2.mp3",
   "./assets/audio/ui/en-3.mp3",
   "./assets/audio/ui/en-4.mp3",
-  "./assets/audio/ui/en-5.mp3"
+  "./assets/audio/ui/en-5.mp3",
+  "./assets/audio/ui/name-antonella.mp3"
 ];
 
 self.addEventListener("install", function (event) {

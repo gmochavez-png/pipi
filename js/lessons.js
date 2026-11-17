@@ -47,9 +47,9 @@ window.PIPI_LESSONS = {
         ]
       },
 
-      silabas: {
-        title: "Ordena las sílabas",
-        emoji: "🧩",
+      silabas1: {
+        title: "Sílabas 1",
+        emoji: "1️⃣",
         kind: "order",
         items: [
           { big: "mamá", syllables: ["ma", "má"], emoji: "👩" },
@@ -58,12 +58,57 @@ window.PIPI_LESSONS = {
           { big: "gato", syllables: ["ga", "to"], emoji: "🐱" },
           { big: "luna", syllables: ["lu", "na"], emoji: "🌙" },
           { big: "mesa", syllables: ["me", "sa"], emoji: "🪑" },
+          { big: "pato", syllables: ["pa", "to"], emoji: "🦆" },
+          { big: "oso", syllables: ["o", "so"], emoji: "🐻" },
+          { big: "uva", syllables: ["u", "va"], emoji: "🍇" },
+          { big: "nube", syllables: ["nu", "be"], emoji: "☁️" }
+        ]
+      },
+      silabas2: {
+        title: "Sílabas 2",
+        emoji: "2️⃣",
+        kind: "order",
+        items: [
           { big: "pelota", syllables: ["pe", "lo", "ta"], emoji: "⚽" },
           { big: "zapato", syllables: ["za", "pa", "to"], emoji: "👟" },
           { big: "tortuga", syllables: ["tor", "tu", "ga"], emoji: "🐢" },
           { big: "ventana", syllables: ["ven", "ta", "na"], emoji: "🪟" },
+          { big: "camisa", syllables: ["ca", "mi", "sa"], emoji: "👕" },
+          { big: "comida", syllables: ["co", "mi", "da"], emoji: "🍽️" },
+          { big: "escuela", syllables: ["es", "cue", "la"], emoji: "🏫" },
+          { big: "maleta", syllables: ["ma", "le", "ta"], emoji: "🧳" },
+          { big: "cuchara", syllables: ["cu", "cha", "ra"], emoji: "🥄" },
+          { big: "sombrero", syllables: ["som", "bre", "ro"], emoji: "👒" }
+        ]
+      },
+      silabas3: {
+        title: "Sílabas 3",
+        emoji: "3️⃣",
+        kind: "order",
+        items: [
           { big: "mariposa", syllables: ["ma", "ri", "po", "sa"], emoji: "🦋" },
-          { big: "escuela", syllables: ["es", "cue", "la"], emoji: "🏫" }
+          { big: "elefante", syllables: ["e", "le", "fan", "te"], emoji: "🐘" },
+          { big: "chocolate", syllables: ["cho", "co", "la", "te"], emoji: "🍫" },
+          { big: "bicicleta", syllables: ["bi", "ci", "cle", "ta"], emoji: "🚲" },
+          { big: "calabaza", syllables: ["ca", "la", "ba", "za"], emoji: "🎃" },
+          { big: "teléfono", syllables: ["te", "lé", "fo", "no"], emoji: "📞" },
+          { big: "dinosaurio", syllables: ["di", "no", "sau", "rio"], emoji: "🦕" },
+          { big: "mariquita", syllables: ["ma", "ri", "qui", "ta"], emoji: "🐞" }
+        ]
+      },
+      silabas4: {
+        title: "Sílabas 4",
+        emoji: "4️⃣",
+        kind: "order",
+        items: [
+          { big: "matemáticas", syllables: ["ma", "te", "má", "ti", "cas"], emoji: "🔢" },
+          { big: "computadora", syllables: ["com", "pu", "ta", "do", "ra"], emoji: "💻" },
+          { big: "refrigerador", syllables: ["re", "fri", "ge", "ra", "dor"], emoji: "🧊" },
+          { big: "electricidad", syllables: ["e", "lec", "tri", "ci", "dad"], emoji: "⚡" },
+          { big: "universidad", syllables: ["u", "ni", "ver", "si", "dad"], emoji: "🎓" },
+          { big: "hipopótamo", syllables: ["hi", "po", "pó", "ta", "mo"], emoji: "🦛" },
+          { big: "murciélago", syllables: ["mur", "cié", "la", "go"], emoji: "🦇" },
+          { big: "abecedario", syllables: ["a", "be", "ce", "da", "rio"], emoji: "🔤" }
         ]
       },
 

@@ -597,6 +597,7 @@ body::before {
 }
 
 .menu-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -618,6 +619,14 @@ body::before {
 .menu-card__count { font-size: 0.78rem; font-weight: 700; color: var(--ink-soft); }
 .menu-card--lectura { border-top: 6px solid #ff9a5c; }
 .menu-card--ingles { border-top: 6px solid #3fc1b0; }
+.menu-card.is-locked { opacity: 0.55; filter: grayscale(0.4); }
+.menu-card.is-locked:active { transform: none; }
+.menu-card__lock {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.1rem;
+}
 
 /* ---------- Actividad ---------- */
 .activity-stage {
@@ -819,6 +828,17 @@ body::before {
 .celebrate.is-show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 .celebrate__emoji { font-size: 1.8rem; letter-spacing: 4px; }
 .celebrate__text { font-size: 1.3rem; font-weight: 900; color: var(--ink); margin: 6px 0; }
+.celebrate--trophy { padding: 24px 32px; }
+.celebrate--trophy .trophy {
+  font-size: 4.2rem;
+  line-height: 1;
+  animation: trophy-pop 0.6s ease both;
+}
+@keyframes trophy-pop {
+  0% { transform: scale(0.3) rotate(-15deg); }
+  60% { transform: scale(1.15) rotate(5deg); }
+  100% { transform: scale(1) rotate(0); }
+}
 
 /* ---------- Recompensas ---------- */
 .rewards-hero { text-align: center; padding: 6px 0 18px; }
