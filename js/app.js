@@ -767,21 +767,17 @@
       var st = state.syllableStats.byLevel[currentCat] || { correct: 0, errors: 0 };
       var stars = st.errors <= 1 ? 3 : st.errors <= 3 ? 2 : 1;
       var grade = "✅ " + st.correct + " aciertos · ❌ " + st.errors + " errores · " + "⭐".repeat(stars);
-
-      if (lvl === state.unlockedSyllableLevel && lvl < 4) {
+      var unlockedNew = (lvl === state.unlockedSyllableLevel && lvl < 4);
+      if (unlockedNew) {
         state.unlockedSyllableLevel = lvl + 1;
         saveState();
-        showParty("¡FELICIDADES, " + childName() + "!", "¡Completaste el Nivel " + lvl + "! 🏆", grade, function () {
-          openModule(currentModule);
-        });
-        return;
       }
-      if (lvl === 4) {
-        showParty("¡FELICIDADES, " + childName() + "!", "¡Ganaste la copa! 🏆", grade, function () {
-          show("menu");
-        });
-        return;
-      }
+      var sub = (lvl === 4) ? "¡Ganaste la copa! 🏆" : "¡Completaste el Nivel " + lvl + "! 🏆";
+      showParty("¡FELICIDADES, " + childName() + "!", sub, grade, function () {
+        if (unlockedNew) openModule(currentModule);
+        else show("menu");
+      });
+      return;
     }
 
     var finishText = "¡Muy bien, " + childName() + "! Terminaste.";
@@ -1253,6 +1249,13 @@
 
     // Registrar service worker solo si se sirve por http(s)
     if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+      var hadController = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (hadController && !window.__pipiReloading) {
+          window.__pipiReloading = true;
+          window.location.reload();
+        }
+      });
       window.addEventListener("load", function () {
         navigator.serviceWorker.register("sw.js").catch(function () {});
       });

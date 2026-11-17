@@ -53,7 +53,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - Incluye filtros de seguridad y modo padres.
 
 ### 🔊 Voz (ElevenLabs)
-- Los 142 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
+- Los 170 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
   - Español: voz **Liz** (dulce y cálida).
   - Inglés: voz **Jessica** (juguetona y brillante).
 - Así suena igual en cualquier teléfono, sin depender de las voces del sistema.
@@ -155,7 +155,7 @@ pipi-app/
    ├─ koala.jpg        → logo (recorte de la foto de PIPI)
    ├─ koala-source.jpg → foto original que enviaste
    ├─ icons/           → iconos de la app (192, 512, etc.)
-   └─ audio/           → 142 audios MP3 (español, inglés y cuentos)
+   └─ audio/           → 170 audios MP3 (español, inglés, cuentos y nombre)
 ```
 
 ---
