@@ -42,7 +42,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 
 ### 👧 Nombre y ajustes
 - Al abrir la app se escribe el **nombre** de la niña; PIPI lo usa para saludar y felicitar.
-- El botón **⚙️ Ajustes** permite cambiar el nombre, la **frecuencia de expresiones** (pocas / normal / muchas) y el **color del pelaje** de PIPI.
+- El botón **⚙️ Ajustes** permite cambiar el nombre, la **frecuencia de expresiones** (pocas / normal / muchas) y el **color del pelaje** de PIPI (gris, marrón, blanco, rosa, azul, verde, naranja y morado).
 
 ### 💬 Chat con PIPI
 - PIPI conversa con **respuestas escolares curadas** y busca en **Vikidia / Wikipedia**.
