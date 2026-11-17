@@ -12,7 +12,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 
 ### 📖 Aprender a leer (español)
 - **Letras**: A–Z (incluida la Ñ) con nombre, dibujo y palabra de ejemplo.
-- **Sílabas**: 4 niveles (2, 3, 4 y 5 sílabas) para **ordenar sílabas** y formar palabras. La palabra **no se muestra**: se oye con 🔊 Escuchar. Al completar un nivel se gana una **copa 🏆** y se desbloquea el siguiente.
+- **Sílabas**: 4 niveles (2, 3, 4 y 5 sílabas) para **arrastrar sílabas** y formar palabras. La palabra **no se muestra**: se oye con 🔊 Escuchar. Incluye **sonidos**, **marcador (✅ aciertos / ❌ errores)** y una **fiesta 🎉 con copa 🏆** al completar cada nivel.
 - **Palabras**: mamá, papá, sol, luna, gato, perro…
 - **Frases**: frases cortas para leer en voz alta.
 
@@ -28,7 +28,12 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - Cada tarjeta que la niña marca con **"¡Lo logré!"** da una estrella.
 - Las estrellas desbloquean **pegatinas** (a las 5, 15, 30, 50, 80 y 100 estrellas).
 - Cada logro se celebra con **corazones, flores, confeti y un cartel de "¡Lo lograste!"**.
+- Al completar un nivel de sílabas, PIPI hace una **fiesta** con música, colores, confeti y la **calificación**.
 - El progreso se guarda en el propio teléfono.
+
+### 📚 Cuentos
+- **5 cuentos cortos** de ~15 líneas, con hoja **colorida** y botón **🔊 Escuchar** (voz de Liz).
+- Botón **⭐ ¡Lo leí!** para guardar el cuento leído y ganar una estrella.
 
 ### 🐨 PIPI en 3D
 - PIPI es un koala **3D** (Three.js) con **expresiones**: parpadeo, sonrisa, habla, celebración, sorpresa, tristeza, pensativo y dormido.
@@ -48,7 +53,7 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - Incluye filtros de seguridad y modo padres.
 
 ### 🔊 Voz (ElevenLabs)
-- Los 137 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
+- Los 142 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
   - Español: voz **Liz** (dulce y cálida).
   - Inglés: voz **Jessica** (juguetona y brillante).
 - Así suena igual en cualquier teléfono, sin depender de las voces del sistema.
@@ -134,6 +139,7 @@ pipi-app/
 ├─ index.html          → estructura de la app
 ├─ css/styles.css      → diseño infantil
 ├─ js/lessons.js       → contenido educativo (editable)
+├─ js/stories.js       → cuentos cortos
 ├─ js/app.js           → lógica: navegación, voz, estrellas
 ├─ js/chat.js          → chat seguro, Wikipedia/Vikidia y juegos
 ├─ js/pipi3d.js        → koala 3D (Three.js) y expresiones
@@ -149,7 +155,7 @@ pipi-app/
    ├─ koala.jpg        → logo (recorte de la foto de PIPI)
    ├─ koala-source.jpg → foto original que enviaste
    ├─ icons/           → iconos de la app (192, 512, etc.)
-   └─ audio/           → 137 audios MP3 (español e inglés)
+   └─ audio/           → 142 audios MP3 (español, inglés y cuentos)
 ```
 
 ---

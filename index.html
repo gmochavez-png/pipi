@@ -82,7 +82,10 @@
         </button>
       </div>
 
-      <button class="ghost-btn ghost-btn--stars" data-go="rewards">⭐ Mis estrellas</button>
+      <div class="home-secondary">
+        <button class="ghost-btn ghost-btn--stars" data-go="rewards">⭐ Mis estrellas</button>
+        <button class="ghost-btn ghost-btn--stories" data-go="stories">📚 Cuentos</button>
+      </div>
     </section>
 
     <!-- ================= MENÚ DE CATEGORÍAS ================= -->
@@ -160,6 +163,34 @@
       </div>
     </section>
 
+    <!-- ================= CUENTOS ================= -->
+    <section id="screen-stories" class="screen" aria-label="Cuentos">
+      <header class="screen-head">
+        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
+        <h2>Cuentos</h2>
+        <span></span>
+      </header>
+      <p class="menu-subtitle">Elige un cuento para leer</p>
+      <div id="stories-grid" class="stories-grid"></div>
+    </section>
+
+    <section id="screen-story" class="screen" aria-label="Leer cuento">
+      <header class="screen-head">
+        <button class="icon-btn" id="story-back" aria-label="Volver a cuentos">⬅</button>
+        <h2 id="story-head-title">Cuento</h2>
+        <span></span>
+      </header>
+      <div id="story-page" class="story-page">
+        <div id="story-emoji" class="story-emoji"></div>
+        <h2 id="story-title" class="story-title"></h2>
+        <div id="story-text" class="story-text"></div>
+        <div class="story-actions">
+          <button id="story-listen" class="listen-btn">🔊 Escuchar</button>
+          <button id="story-done" class="star-btn">⭐ ¡Lo leí!</button>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= AJUSTES ================= -->
     <section id="screen-settings" class="screen" aria-label="Ajustes">
       <header class="screen-head">
@@ -222,9 +253,22 @@
 
   </div>
 
+  <!-- ================= FIESTA DE NIVEL ================= -->
+  <div id="party" class="party" hidden>
+    <div class="party-scene">
+      <div class="party-balloons" aria-hidden="true">🎈 🎈 🎈</div>
+      <div id="party-koala" class="party-koala" aria-hidden="true"></div>
+      <h2 id="party-title" class="party-title">¡FELICIDADES!</h2>
+      <p id="party-sub" class="party-sub"></p>
+      <div id="party-grade" class="party-grade"></div>
+      <button id="party-continue" class="big-btn big-btn--read party-btn">¡Seguir!</button>
+    </div>
+  </div>
+
   <script src="js/vendor/three.min.js"></script>
   <script src="js/pipi3d.js"></script>
   <script src="js/lessons.js"></script>
+  <script src="js/stories.js"></script>
   <script src="js/chat.js"></script>
   <script src="js/app.js"></script>
 </body>

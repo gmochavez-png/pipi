@@ -3,7 +3,7 @@
    Guarda la app en el teléfono para que funcione sin conexión.
    ========================================================= */
 
-var CACHE = "pipi-v14";
+var CACHE = "pipi-v15";
 
 var ASSETS = [
   "./",
@@ -11,6 +11,7 @@ var ASSETS = [
   "./manifest.json",
   "./css/styles.css",
   "./js/lessons.js",
+  "./js/stories.js",
   "./js/app.js",
   "./js/chat.js",
   "./js/pipi3d.js",
@@ -44,7 +45,12 @@ var ASSETS = [
   "./assets/audio/ui/en-3.mp3",
   "./assets/audio/ui/en-4.mp3",
   "./assets/audio/ui/en-5.mp3",
-  "./assets/audio/ui/name-antonella.mp3"
+  "./assets/audio/ui/name-antonella.mp3",
+  "./assets/audio/cuentos/mariposa.mp3",
+  "./assets/audio/cuentos/sol-luna.mp3",
+  "./assets/audio/cuentos/nube.mp3",
+  "./assets/audio/cuentos/gatito.mp3",
+  "./assets/audio/cuentos/estrella.mp3"
 ];
 
 self.addEventListener("install", function (event) {

@@ -527,6 +527,20 @@ body::before {
   border-radius: 999px;
   box-shadow: var(--shadow-sm);
 }
+.home-secondary {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+.ghost-btn--stories {
+  background: #e8f0ff;
+  color: #3d6a8f;
+  padding: 12px 22px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+}
 
 /* ---------- Cabecera de pantalla ---------- */
 .screen-head {
@@ -801,12 +815,138 @@ body::before {
 }
 .order-chip.is-used { opacity: 0.25; pointer-events: none; }
 .order-chip:active { transform: translateY(3px); box-shadow: none; }
+.order-chip { touch-action: none; user-select: none; }
+.order-chip.is-dragging { opacity: 0.25; }
+.order-chip--ghost {
+  position: fixed;
+  transform: translate(-50%, -50%) scale(1.1);
+  pointer-events: none;
+  z-index: 2000;
+  opacity: 0.95;
+}
+.order-slot.is-hover {
+  border-color: #ffb703;
+  background: #fff6d9;
+  transform: scale(1.05);
+}
+.order-score {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+}
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-5px); }
   75% { transform: translateX(5px); }
 }
+
+/* ---------- Cuentos ---------- */
+.stories-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding-bottom: 10px;
+}
+.story-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: none;
+  border-radius: 22px;
+  padding: 18px;
+  background: linear-gradient(135deg, var(--story-a), var(--story-b));
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+}
+.story-card:active { transform: scale(0.98); }
+.story-card__emoji { font-size: 2.4rem; }
+.story-card__title { flex: 1; font-size: 1.1rem; font-weight: 900; }
+.story-card__count { font-size: 0.8rem; font-weight: 800; color: var(--ink-soft); }
+.story-card__done { position: absolute; top: 8px; right: 10px; font-size: 1rem; }
+
+#screen-story { position: relative; }
+.story-page {
+  flex: 1;
+  background: linear-gradient(160deg, var(--story-a), var(--story-b));
+  border-radius: 28px;
+  padding: 22px 18px;
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+  color: var(--ink);
+  min-height: 0;
+}
+.story-emoji { font-size: 3.4rem; text-align: center; }
+.story-title { text-align: center; font-size: 1.5rem; font-weight: 900; margin: 4px 0 12px; }
+.story-text { font-size: 1.08rem; line-height: 1.65; font-weight: 700; }
+.story-text p { margin: 0 0 8px; }
+.story-actions { display: flex; gap: 10px; margin-top: 16px; }
+.story-actions .listen-btn { flex: 1; }
+.story-actions .star-btn { flex: 1; }
+
+/* ---------- Fiesta de nivel ---------- */
+.party {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #ffe29a, #ff9ec4 40%, #a78bfa 70%, #7ec8e3);
+  background-size: 200% 200%;
+  animation: party-bg 6s ease infinite;
+}
+.party[hidden] { display: none; }
+@keyframes party-bg {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.party-scene { text-align: center; max-width: 360px; width: 100%; }
+.party-balloons {
+  font-size: 2rem;
+  letter-spacing: 8px;
+  animation: party-float 3s ease-in-out infinite;
+}
+@keyframes party-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.party-koala {
+  width: 180px;
+  height: 171px;
+  margin: 6px auto;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+}
+.party-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  margin: 6px 0;
+}
+.party-sub {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 8px;
+}
+.party-grade {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 8px 14px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.party-btn { width: 100%; justify-content: center; }
 
 /* ---------- Celebración de logros ---------- */
 .celebrate {
@@ -896,7 +1036,7 @@ body::before {
 .confetti {
   position: fixed;
   top: -50px;
-  z-index: 900;
+  z-index: 1400;
   pointer-events: none;
   animation: fall 1.5s ease-in forwards;
 }

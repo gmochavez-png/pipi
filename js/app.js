@@ -22,7 +22,8 @@
     name: "",
     expressionRate: "normal",
     furColor: "#8b93a2",
-    unlockedSyllableLevel: 1
+    unlockedSyllableLevel: 1,
+    syllableStats: { byLevel: {} }
   };
 
   /* ---------------- Persistencia ---------------- */
@@ -38,6 +39,8 @@
           state.expressionRate = saved.expressionRate === "low" || saved.expressionRate === "high" ? saved.expressionRate : "normal";
           state.furColor = typeof saved.furColor === "string" && /^#[0-9a-fA-F]{6}$/.test(saved.furColor) ? saved.furColor : "#8b93a2";
           state.unlockedSyllableLevel = (saved.unlockedSyllableLevel >= 1 && saved.unlockedSyllableLevel <= 4) ? saved.unlockedSyllableLevel : 1;
+          state.syllableStats = (saved.syllableStats && typeof saved.syllableStats === "object") ? saved.syllableStats : { byLevel: {} };
+          if (!state.syllableStats.byLevel) state.syllableStats.byLevel = {};
         }
       }
     } catch (e) { /* almacenamiento no disponible: seguimos en memoria */ }
@@ -51,7 +54,8 @@
         name: state.name,
         expressionRate: state.expressionRate,
         furColor: state.furColor,
-        unlockedSyllableLevel: state.unlockedSyllableLevel
+        unlockedSyllableLevel: state.unlockedSyllableLevel,
+        syllableStats: state.syllableStats
       }));
     } catch (e) { /* modo privado: no pasa nada */ }
   }
@@ -203,6 +207,76 @@
     } catch (e) {}
   }
 
+  /* ---------------- Sonidos y música ---------------- */
+  var sfxCtx = null;
+
+  function ensureSfx() {
+    if (!sfxCtx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) sfxCtx = new AC();
+    }
+    if (sfxCtx && sfxCtx.state === "suspended") {
+      try { sfxCtx.resume(); } catch (e) {}
+    }
+    return sfxCtx;
+  }
+
+  function tone(ctx, freq, start, dur, gain) {
+    var o = ctx.createOscillator();
+    var g = ctx.createGain();
+    o.type = "triangle";
+    o.frequency.setValueAtTime(freq, start);
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.exponentialRampToValueAtTime(gain || 0.1, start + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+    o.connect(g);
+    g.connect(ctx.destination);
+    o.start(start);
+    o.stop(start + dur + 0.02);
+  }
+
+  function playSfx(type) {
+    if (state.muted) return;
+    var ctx = ensureSfx();
+    if (!ctx) return;
+    var now = ctx.currentTime;
+    if (type === "drag") {
+      tone(ctx, 520, now, 0.08, 0.06);
+    } else if (type === "drop") {
+      tone(ctx, 700, now, 0.1, 0.1);
+    } else if (type === "correct") {
+      [523, 659, 784, 1047].forEach(function (f, i) { tone(ctx, f, now + i * 0.09, 0.18, 0.12); });
+    } else if (type === "wrong") {
+      tone(ctx, 220, now, 0.16, 0.1);
+      tone(ctx, 180, now + 0.14, 0.2, 0.08);
+    }
+  }
+
+  var partyMusicTimer = null;
+
+  function playPartyMusic() {
+    if (state.muted) return;
+    var ctx = ensureSfx();
+    if (!ctx) return;
+    stopPartyMusic();
+    var notes = [523, 659, 784, 1047, 784, 659, 523, 659, 784, 1047, 1319, 1047];
+    var i = 0;
+    function note() {
+      if (!ctx) return;
+      tone(ctx, notes[i % notes.length], ctx.currentTime, 0.18, 0.08);
+      i++;
+    }
+    note();
+    partyMusicTimer = setInterval(note, 220);
+  }
+
+  function stopPartyMusic() {
+    if (partyMusicTimer) {
+      clearInterval(partyMusicTimer);
+      partyMusicTimer = null;
+    }
+  }
+
   /* ---------------- Personaje koala (SVG) ---------------- */
   function koalaSVG() {
     return (
@@ -338,6 +412,79 @@
     show("menu");
   }
 
+  /* ---------------- Cuentos ---------------- */
+  var currentStory = null;
+
+  function openStories() {
+    var grid = $("#stories-grid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    var stories = window.PIPI_STORIES || [];
+    stories.forEach(function (s, i) {
+      var b = document.createElement("button");
+      b.className = "story-card";
+      b.style.setProperty("--story-a", s.color);
+      b.style.setProperty("--story-b", s.color2);
+      var done = !!state.done["cuento:" + s.slug];
+      b.innerHTML =
+        '<span class="story-card__emoji">' + s.emoji + "</span>" +
+        '<span class="story-card__title">' + s.title + "</span>" +
+        '<span class="story-card__count">' + s.lines.length + " líneas</span>" +
+        (done ? '<span class="story-card__done">✅</span>' : "");
+      b.addEventListener("click", function () { openStory(i); });
+      grid.appendChild(b);
+    });
+    show("stories");
+  }
+
+  function openStory(index) {
+    var stories = window.PIPI_STORIES || [];
+    var s = stories[index];
+    if (!s) return;
+    currentStory = s;
+    var page = $("#story-page");
+    if (page) {
+      page.style.setProperty("--story-a", s.color);
+      page.style.setProperty("--story-b", s.color2);
+    }
+    var emoji = $("#story-emoji"); if (emoji) emoji.textContent = s.emoji;
+    var title = $("#story-title"); if (title) title.textContent = s.title;
+    var head = $("#story-head-title"); if (head) head.textContent = s.title;
+    var text = $("#story-text");
+    if (text) {
+      text.innerHTML = "";
+      s.lines.forEach(function (line) {
+        var p = document.createElement("p");
+        p.textContent = line;
+        text.appendChild(p);
+      });
+    }
+    show("story");
+  }
+
+  function listenStory() {
+    if (!currentStory) return;
+    stopAll();
+    playAudio(audioBase + "cuentos/" + currentStory.slug + ".mp3", currentStory.lines.join(" "), "es");
+  }
+
+  function awardStory() {
+    if (!currentStory) return;
+    var key = "cuento:" + currentStory.slug;
+    var isNew = !state.done[key];
+    if (isNew) {
+      state.done[key] = true;
+      saveState();
+      updateStars();
+    }
+    burstStars();
+    celebrateBanner("¡Leíste el cuento, " + childName() + "! 📚");
+    var praise = randomPraise();
+    var praiseText = praise.text.replace(/{name}/g, childName());
+    speakPersonalized(praiseText, audioBase + "ui/" + praise.slug + ".mp3", praise.audioText, praise.lang, null);
+    showToast("¡Cuento leído! ⭐");
+  }
+
   /* ---------------- Actividad ---------------- */
   function getCategory() {
     return window.PIPI_LESSONS[currentModule].categories[currentCat];
@@ -452,21 +599,39 @@
         '<div class="card__emoji">' + (item.emoji || "🧩") + "</div>" +
         '<div class="order-slots" id="order-slots">' + slotsHtml + "</div>" +
         '<div class="order-pool" id="order-pool">' + chipsHtml + "</div>" +
-        '<div class="card__hint">Toca 🔊 Escuchar y ordena las sílabas</div>' +
+        '<div class="card__hint">Arrastra o toca las sílabas en orden</div>' +
+        '<div class="order-score" id="order-score"></div>' +
       "</div>";
 
     var slotEls = Array.prototype.slice.call(stage.querySelectorAll(".order-slot"));
     var chipEls = Array.prototype.slice.call(stage.querySelectorAll(".order-chip"));
     var slots = new Array(syllables.length).fill(null);
     var filled = 0;
+    var drag = null;
+    var lastDrop = 0;
 
-    function placeChip(chip) {
-      if (chip.classList.contains("is-used")) return;
-      var idx = -1;
-      for (var i = 0; i < slots.length; i++) {
-        if (!slots[i]) { idx = i; break; }
+    function levelStats() {
+      var key = currentCat || "";
+      if (!state.syllableStats.byLevel) state.syllableStats.byLevel = {};
+      if (!state.syllableStats.byLevel[key]) state.syllableStats.byLevel[key] = { correct: 0, errors: 0 };
+      return state.syllableStats.byLevel[key];
+    }
+
+    function updateScore() {
+      var st = levelStats();
+      var el = stage.querySelector("#order-score");
+      if (el) el.textContent = "✅ " + st.correct + "   ❌ " + st.errors;
+    }
+
+    function placeChip(chip, slotIndex) {
+      if (!chip || chip.classList.contains("is-used")) return false;
+      var idx = (typeof slotIndex === "number") ? slotIndex : -1;
+      if (idx === -1) {
+        for (var i = 0; i < slots.length; i++) {
+          if (!slots[i]) { idx = i; break; }
+        }
       }
-      if (idx === -1) return;
+      if (idx === -1 || slots[idx]) return false;
       slots[idx] = chip;
       chip.classList.add("is-used");
       chip.disabled = true;
@@ -474,6 +639,7 @@
       slotEls[idx].classList.add("is-filled");
       filled++;
       if (filled === slots.length) checkOrder();
+      return true;
     }
 
     function removeSlot(idx) {
@@ -489,11 +655,20 @@
 
     function checkOrder() {
       var formed = slots.map(function (c) { return c ? c.textContent : ""; }).join("");
+      var st = levelStats();
       if (formed === item.big) {
+        st.correct++;
+        saveState();
+        updateScore();
         slotEls.forEach(function (s) { s.classList.add("is-correct"); });
+        playSfx("correct");
         awardStar();
       } else {
+        st.errors++;
+        saveState();
+        updateScore();
         slotEls.forEach(function (s) { s.classList.add("is-wrong"); });
+        playSfx("wrong");
         speak("Casi... inténtalo otra vez.", "es");
         setTimeout(function () {
           for (var i = 0; i < slots.length; i++) removeSlot(i);
@@ -502,13 +677,74 @@
       }
     }
 
+    function startDrag(e, chip) {
+      if (chip.classList.contains("is-used")) return;
+      if (e.button !== undefined && e.button !== 0) return;
+      e.preventDefault();
+      var ghost = chip.cloneNode(true);
+      ghost.classList.add("order-chip--ghost");
+      ghost.style.left = e.clientX + "px";
+      ghost.style.top = e.clientY + "px";
+      document.body.appendChild(ghost);
+      chip.classList.add("is-dragging");
+      drag = { chip: chip, ghost: ghost, startX: e.clientX, startY: e.clientY, moved: false };
+      playSfx("drag");
+      try { chip.setPointerCapture(e.pointerId); } catch (err) {}
+      chip.addEventListener("pointermove", onDragMove);
+      chip.addEventListener("pointerup", onDragEnd);
+      chip.addEventListener("pointercancel", onDragEnd);
+    }
+
+    function onDragMove(e) {
+      if (!drag) return;
+      var dx = e.clientX - drag.startX;
+      var dy = e.clientY - drag.startY;
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) drag.moved = true;
+      drag.ghost.style.left = e.clientX + "px";
+      drag.ghost.style.top = e.clientY + "px";
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      var slot = el && el.closest ? el.closest(".order-slot") : null;
+      slotEls.forEach(function (s) {
+        s.classList.toggle("is-hover", s === slot && !s.classList.contains("is-filled"));
+      });
+    }
+
+    function onDragEnd(e) {
+      if (!drag) return;
+      var d = drag;
+      drag = null;
+      d.chip.removeEventListener("pointermove", onDragMove);
+      d.chip.removeEventListener("pointerup", onDragEnd);
+      d.chip.removeEventListener("pointercancel", onDragEnd);
+      d.chip.classList.remove("is-dragging");
+      if (d.ghost) d.ghost.remove();
+      slotEls.forEach(function (s) { s.classList.remove("is-hover"); });
+
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      var slot = el && el.closest ? el.closest(".order-slot") : null;
+      var placed = false;
+      if (slot) {
+        var idx = slotEls.indexOf(slot);
+        if (idx !== -1) placed = placeChip(d.chip, idx);
+      }
+      if (!placed && !d.moved) placed = placeChip(d.chip);
+      if (placed) {
+        lastDrop = Date.now();
+        playSfx("drop");
+      }
+    }
+
     chipEls.forEach(function (chip) {
-      chip.addEventListener("click", function () { placeChip(chip); });
+      chip.addEventListener("pointerdown", function (e) { startDrag(e, chip); });
     });
     slotEls.forEach(function (slot, idx) {
-      slot.addEventListener("click", function () { removeSlot(idx); });
+      slot.addEventListener("click", function () {
+        if (Date.now() - lastDrop < 350) return;
+        removeSlot(idx);
+      });
     });
 
+    updateScore();
     if (pipi3d) pipi3d.setExpression("thinking", 120000);
   }
 
@@ -524,37 +760,37 @@
 
   function finishCategory() {
     updateStars();
+
+    var m = (currentCat || "").match(/^silabas(\d+)$/);
+    if (m) {
+      var lvl = parseInt(m[1], 10);
+      var st = state.syllableStats.byLevel[currentCat] || { correct: 0, errors: 0 };
+      var stars = st.errors <= 1 ? 3 : st.errors <= 3 ? 2 : 1;
+      var grade = "✅ " + st.correct + " aciertos · ❌ " + st.errors + " errores · " + "⭐".repeat(stars);
+
+      if (lvl === state.unlockedSyllableLevel && lvl < 4) {
+        state.unlockedSyllableLevel = lvl + 1;
+        saveState();
+        showParty("¡FELICIDADES, " + childName() + "!", "¡Completaste el Nivel " + lvl + "! 🏆", grade, function () {
+          openModule(currentModule);
+        });
+        return;
+      }
+      if (lvl === 4) {
+        showParty("¡FELICIDADES, " + childName() + "!", "¡Ganaste la copa! 🏆", grade, function () {
+          show("menu");
+        });
+        return;
+      }
+    }
+
     var finishText = "¡Muy bien, " + childName() + "! Terminaste.";
     speakPersonalized(finishText, audioBase + "ui/terminaste.mp3", "¡Muy bien! Terminaste.", "es", null);
     if (pipi3d) pipi3d.celebrate();
     burstStars();
-
-    var unlockedNew = false;
-    var m = (currentCat || "").match(/^silabas(\d+)$/);
-    if (m) {
-      var lvl = parseInt(m[1], 10);
-      if (lvl === state.unlockedSyllableLevel && lvl < 4) {
-        state.unlockedSyllableLevel = lvl + 1;
-        saveState();
-        unlockedNew = true;
-        celebrateTrophy("¡Nivel " + lvl + " completado!");
-        showToast("¡Nivel " + (lvl + 1) + " desbloqueado! 🏆");
-      } else if (lvl === 4) {
-        celebrateTrophy("¡Ganaste la copa!");
-        showToast("¡Completaste todos los niveles! 🏆");
-      } else {
-        celebrateBanner("¡Terminaste, " + childName() + "! 🏆");
-        showToast("¡Muy bien! Terminaste esta lección 🎉");
-      }
-    } else {
-      celebrateBanner("¡Terminaste, " + childName() + "! 🏆");
-      showToast("¡Muy bien! Terminaste esta lección 🎉");
-    }
-
-    setTimeout(function () {
-      if (unlockedNew) openModule(currentModule);
-      else show("menu");
-    }, unlockedNew ? 2600 : 1500);
+    celebrateBanner("¡Terminaste, " + childName() + "! 🏆");
+    showToast("¡Muy bien! Terminaste esta lección 🎉");
+    setTimeout(function () { show("menu"); }, 1500);
   }
 
   /* ---------------- Estrella / recompensa ---------------- */
@@ -657,6 +893,38 @@
       el.classList.remove("is-show");
       setTimeout(function () { el.remove(); }, 400);
     }, 2400);
+  }
+
+  var partyCallback = null;
+
+  function showParty(title, sub, grade, onContinue) {
+    partyCallback = onContinue || null;
+    var p = $("#party");
+    if (!p) {
+      if (onContinue) onContinue();
+      return;
+    }
+    var t = $("#party-title"); if (t) t.textContent = title;
+    var s = $("#party-sub"); if (s) s.textContent = sub;
+    var g = $("#party-grade"); if (g) g.textContent = grade || "";
+    p.hidden = false;
+    burstStars();
+    playPartyMusic();
+    if (pipi3d) {
+      pipi3d.attach($("#party-koala"));
+      pipi3d.celebrate();
+      pipi3d.setExpression("happy", 8000);
+    }
+  }
+
+  function hideParty() {
+    var p = $("#party");
+    if (p) p.hidden = true;
+    stopPartyMusic();
+    if (pipi3d) pipi3d.hide();
+    var cb = partyCallback;
+    partyCallback = null;
+    if (cb) cb();
   }
 
   /* ---------------- Aviso ---------------- */
@@ -810,6 +1078,7 @@
         var go = el.getAttribute("data-go");
         if (go === "menu") openModule(el.getAttribute("data-module"));
         else if (go === "rewards") { renderRewards(); show("rewards"); }
+        else if (go === "stories") openStories();
         else show(go);
       });
     });
@@ -819,6 +1088,8 @@
       btn.addEventListener("click", function () {
         if (currentScreen === "activity") show("menu");
         else if (currentScreen === "menu") show("home");
+        else if (currentScreen === "story") show("stories");
+        else if (currentScreen === "stories") show("home");
         else show("home");
       });
     });
@@ -865,6 +1136,18 @@
         showToast("¡Listo! Empezamos de nuevo.");
       }
     });
+
+    // Cuentos
+    var storyBack = $("#story-back");
+    if (storyBack) storyBack.addEventListener("click", function () { show("stories"); });
+    var storyListen = $("#story-listen");
+    if (storyListen) storyListen.addEventListener("click", listenStory);
+    var storyDone = $("#story-done");
+    if (storyDone) storyDone.addEventListener("click", awardStory);
+
+    // Fiesta de nivel
+    var partyContinue = $("#party-continue");
+    if (partyContinue) partyContinue.addEventListener("click", hideParty);
 
     // Bienvenida: nombre
     var startBtn = $("#start-btn");

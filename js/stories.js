@@ -1,0 +1,122 @@
+window.PIPI_STORIES = [
+  {
+    slug: "mariposa",
+    title: "PIPI y la mariposa",
+    emoji: "🦋",
+    color: "#ffe3f3",
+    color2: "#d8c2ff",
+    lines: [
+      "PIPI era un koala muy curioso.",
+      "Un día vio una mariposa de colores.",
+      "La mariposa volaba de flor en flor.",
+      "PIPI quiso jugar con ella.",
+      "Caminó despacio por el bosque.",
+      "Encontró un río azul y tranquilo.",
+      "La mariposa se posó en su nariz.",
+      "PIPI se rió con muchas ganas.",
+      "La mariposa le dijo: \"¡Hola, PIPI!\"",
+      "PIPI le dio una hoja verde.",
+      "La mariposa voló muy alto.",
+      "PIPI la siguió con la mirada.",
+      "Luego volvió a su casa.",
+      "Esa noche soñó con mariposas.",
+      "Y durmió muy feliz."
+    ]
+  },
+  {
+    slug: "sol-luna",
+    title: "El sol y la luna",
+    emoji: "🌙",
+    color: "#fff2c7",
+    color2: "#ffc9e3",
+    lines: [
+      "El sol y la luna eran amigos.",
+      "El sol salía por la mañana.",
+      "La luna salía por la noche.",
+      "Un día la luna se puso triste.",
+      "Quería jugar con el sol.",
+      "El sol le dijo: \"No estés triste.\"",
+      "\"Yo te presto mi luz.\"",
+      "La luna sonrió muy contenta.",
+      "Desde entonces, la luna brilla.",
+      "Ilumina los sueños de los niños.",
+      "El sol calienta las flores.",
+      "La luna cuida la noche.",
+      "Los dos se quieren mucho.",
+      "Y siempre se esperan.",
+      "Fin."
+    ]
+  },
+  {
+    slug: "nube",
+    title: "La nube que quería llover",
+    emoji: "☁️",
+    color: "#dff2ff",
+    color2: "#b9e0ff",
+    lines: [
+      "Había una nube muy suave.",
+      "La nube quería regalar lluvia.",
+      "Miró las plantas del jardín.",
+      "Las plantas tenían sed.",
+      "La nube sopló y sopló.",
+      "Se puso gris y pesada.",
+      "Entonces empezó a llover.",
+      "Las gotitas caían despacio.",
+      "Las plantas bebieron agua.",
+      "Las flores abrieron sus pétalos.",
+      "La nube se puso blanca otra vez.",
+      "El sol salió e hizo un arcoíris.",
+      "Todos dieron gracias a la nube.",
+      "La nube se sintió muy feliz.",
+      "Y siguió cuidando el jardín."
+    ]
+  },
+  {
+    slug: "gatito",
+    title: "El gatito valiente",
+    emoji: "🐱",
+    color: "#ffe9d6",
+    color2: "#ffd0a8",
+    lines: [
+      "Había un gatito muy pequeño.",
+      "El gatito se llamaba Miso.",
+      "Miso tenía miedo a la oscuridad.",
+      "Un día se perdió en el bosque.",
+      "Estaba solo y triste.",
+      "Entonces vio una luciérnaga.",
+      "La luciérnaga brillaba mucho.",
+      "Miso la siguió despacio.",
+      "La luciérnaga lo llevó a casa.",
+      "Su mamá lo abrazó fuerte.",
+      "Miso ya no tenía miedo.",
+      "Aprendió que la luz siempre vuelve.",
+      "Ahora duerme tranquilo.",
+      "Y sueña con su amiga luciérnaga.",
+      "Miso es un gatito valiente."
+    ]
+  },
+  {
+    slug: "estrella",
+    title: "La estrella que no brillaba",
+    emoji: "⭐",
+    color: "#e8e2ff",
+    color2: "#c9b8ff",
+    lines: [
+      "En el cielo había una estrella.",
+      "La estrella se sentía apagada.",
+      "Las otras estrellas brillaban mucho.",
+      "La estrella quería brillar también.",
+      "Una noche escuchó a un niño.",
+      "El niño pedía un deseo.",
+      "La estrella se acercó despacio.",
+      "El niño dijo: \"Quiero un amigo.\"",
+      "La estrella brilló muy fuerte.",
+      "El niño sonrió y cerró los ojos.",
+      "Desde esa noche, la estrella brilla.",
+      "Brilla para todos los niños.",
+      "Y les recuerda que son especiales.",
+      "La estrella aprendió a quererse.",
+      "Y el cielo se llenó de luz."
+    ]
+  }
+];
