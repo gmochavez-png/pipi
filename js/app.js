@@ -1038,7 +1038,13 @@
     return PHRASES[Math.floor(Math.random() * PHRASES.length)];
   }
 
+  // Al tocar a PIPI le brilla el corazón.
+  function glowHeart(ms) {
+    if (pipi3d && pipi3d.glowHeart) pipi3d.glowHeart(ms || 1800);
+  }
+
   function greet() {
+    glowHeart(1800);
     if (state.muted) {
       showToast("🔇 El sonido está apagado. Toca el altavoz.");
       return;
@@ -1140,6 +1146,11 @@
     // Tocar al koala (home)
     var koala = $("#koala-home");
     if (koala) koala.addEventListener("click", greet);
+    // En las demás pantallas, tocar a PIPI también hace brillar su corazón.
+    ["#koala-welcome", "#koala-settings", "#koala-games", "#party-koala"].forEach(function (sel) {
+      var el = $(sel);
+      if (el) el.addEventListener("click", function () { glowHeart(1800); playSfx("drop"); });
+    });
 
     // Reset
     var reset = $("#reset-btn");
@@ -1277,6 +1288,7 @@
       randomPraise: randomPraise,
       expression: function (mood, ms) { if (pipi3d) pipi3d.setExpression(mood, ms); },
       celebrate: function () { if (pipi3d) pipi3d.celebrate(); },
+      glowHeart: glowHeart,
       addStar: function (key) {
         if (!key || state.done[key]) return false;
         state.done[key] = true;
@@ -1297,7 +1309,16 @@
         }
       });
       window.addEventListener("load", function () {
-        navigator.serviceWorker.register("sw.js").catch(function () {});
+        // updateViaCache "none": siempre pide sw.js nuevo al servidor.
+        navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function (reg) {
+          // Busca versión nueva cada vez que la app vuelve a la pantalla
+          // (en el celular la app instalada a veces solo se "despierta").
+          var check = function () { try { reg.update(); } catch (e) {} };
+          document.addEventListener("visibilitychange", function () {
+            if (document.visibilityState === "visible") check();
+          });
+          setInterval(check, 30 * 60 * 1000);
+        }).catch(function () {});
       });
     }
   }

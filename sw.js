@@ -9,7 +9,7 @@
    reciban la versión nueva.
    ========================================================= */
 
-var CACHE = "pipi-v19";
+var CACHE = "pipi-v20";
 
 var APP_FILES = [
   "./",
@@ -210,7 +210,9 @@ var ASSETS = APP_FILES.concat(AUDIO_FILES);
 self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE).then(function (cache) {
-      return cache.addAll(ASSETS);
+      // "reload" baja cada archivo directo del servidor, sin usar la caché del
+      // navegador. Así una versión nueva nunca guarda archivos viejos.
+      return cache.addAll(ASSETS.map(function (u) { return new Request(u, { cache: "reload" }); }));
     }).then(function () {
       return self.skipWaiting();
     })
@@ -253,6 +255,42 @@ function rangeResponse(cached, range) {
   });
 }
 
+function saveCopy(req, response) {
+  if (response && response.status === 200 && response.type === "basic") {
+    var copy = response.clone();
+    caches.open(CACHE).then(function (cache) {
+      cache.put(req, copy).catch(function () {});
+    });
+  }
+  return response;
+}
+
+// Página, JS, CSS y manifiesto: primero internet (así siempre llega lo más
+// nuevo) y, si no hay conexión o tarda más de 4 s, lo guardado.
+function networkFirst(req) {
+  var fromCache = function () {
+    return caches.match(req, { ignoreSearch: true }).then(function (c) {
+      return c || caches.match("./index.html");
+    });
+  };
+  return new Promise(function (resolve) {
+    var done = false;
+    var timer = setTimeout(function () {
+      fromCache().then(function (c) { if (!done && c) { done = true; resolve(c); } });
+    }, 4000);
+    fetch(req, { cache: "no-cache" }).then(function (res) {
+      clearTimeout(timer);
+      saveCopy(req, res);
+      if (!done) { done = true; resolve(res); }
+    }).catch(function () {
+      clearTimeout(timer);
+      fromCache().then(function (c) {
+        if (!done) { done = true; resolve(c || Response.error()); }
+      });
+    });
+  });
+}
+
 self.addEventListener("fetch", function (event) {
   var req = event.request;
   if (req.method !== "GET") return;
@@ -262,23 +300,21 @@ self.addEventListener("fetch", function (event) {
   var url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  var range = req.headers.get("range");
+  var isCode = req.mode === "navigate" || /\.(html|js|css|json)$/.test(url.pathname) || url.pathname.slice(-1) === "/";
+  if (isCode) {
+    event.respondWith(networkFirst(req));
+    return;
+  }
 
+  // Audios e imágenes: primero lo guardado (rápido y sin internet).
+  var range = req.headers.get("range");
   event.respondWith(
     caches.match(req, { ignoreSearch: true }).then(function (cached) {
       if (cached && range) return rangeResponse(cached, range);
       if (cached) return cached;
       return fetch(req).then(function (response) {
-        if (response && response.status === 200 && response.type === "basic") {
-          var copy = response.clone();
-          caches.open(CACHE).then(function (cache) {
-            cache.put(req, copy).catch(function () {});
-          });
-        }
-        return response;
+        return saveCopy(req, response);
       }).catch(function () {
-        // Sin red ni caché: si era una página, mostramos la app igualmente.
-        if (req.mode === "navigate") return caches.match("./index.html");
         return Response.error();
       });
     })

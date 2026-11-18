@@ -107,6 +107,7 @@ body::before {
   text-align: center;
 }
 .koala-welcome {
+  cursor: pointer;
   width: min(62vw, 230px);
   height: min(59vw, 218px);
   filter: drop-shadow(0 16px 20px rgba(70, 110, 150, 0.22));
@@ -1242,7 +1243,7 @@ body::before {
   flex: 0 0 auto;
   width: 72px;
   height: 72px;
-  pointer-events: none;
+  cursor: pointer;
   filter: drop-shadow(0 6px 8px rgba(70, 110, 150, 0.18));
 }
 .koala-games canvas { display: block; width: 100% !important; height: 100% !important; }

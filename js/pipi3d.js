@@ -441,6 +441,34 @@
     });
     koala.add(heart);
 
+    /* Brillo del corazón: un halo rosa y una luz que tiñe el pelaje. */
+    function heartGlowCanvas() {
+      var c = makeCanvas(512), ctx = c.getContext("2d");
+      ctx.shadowColor = "rgba(255,90,170,1)";
+      ctx.shadowBlur = 60;
+      heartPath(ctx, 0.95);
+      ctx.fillStyle = "rgba(255,120,190,0.55)";
+      ctx.fill();
+      ctx.shadowBlur = 120;
+      ctx.fill();
+      return c;
+    }
+    var heartHalo = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: canvasTexture(heartGlowCanvas()),
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    }));
+    heartHalo.position.set(0, -0.32, surfaceZ(0, -0.32) + 0.16);
+    heartHalo.scale.set(1.9, 1.9, 1);
+    heartHalo.visible = false;
+    koala.add(heartHalo);
+    var heartLight = new THREE.PointLight(0xff5fae, 0, 3.2, 2);
+    heartLight.position.set(0, -0.3, surfaceZ(0, -0.3) + 0.5);
+    koala.add(heartLight);
+
     /* Bocas (el peluche no tiene: solo aparecen al hablar o con emociones) */
     var mouthOpen = makePatch(mouthCanvas("open"), 0.24, 0.13, 0, 0.19, { seg: 16, lift: 0.012 });
     var smile = makePatch(mouthCanvas("smile"), 0.26, 0.13, 0, 0.21, { seg: 16, lift: 0.012 });
@@ -585,7 +613,9 @@
       nextMood: performance.now() + 14000,
       nextBlink: 2200 + Math.random() * 3000,
       blinkUntil: 0,
-      nextSparkle: 0
+      nextSparkle: 0,
+      glowStart: 0,
+      glowUntil: 0
     };
 
     var activeContainer = null;
@@ -607,7 +637,15 @@
 
     function talk(on) { state.talking = !!on; }
 
+    // Hace brillar el corazón durante "ms" milisegundos (con latidos).
+    function glowHeart(ms) {
+      var now = performance.now();
+      if (now > state.glowUntil) state.glowStart = now;
+      state.glowUntil = Math.max(state.glowUntil, now + (ms || 1600));
+    }
+
     function celebrate() {
+      glowHeart(2200);
       setExpression("happy", 1500);
       state.mouth = 0;
     }
@@ -714,7 +752,23 @@
         heartSparkleTex.offset.set(Math.random(), Math.random());
         hornSparkleTex.offset.set(Math.random(), Math.random());
       }
-      heart.material.emissiveIntensity = 0.45 + Math.sin(t * 5) * 0.12;
+      /* brillo del corazón (al tocar a PIPI y en cada logro) */
+      var glow = 0;
+      if (now < state.glowUntil) {
+        var age = (now - state.glowStart) / 1000;
+        var fadeIn = Math.min(1, age / 0.18);
+        var fadeOut = Math.min(1, (state.glowUntil - now) / 450);
+        var beat = 0.75 + 0.25 * Math.pow(Math.abs(Math.sin(age * 5.2)), 2);
+        glow = fadeIn * fadeOut * beat;
+      }
+      heart.material.emissiveIntensity = 0.45 + Math.sin(t * 5) * 0.12 + glow * 1.3;
+      heart.material.color.setScalar(1 + glow * 0.22);
+      var hs = 1 + glow * 0.07;
+      heart.scale.set(hs, hs, 1 + glow * 0.03);
+      heartHalo.visible = glow > 0.01;
+      heartHalo.material.opacity = glow * 0.45;
+      heartHalo.scale.set(1.75 + glow * 0.2, 1.75 + glow * 0.2, 1);
+      heartLight.intensity = glow * 0.7;
 
       /* burbujas */
       question.visible = state.expression === "thinking";
@@ -768,6 +822,7 @@
       talk: talk,
       setExpression: setExpression,
       celebrate: celebrate,
+      glowHeart: glowHeart,
       setMoodInterval: setMoodInterval,
       setFurColor: setFurColor,
       getFurColor: getFurColor,
