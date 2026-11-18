@@ -429,6 +429,13 @@
 
     var grid = $("#menu-grid");
     grid.innerHTML = "";
+    grid.classList.toggle("menu-grid--groups", !!data.groups);
+    if (data.groups) {
+      renderGroupedMenu(mod, data, grid);
+      updateStars();
+      show("menu");
+      return;
+    }
     Object.keys(data.categories).forEach(function (key) {
       var cat = data.categories[key];
       var levelMatch = key.match(/^silabas(\d+)$/);
@@ -453,6 +460,75 @@
 
     updateStars();
     show("menu");
+  }
+
+  /* Menú por temas: cada tema con su color y sus niveles como tarjetas. */
+  function levelDone(mod, key, cat) {
+    var n = 0;
+    for (var i = 0; i < cat.items.length; i++) if (state.done[mod + ":" + key + ":" + i]) n++;
+    return n;
+  }
+
+  function renderGroupedMenu(mod, data, grid) {
+    Object.keys(data.groups).forEach(function (gkey) {
+      var g = data.groups[gkey];
+      var keys = Object.keys(data.categories).filter(function (k) { return data.categories[k].group === gkey; });
+      if (!keys.length) return;
+
+      var section = document.createElement("section");
+      section.className = "level-group level-group--" + g.color;
+      section.innerHTML =
+        '<header class="level-group__head">' +
+          '<span class="level-group__icon"><span class="glyph-text' + (g.glyph.length > 2 ? " glyph-text--small" : "") + '">' + g.glyph + "</span></span>" +
+          '<span class="level-group__text">' +
+            '<span class="level-group__title">' + g.title + "</span>" +
+            '<span class="level-group__note">' + keys.length + " niveles · " + g.note + "</span>" +
+          "</span>" +
+        "</header>";
+      var row = document.createElement("div");
+      row.className = "level-grid";
+
+      keys.forEach(function (key) {
+        var cat = data.categories[key];
+        var isSyl = gkey === "silabas";
+        var locked = isSyl && cat.level > state.unlockedSyllableLevel;
+        var count = cat.items.length;
+        var done = levelDone(mod, key, cat);
+        var complete = done >= count;
+        if (isSyl) {
+          var st = (state.syllableStats.byLevel || {})[key];
+          done = Math.min(count, st ? st.correct : 0);
+          complete = cat.level < state.unlockedSyllableLevel || done >= count;
+          if (complete) done = count;
+        }
+        var pct = Math.round((done / count) * 100);
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "level-card" + (locked ? " is-locked" : "") + (complete ? " is-complete" : "");
+        btn.setAttribute("aria-label", g.title + ", nivel " + cat.level + ": " + cat.title + (locked ? " (bloqueado)" : ""));
+        btn.innerHTML =
+          '<span class="level-card__top">' +
+            '<span class="level-card__badge">Nivel ' + cat.level + "</span>" +
+            (locked ? '<span class="level-card__state">' + icon("lock") + "</span>"
+              : complete ? '<span class="level-card__state level-card__state--done">' + icon("check") + "</span>" : "") +
+          "</span>" +
+          '<span class="level-card__title">' + cat.title + "</span>" +
+          '<span class="level-card__preview">' + (cat.preview || "") + "</span>" +
+          '<span class="level-card__bar"><span style="width:' + pct + '%"></span></span>' +
+          '<span class="level-card__count">' + done + " de " + count + "</span>";
+        btn.addEventListener("click", function () {
+          if (locked) {
+            showToast("Termina el nivel " + (cat.level - 1) + " para abrir este");
+            return;
+          }
+          startCategory(mod, key);
+        });
+        row.appendChild(btn);
+      });
+
+      section.appendChild(row);
+      grid.appendChild(section);
+    });
   }
 
   /* ---------------- Cuentos ---------------- */
@@ -581,7 +657,9 @@
   function autoSpeak(kind, item) {
     var lang = currentModule === "ingles" ? "en" : "es";
     var text = currentModule === "ingles" ? item.en : (item.say || item.big);
-    var url = audioBase + currentModule + "/" + currentCat + "/" + currentIndex + ".mp3";
+    // Las tarjetas nuevas sin audio grabado (audio: null) usan la voz del teléfono.
+    if (item.audio === null) { stopAll(); speak(text, lang); return; }
+    var url = item.audio ? audioBase + item.audio : audioBase + currentModule + "/" + currentCat + "/" + currentIndex + ".mp3";
     playAudio(url, text, lang);
   }
 
@@ -823,6 +901,22 @@
         if (unlockedNew) openModule(currentModule);
         else show("menu");
       });
+      return;
+    }
+
+    // Letras, palabras y frases: fiesta al terminar cada nivel.
+    var lessons = window.PIPI_LESSONS[currentModule];
+    var lcat = getCategory();
+    var lgroup = lcat && lcat.group && lessons.groups ? lessons.groups[lcat.group] : null;
+    if (lgroup && lcat.level) {
+      var groupKeys = Object.keys(lessons.categories).filter(function (k) {
+        return lessons.categories[k].group === lcat.group;
+      });
+      var last = lcat.level >= groupKeys.length;
+      var gname = lgroup.title.toLowerCase();
+      showParty("¡FELICIDADES, " + childName() + "!",
+        last ? "¡Terminaste todos los niveles de " + gname + "! 🏆" : "¡Completaste " + gname + " · Nivel " + lcat.level + "! 🏆",
+        "", function () { openModule(currentModule); });
       return;
     }
 

@@ -6,51 +6,77 @@
 
 window.PIPI_LESSONS = {
 
-  /* ---------------- LECTURA (español) ---------------- */
+  /* ---------------- LECTURA (español) ----------------
+     Organizada por temas (group) y niveles (level).
+     "audio": ruta del audio grabado; null = se usa la voz del teléfono. */
   lectura: {
     title: "Aprender a leer",
-    subtitle: "Letras, sílabas, palabras y frases",
+    subtitle: "Elige un tema y un nivel",
+    groups: {
+      letras:   { title: "Las letras",   color: "orange", glyph: "Aa",  note: "Conoce cada letra" },
+      silabas:  { title: "Las sílabas",  color: "indigo", glyph: "ma",  note: "Forma palabras" },
+      palabras: { title: "Las palabras", color: "green",  glyph: "sol", note: "Cada vez más largas" },
+      frases:   { title: "Las frases",   color: "pink",   glyph: "Mi",  note: "Lee frases completas" }
+    },
     categories: {
 
-      letras: {
-        title: "Las letras",
-        emoji: "🔤",
-        kind: "letter",
+      /* ----- Las letras (4 niveles) ----- */
+      letras1: {
+        group: "letras", level: 1, title: "Las vocales", preview: "A E I O U",
+        emoji: "🔤", kind: "letter",
         items: [
-          { big: "A a", say: "a", word: "Abeja", emoji: "🐝" },
-          { big: "B b", say: "be", word: "Ballena", emoji: "🐋" },
-          { big: "C c", say: "ce", word: "Casa", emoji: "🏠" },
-          { big: "D d", say: "de", word: "Delfín", emoji: "🐬" },
-          { big: "E e", say: "e", word: "Elefante", emoji: "🐘" },
-          { big: "F f", say: "efe", word: "Flor", emoji: "🌸" },
-          { big: "G g", say: "ge", word: "Gato", emoji: "🐱" },
-          { big: "H h", say: "hache", word: "Helado", emoji: "🍦" },
-          { big: "I i", say: "i", word: "Iguana", emoji: "🦎" },
-          { big: "J j", say: "jota", word: "Jirafa", emoji: "🦒" },
-          { big: "K k", say: "ka", word: "Kiwi", emoji: "🥝" },
-          { big: "L l", say: "ele", word: "Luna", emoji: "🌙" },
-          { big: "M m", say: "eme", word: "Manzana", emoji: "🍎" },
-          { big: "N n", say: "ene", word: "Nube", emoji: "☁️" },
-          { big: "Ñ ñ", say: "eñe", word: "Piña", emoji: "🍍" },
-          { big: "O o", say: "o", word: "Oso", emoji: "🐻" },
-          { big: "P p", say: "pe", word: "Perro", emoji: "🐶" },
-          { big: "Q q", say: "cu", word: "Queso", emoji: "🧀" },
-          { big: "R r", say: "erre", word: "Ratón", emoji: "🐭" },
-          { big: "S s", say: "ese", word: "Sol", emoji: "☀️" },
-          { big: "T t", say: "te", word: "Tortuga", emoji: "🐢" },
-          { big: "U u", say: "u", word: "Uva", emoji: "🍇" },
-          { big: "V v", say: "uve", word: "Vaca", emoji: "🐮" },
-          { big: "W w", say: "uve doble", word: "Wifi", emoji: "📶" },
-          { big: "X x", say: "equis", word: "Xilófono", emoji: "🎼" },
-          { big: "Y y", say: "ye", word: "Yoyo", emoji: "🪀" },
-          { big: "Z z", say: "zeta", word: "Zapato", emoji: "👟" }
+          { big: "A a", say: "a", word: "Abeja", emoji: "🐝", audio: "lectura/letras/0.mp3" },
+          { big: "E e", say: "e", word: "Elefante", emoji: "🐘", audio: "lectura/letras/4.mp3" },
+          { big: "I i", say: "i", word: "Iguana", emoji: "🦎", audio: "lectura/letras/8.mp3" },
+          { big: "O o", say: "o", word: "Oso", emoji: "🐻", audio: "lectura/letras/15.mp3" },
+          { big: "U u", say: "u", word: "Uva", emoji: "🍇", audio: "lectura/letras/21.mp3" }
+        ]
+      },
+      letras2: {
+        group: "letras", level: 2, title: "Letras fáciles", preview: "M P S L T N D",
+        emoji: "🔤", kind: "letter",
+        items: [
+          { big: "M m", say: "eme", word: "Manzana", emoji: "🍎", audio: "lectura/letras/12.mp3" },
+          { big: "P p", say: "pe", word: "Perro", emoji: "🐶", audio: "lectura/letras/16.mp3" },
+          { big: "S s", say: "ese", word: "Sol", emoji: "☀️", audio: "lectura/letras/19.mp3" },
+          { big: "L l", say: "ele", word: "Luna", emoji: "🌙", audio: "lectura/letras/11.mp3" },
+          { big: "T t", say: "te", word: "Tortuga", emoji: "🐢", audio: "lectura/letras/20.mp3" },
+          { big: "N n", say: "ene", word: "Nube", emoji: "☁️", audio: "lectura/letras/13.mp3" },
+          { big: "D d", say: "de", word: "Delfín", emoji: "🐬", audio: "lectura/letras/3.mp3" }
+        ]
+      },
+      letras3: {
+        group: "letras", level: 3, title: "Más letras", preview: "B C F G R V J",
+        emoji: "🔤", kind: "letter",
+        items: [
+          { big: "B b", say: "be", word: "Ballena", emoji: "🐋", audio: "lectura/letras/1.mp3" },
+          { big: "C c", say: "ce", word: "Casa", emoji: "🏠", audio: "lectura/letras/2.mp3" },
+          { big: "F f", say: "efe", word: "Flor", emoji: "🌸", audio: "lectura/letras/5.mp3" },
+          { big: "G g", say: "ge", word: "Gato", emoji: "🐱", audio: "lectura/letras/6.mp3" },
+          { big: "R r", say: "erre", word: "Ratón", emoji: "🐭", audio: "lectura/letras/18.mp3" },
+          { big: "V v", say: "uve", word: "Vaca", emoji: "🐮", audio: "lectura/letras/22.mp3" },
+          { big: "J j", say: "jota", word: "Jirafa", emoji: "🦒", audio: "lectura/letras/9.mp3" }
+        ]
+      },
+      letras4: {
+        group: "letras", level: 4, title: "Letras difíciles", preview: "H K Ñ Q W X Y Z",
+        emoji: "🔤", kind: "letter",
+        items: [
+          { big: "H h", say: "hache", word: "Helado", emoji: "🍦", audio: "lectura/letras/7.mp3" },
+          { big: "K k", say: "ka", word: "Kiwi", emoji: "🥝", audio: "lectura/letras/10.mp3" },
+          { big: "Ñ ñ", say: "eñe", word: "Piña", emoji: "🍍", audio: "lectura/letras/14.mp3" },
+          { big: "Q q", say: "cu", word: "Queso", emoji: "🧀", audio: "lectura/letras/17.mp3" },
+          { big: "W w", say: "uve doble", word: "Wifi", emoji: "📶", audio: "lectura/letras/23.mp3" },
+          { big: "X x", say: "equis", word: "Xilófono", emoji: "🎼", audio: "lectura/letras/24.mp3" },
+          { big: "Y y", say: "ye", word: "Yoyo", emoji: "🪀", audio: "lectura/letras/25.mp3" },
+          { big: "Z z", say: "zeta", word: "Zapato", emoji: "👟", audio: "lectura/letras/26.mp3" }
         ]
       },
 
+      /* ----- Las sílabas (4 niveles, se desbloquean en orden) ----- */
       silabas1: {
-        title: "Sílabas 1",
-        emoji: "1️⃣",
-        kind: "order",
+        group: "silabas", level: 1, title: "2 sílabas", preview: "ma · má",
+        emoji: "1️⃣", kind: "order",
         items: [
           { big: "mamá", syllables: ["ma", "má"], emoji: "👩" },
           { big: "papá", syllables: ["pa", "pá"], emoji: "👨" },
@@ -65,9 +91,8 @@ window.PIPI_LESSONS = {
         ]
       },
       silabas2: {
-        title: "Sílabas 2",
-        emoji: "2️⃣",
-        kind: "order",
+        group: "silabas", level: 2, title: "3 sílabas", preview: "pe · lo · ta",
+        emoji: "2️⃣", kind: "order",
         items: [
           { big: "pelota", syllables: ["pe", "lo", "ta"], emoji: "⚽" },
           { big: "zapato", syllables: ["za", "pa", "to"], emoji: "👟" },
@@ -82,9 +107,8 @@ window.PIPI_LESSONS = {
         ]
       },
       silabas3: {
-        title: "Sílabas 3",
-        emoji: "3️⃣",
-        kind: "order",
+        group: "silabas", level: 3, title: "4 sílabas", preview: "ma · ri · po · sa",
+        emoji: "3️⃣", kind: "order",
         items: [
           { big: "mariposa", syllables: ["ma", "ri", "po", "sa"], emoji: "🦋" },
           { big: "elefante", syllables: ["e", "le", "fan", "te"], emoji: "🐘" },
@@ -97,9 +121,8 @@ window.PIPI_LESSONS = {
         ]
       },
       silabas4: {
-        title: "Sílabas 4",
-        emoji: "4️⃣",
-        kind: "order",
+        group: "silabas", level: 4, title: "5 sílabas", preview: "hi · po · pó · ta · mo",
+        emoji: "4️⃣", kind: "order",
         items: [
           { big: "matemáticas", syllables: ["ma", "te", "má", "ti", "cas"], emoji: "🔢" },
           { big: "computadora", syllables: ["com", "pu", "ta", "do", "ra"], emoji: "💻" },
@@ -112,40 +135,97 @@ window.PIPI_LESSONS = {
         ]
       },
 
-      palabras: {
-        title: "Las palabras",
-        emoji: "📝",
-        kind: "word",
+      /* ----- Las palabras (3 niveles) ----- */
+      palabras1: {
+        group: "palabras", level: 1, title: "Palabras cortas", preview: "sol · oso · mamá",
+        emoji: "📝", kind: "word",
         items: [
-          { big: "mamá", say: "mamá", emoji: "👩" },
-          { big: "papá", say: "papá", emoji: "👨" },
-          { big: "sol", say: "sol", emoji: "☀️" },
-          { big: "luna", say: "luna", emoji: "🌙" },
-          { big: "gato", say: "gato", emoji: "🐱" },
-          { big: "perro", say: "perro", emoji: "🐶" },
-          { big: "casa", say: "casa", emoji: "🏠" },
-          { big: "flor", say: "flor", emoji: "🌸" },
-          { big: "agua", say: "agua", emoji: "💧" },
-          { big: "mesa", say: "mesa", emoji: "🪑" },
-          { big: "pelota", say: "pelota", emoji: "⚽" },
-          { big: "mano", say: "mano", emoji: "✋" },
-          { big: "oso", say: "oso", emoji: "🐻" },
-          { big: "nube", say: "nube", emoji: "☁️" },
-          { big: "lápiz", say: "lápiz", emoji: "✏️" }
+          { big: "sol", say: "sol", emoji: "☀️", audio: "lectura/palabras/2.mp3" },
+          { big: "oso", say: "oso", emoji: "🐻", audio: "lectura/palabras/12.mp3" },
+          { big: "mamá", say: "mamá", emoji: "👩", audio: "lectura/palabras/0.mp3" },
+          { big: "papá", say: "papá", emoji: "👨", audio: "lectura/palabras/1.mp3" },
+          { big: "luna", say: "luna", emoji: "🌙", audio: "lectura/palabras/3.mp3" },
+          { big: "gato", say: "gato", emoji: "🐱", audio: "lectura/palabras/4.mp3" },
+          { big: "casa", say: "casa", emoji: "🏠", audio: "lectura/palabras/6.mp3" },
+          { big: "mesa", say: "mesa", emoji: "🪑", audio: "lectura/palabras/9.mp3" },
+          { big: "mano", say: "mano", emoji: "✋", audio: "lectura/palabras/11.mp3" },
+          { big: "nube", say: "nube", emoji: "☁️", audio: "lectura/palabras/13.mp3" },
+          { big: "pato", say: "pato", emoji: "🦆", audio: null },
+          { big: "uva", say: "uva", emoji: "🍇", audio: null }
+        ]
+      },
+      palabras2: {
+        group: "palabras", level: 2, title: "Palabras medianas", preview: "perro · flor · agua",
+        emoji: "📝", kind: "word",
+        items: [
+          { big: "perro", say: "perro", emoji: "🐶", audio: "lectura/palabras/5.mp3" },
+          { big: "flor", say: "flor", emoji: "🌸", audio: "lectura/palabras/7.mp3" },
+          { big: "agua", say: "agua", emoji: "💧", audio: "lectura/palabras/8.mp3" },
+          { big: "lápiz", say: "lápiz", emoji: "✏️", audio: "lectura/palabras/14.mp3" },
+          { big: "pelota", say: "pelota", emoji: "⚽", audio: "lectura/palabras/10.mp3" },
+          { big: "queso", say: "queso", emoji: "🧀", audio: null },
+          { big: "fresa", say: "fresa", emoji: "🍓", audio: null },
+          { big: "tren", say: "tren", emoji: "🚂", audio: null },
+          { big: "árbol", say: "árbol", emoji: "🌳", audio: null },
+          { big: "libro", say: "libro", emoji: "📕", audio: null },
+          { big: "globo", say: "globo", emoji: "🎈", audio: null },
+          { big: "plato", say: "plato", emoji: "🍽️", audio: null }
+        ]
+      },
+      palabras3: {
+        group: "palabras", level: 3, title: "Palabras largas", preview: "mariposa · conejo",
+        emoji: "📝", kind: "word",
+        items: [
+          { big: "mariposa", say: "mariposa", emoji: "🦋", audio: null },
+          { big: "zapato", say: "zapato", emoji: "👟", audio: null },
+          { big: "tortuga", say: "tortuga", emoji: "🐢", audio: null },
+          { big: "conejo", say: "conejo", emoji: "🐰", audio: null },
+          { big: "manzana", say: "manzana", emoji: "🍎", audio: null },
+          { big: "helado", say: "helado", emoji: "🍦", audio: null },
+          { big: "estrella", say: "estrella", emoji: "⭐", audio: null },
+          { big: "pájaro", say: "pájaro", emoji: "🐦", audio: null },
+          { big: "galleta", say: "galleta", emoji: "🍪", audio: null },
+          { big: "plátano", say: "plátano", emoji: "🍌", audio: null },
+          { big: "dinosaurio", say: "dinosaurio", emoji: "🦕", audio: null },
+          { big: "arcoíris", say: "arcoíris", emoji: "🌈", audio: null }
         ]
       },
 
-      frases: {
-        title: "Las frases",
-        emoji: "📖",
-        kind: "sentence",
+      /* ----- Las frases (3 niveles) ----- */
+      frases1: {
+        group: "frases", level: 1, title: "Frases cortas", preview: "Mi mamá me ama.",
+        emoji: "📖", kind: "sentence",
         items: [
-          { big: "Mi mamá me ama.", say: "Mi mamá me ama.", emoji: "👩" },
-          { big: "El sol es amarillo.", say: "El sol es amarillo.", emoji: "☀️" },
-          { big: "El gato bebe agua.", say: "El gato bebe agua.", emoji: "🐱" },
-          { big: "La niña lee un libro.", say: "La niña lee un libro.", emoji: "📖" },
-          { big: "PIPI es un koala.", say: "Pipi es un koala.", emoji: "🐨" },
-          { big: "Me gusta jugar.", say: "Me gusta jugar.", emoji: "⚽" }
+          { big: "Mi mamá me ama.", say: "Mi mamá me ama.", emoji: "👩", audio: "lectura/frases/0.mp3" },
+          { big: "Me gusta jugar.", say: "Me gusta jugar.", emoji: "⚽", audio: "lectura/frases/5.mp3" },
+          { big: "PIPI es un koala.", say: "Pipi es un koala.", emoji: "🐨", audio: "lectura/frases/4.mp3" },
+          { big: "Yo leo.", say: "Yo leo.", emoji: "📖", audio: null },
+          { big: "El gato come.", say: "El gato come.", emoji: "🐱", audio: null },
+          { big: "Mi casa es azul.", say: "Mi casa es azul.", emoji: "🏠", audio: null }
+        ]
+      },
+      frases2: {
+        group: "frases", level: 2, title: "Frases medianas", preview: "El gato bebe agua.",
+        emoji: "📖", kind: "sentence",
+        items: [
+          { big: "El sol es amarillo.", say: "El sol es amarillo.", emoji: "☀️", audio: "lectura/frases/1.mp3" },
+          { big: "El gato bebe agua.", say: "El gato bebe agua.", emoji: "🐱", audio: "lectura/frases/2.mp3" },
+          { big: "La niña lee un libro.", say: "La niña lee un libro.", emoji: "📖", audio: "lectura/frases/3.mp3" },
+          { big: "La luna sale de noche.", say: "La luna sale de noche.", emoji: "🌙", audio: null },
+          { big: "Me gusta comer fresas.", say: "Me gusta comer fresas.", emoji: "🍓", audio: null },
+          { big: "La mariposa vuela alto.", say: "La mariposa vuela alto.", emoji: "🦋", audio: null }
+        ]
+      },
+      frases3: {
+        group: "frases", level: 3, title: "Frases largas", preview: "En el jardín hay flores…",
+        emoji: "📖", kind: "sentence",
+        items: [
+          { big: "El perro corre en el parque.", say: "El perro corre en el parque.", emoji: "🐶", audio: null },
+          { big: "PIPI tiene un corazón que brilla.", say: "Pipi tiene un corazón que brilla.", emoji: "💖", audio: null },
+          { big: "En el jardín hay flores de colores.", say: "En el jardín hay flores de colores.", emoji: "🌷", audio: null },
+          { big: "Mi mamá y yo vamos a la escuela.", say: "Mi mamá y yo vamos a la escuela.", emoji: "🏫", audio: null },
+          { big: "Cuando llueve, me pongo mis botas.", say: "Cuando llueve, me pongo mis botas.", emoji: "🌧️", audio: null },
+          { big: "El sol sale por la mañana.", say: "El sol sale por la mañana.", emoji: "🌅", audio: null }
         ]
       }
 

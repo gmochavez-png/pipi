@@ -11,10 +11,13 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 ## ✨ Qué incluye
 
 ### 📖 Aprender a leer (español)
-- **Letras**: A–Z (incluida la Ñ) con nombre, dibujo y palabra de ejemplo.
-- **Sílabas**: 4 niveles (2, 3, 4 y 5 sílabas) para **arrastrar sílabas** y formar palabras. La palabra **no se muestra**: se oye con 🔊 Escuchar. Incluye **sonidos**, **marcador (✅ aciertos / ❌ errores)** y una **fiesta 🎉 con copa 🏆** al completar cada nivel.
-- **Palabras**: mamá, papá, sol, luna, gato, perro…
-- **Frases**: frases cortas para leer en voz alta.
+El menú está ordenado por **temas**, cada uno con su color, y cada tema tiene **niveles** con su barra de avance:
+- 🟧 **Las letras** (4 niveles): las vocales → letras fáciles (M P S L T N D) → más letras (B C F G R V J) → letras difíciles (H K Ñ Q W X Y Z). Cada letra con nombre, dibujo y palabra de ejemplo.
+- 🟪 **Las sílabas** (4 niveles: 2, 3, 4 y 5 sílabas) para **arrastrar sílabas** y formar palabras. La palabra **no se muestra**: se oye con 🔊 Escuchar. Los niveles se abren en orden.
+- 🟩 **Las palabras** (3 niveles): cortas, medianas y largas (36 palabras).
+- 🩷 **Las frases** (3 niveles): cortas, medianas y largas (18 frases).
+- Al terminar cualquier nivel hay **fiesta 🎉 con copa 🏆**.
+- Las palabras y frases nuevas usan la voz del teléfono hasta que se graben sus audios.
 
 ### 🌎 Inglés básico
 - **Saludos**: Hello, Thank you, Goodbye…

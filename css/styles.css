@@ -1569,3 +1569,105 @@ input:focus-visible {
 }
 /* Fuera de la portada el fondo se oculta y sus animaciones se pausan. */
 #app:not(:has(#screen-home.is-active)):not(:has(#screen-welcome.is-active)) .backdrop * { animation-play-state: paused; }
+
+/* =========================================================
+   Aprender a leer: temas con color y niveles
+   ========================================================= */
+.menu-grid--groups { display: block; }
+.level-group {
+  --g1: #ffb547; --g2: #ff7a00; --g-ink: #b85500; --g-tint: #fff3e6; --g-bar: #ff8a1f;
+  margin-bottom: 26px;
+}
+.level-group--indigo { --g1: #9a88ff; --g2: #5b3fe0; --g-ink: #4a35c4; --g-tint: #f0edff; --g-bar: #6b55ef; }
+.level-group--green  { --g1: #6fdc8c; --g2: #22a447; --g-ink: #1d7f35; --g-tint: #e8f8ed; --g-bar: #2fb457; }
+.level-group--pink   { --g1: #ff7eaa; --g2: #e02a66; --g-ink: #c21a55; --g-tint: #ffeaf1; --g-bar: #ea3d77; }
+
+.level-group__head { display: flex; align-items: center; gap: 12px; margin: 0 2px 12px; }
+.level-group__icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 22.5%;
+  background: linear-gradient(160deg, var(--g1), var(--g2));
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 14px color-mix(in srgb, var(--g2) 30%, transparent);
+}
+.level-group__icon .glyph-text { font-size: 24px; }
+.level-group__icon .glyph-text--small { font-size: 18px; }
+.level-group__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.level-group__title { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink); }
+.level-group__note { font-size: 14px; font-weight: 600; color: var(--ink-2); }
+
+.level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.level-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 132px;
+  padding: 14px 14px 12px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.25s var(--spring);
+}
+.level-card:active { transform: scale(0.96); }
+.level-card__top { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 4px; }
+.level-card__badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(160deg, var(--g1), var(--g2));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+.level-card__state {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--fill);
+  color: var(--ink-2);
+}
+.level-card__state .ico-svg { width: 15px; height: 15px; }
+.level-card__state--done { background: var(--g-tint); color: var(--g-ink); }
+.level-card__title { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; }
+.level-card__preview {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--g-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.level-card__bar {
+  width: 100%;
+  height: 8px;
+  margin-top: auto;
+  border-radius: 999px;
+  background: var(--g-tint);
+  overflow: hidden;
+}
+.level-card__bar span { display: block; height: 100%; border-radius: inherit; background: var(--g-bar); transition: width 0.4s var(--ease); }
+.level-card__count { font-size: 13px; font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.level-card.is-complete { background: var(--g-tint); box-shadow: none; }
+.level-card.is-locked { opacity: 0.55; cursor: default; }
+.level-card.is-locked:active { transform: none; }
+
+/* Si un tema tiene un número impar de niveles, el último ocupa toda la fila. */
+.level-grid > .level-card:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 112px; }
+
+@media (min-width: 700px) {
+  .level-grid { grid-template-columns: repeat(4, 1fr); }
+  .level-grid > .level-card:last-child:nth-child(odd) { grid-column: auto; min-height: 132px; }
+}

@@ -43,14 +43,18 @@
 
   /* ---------- Palabras disponibles ---------- */
   function wordPool() {
-    var cat = window.PIPI_LESSONS && window.PIPI_LESSONS.lectura.categories.palabras;
-    if (!cat) return [];
+    // Todas las palabras de los niveles de "Las palabras" (js/lessons.js).
+    var cats = window.PIPI_LESSONS ? window.PIPI_LESSONS.lectura.categories : {};
     var pool = [];
-    cat.items.forEach(function (item, idx) {
-      var ls = letters(item.big);
-      if (ls.length >= 3 && ls.length <= SIZE) {
-        pool.push({ word: item.big, letters: ls, emoji: item.emoji, say: item.say || item.big, audioIdx: idx });
-      }
+    Object.keys(cats).forEach(function (key) {
+      var cat = cats[key];
+      if (cat.group !== "palabras") return;
+      cat.items.forEach(function (item) {
+        var ls = letters(item.big);
+        if (ls.length >= 3 && ls.length <= SIZE) {
+          pool.push({ word: item.big, letters: ls, emoji: item.emoji, say: item.say || item.big, audio: item.audio });
+        }
+      });
     });
     return pool;
   }
@@ -206,7 +210,8 @@
 
   function sayWord(w) {
     var a = app();
-    if (a.playAudio) a.playAudio(a.audioBase + "lectura/palabras/" + w.audioIdx + ".mp3", w.say, "es");
+    if (!w.audio) { if (a.stopAll) a.stopAll(); if (a.speak) a.speak(w.say, "es"); return; }
+    if (a.playAudio) a.playAudio(a.audioBase + w.audio, w.say, "es");
   }
 
   /* ---------- Selección ---------- */
