@@ -467,7 +467,7 @@
     var b = $("#chat-mute");
     if (!b) return;
     var muted = window.PipiApp && window.PipiApp.isMuted ? window.PipiApp.isMuted() : false;
-    b.textContent = muted ? "🔇" : "🔊";
+    if (window.PipiIcons) window.PipiIcons.set(b.querySelector(".ico") || b, muted ? "speaker-off" : "speaker");
   }
 
   /* ---------------- Inicio ---------------- */
@@ -563,7 +563,7 @@
     function setListening(on) {
       listening = on;
       btn.classList.toggle("is-listening", on);
-      btn.textContent = on ? "⏹️" : "🎤";
+      if (window.PipiIcons) window.PipiIcons.set(btn.querySelector(".ico") || btn, on ? "stop" : "mic");
       btn.setAttribute("aria-label", on ? "Detener micrófono" : "Hablar por micrófono");
       if (input) input.placeholder = on ? "Escuchando..." : "Escribe tu pregunta...";
     }
@@ -574,11 +574,11 @@
       setListening(false);
       var err = e && e.error;
       if (err === "not-allowed" || err === "service-not-allowed") {
-        respond("No tengo permiso para el micrófono. Actívalo en el navegador. 🎤", false);
+        respond("No tengo permiso para el micrófono. Actívalo en el navegador.", false);
       } else if (err === "no-speech") {
-        respond("No te escuché. Toca 🎤 y habla otra vez.", false);
+        respond("No te escuché. Toca el micrófono y habla otra vez.", false);
       } else if (err !== "aborted") {
-        respond("No pude escuchar. Intenta otra vez. 🎤", false);
+        respond("No pude escuchar. Intenta otra vez.", false);
       }
     };
     rec.onresult = function (e) {
@@ -598,7 +598,7 @@
       try {
         rec.start();
       } catch (e) {
-        respond("No pude abrir el micrófono. Intenta otra vez. 🎤", false);
+        respond("No pude abrir el micrófono. Intenta otra vez.", false);
       }
     });
   }

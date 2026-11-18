@@ -13,6 +13,12 @@
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
 
   var STORE_KEY = "pipi.progress.v2";
+  function icon(name) { return window.PipiIcons ? window.PipiIcons.svg(name) : ""; }
+  // Marcador de aciertos y errores con íconos (sin emojis).
+  function scoreHtml(ok, bad, long) {
+    return '<span class="score score--ok">' + icon("check") + ok + (long ? " aciertos" : "") + "</span>" +
+      '<span class="score score--bad">' + icon("xmark") + bad + (long ? " errores" : "") + "</span>";
+  }
   var audioBase = "assets/audio/";
   var pipi3d = null;
 
@@ -70,7 +76,7 @@
 
   function updateHomeGreeting() {
     var hg = $("#home-greeting");
-    if (hg) hg.textContent = state.name ? "¡Hola, " + state.name + "! 🐨" : "¡Hola! 🐨";
+    if (hg) hg.textContent = state.name ? "¡Hola, " + state.name + "!" : "¡Hola!";
   }
 
   /* ---------------- Voz ---------------- */
@@ -397,6 +403,24 @@
   }
 
   /* ---------------- Menú ---------------- */
+  // Ícono de cada categoría: letras blancas o un dibujo dentro del cuadro de color.
+  var CATEGORY_GLYPHS = {
+    letras: { t: "Aa" },
+    palabras: { t: "sol" }, frases: { t: "Mi" },
+    saludos: { t: "Hi!" }, colores: { i: "palette" }, numeros: { t: "123" },
+    animales: { i: "paw" }, familia: { i: "people" }, cuerpo: { i: "face" }
+  };
+
+  function categoryGlyph(key, cat) {
+    var g = CATEGORY_GLYPHS[key];
+    if (key.indexOf("silabas") === 0) {
+      var n = parseInt(key.replace("silabas", ""), 10);
+      return '<span class="glyph-text">ma</span><span class="glyph-level">' + n + "</span>";
+    }
+    if (g && g.i) return icon(g.i);
+    if (g && g.t) return '<span class="glyph-text' + (g.t.length > 2 ? " glyph-text--small" : "") + '">' + g.t + "</span>";
+    return '<span class="glyph-text">' + (cat.title || "?").charAt(0) + "</span>";
+  }
   function openModule(mod) {
     currentModule = mod;
     var data = window.PIPI_LESSONS[mod];
@@ -413,10 +437,10 @@
       var btn = document.createElement("button");
       btn.className = "menu-card menu-card--" + mod + (locked ? " is-locked" : "");
       btn.innerHTML =
-        '<span class="menu-card__emoji">' + cat.emoji + "</span>" +
+        '<span class="menu-card__icon">' + categoryGlyph(key, cat) + "</span>" +
         '<span class="menu-card__title">' + cat.title + "</span>" +
         '<span class="menu-card__count">' + cat.items.length + " tarjetas</span>" +
-        (locked ? '<span class="menu-card__lock">🔒</span>' : "");
+        (locked ? '<span class="menu-card__lock">' + icon("lock") + "</span>" : "");
       btn.addEventListener("click", function () {
         if (locked) {
           showToast("Completa el nivel anterior para desbloquear 😊");
@@ -447,9 +471,12 @@
       var done = !!state.done["cuento:" + s.slug];
       b.innerHTML =
         '<span class="story-card__emoji">' + s.emoji + "</span>" +
-        '<span class="story-card__title">' + s.title + "</span>" +
-        '<span class="story-card__count">' + s.lines.length + " líneas</span>" +
-        (done ? '<span class="story-card__done">✅</span>' : "");
+        '<span class="story-card__body">' +
+          '<span class="story-card__title">' + s.title + "</span>" +
+          '<span class="story-card__count">' + (done ? "Leído · " : "") + s.lines.length + " líneas</span>" +
+        "</span>" +
+        (done ? '<span class="story-card__done">' + icon("check") + "</span>" : "") +
+        '<span class="story-card__chev">' + icon("chevron-right") + "</span>";
       b.addEventListener("click", function () { openStory(i); });
       grid.appendChild(b);
     });
@@ -578,7 +605,7 @@
     var card = $("#activity-stage .card");
     var hint = document.createElement("div");
     hint.className = "card__hint";
-    hint.textContent = "Primero inténtalo · toca 🔊 para escuchar";
+    hint.innerHTML = 'Primero inténtalo · toca <span class="inline-ico">' + icon("speaker") + "</span> para escuchar";
     if (card) card.appendChild(hint);
 
     if (pipi3d) pipi3d.setExpression("thinking", 120000);
@@ -639,7 +666,7 @@
     function updateScore() {
       var st = levelStats();
       var el = stage.querySelector("#order-score");
-      if (el) el.textContent = "✅ " + st.correct + "   ❌ " + st.errors;
+      if (el) el.innerHTML = scoreHtml(st.correct, st.errors);
     }
 
     function placeChip(chip, slotIndex) {
@@ -785,7 +812,7 @@
       var lvl = parseInt(m[1], 10);
       var st = state.syllableStats.byLevel[currentCat] || { correct: 0, errors: 0 };
       var stars = st.errors <= 1 ? 3 : st.errors <= 3 ? 2 : 1;
-      var grade = "✅ " + st.correct + " aciertos · ❌ " + st.errors + " errores · " + "⭐".repeat(stars);
+      var grade = scoreHtml(st.correct, st.errors, true) + '<span class="score-stars">' + new Array(stars + 1).join(icon("star")) + "</span>";
       var unlockedNew = (lvl === state.unlockedSyllableLevel && lvl < 4);
       if (unlockedNew) {
         state.unlockedSyllableLevel = lvl + 1;
@@ -921,7 +948,7 @@
     }
     var t = $("#party-title"); if (t) t.textContent = title;
     var s = $("#party-sub"); if (s) s.textContent = sub;
-    var g = $("#party-grade"); if (g) g.textContent = grade || "";
+    var g = $("#party-grade"); if (g) g.innerHTML = grade || "";
     p.hidden = false;
     burstStars();
     playPartyMusic();
@@ -986,7 +1013,7 @@
       var d = document.createElement("div");
       d.className = "sticker" + (unlocked ? " is-unlocked" : "");
       d.innerHTML =
-        '<div class="sticker__emoji">' + (unlocked ? s.emoji : "🔒") + "</div>" +
+        '<div class="sticker__emoji">' + (unlocked ? s.emoji : '<span class="sticker__lock">' + icon("lock") + "</span>") + "</div>" +
         '<div class="sticker__name">' + s.name + "</div>" +
         '<div class="sticker__need">' + s.n + " ⭐</div>";
       wrap.appendChild(d);
@@ -997,7 +1024,7 @@
   function updateSoundBtn() {
     var b = $("#sound-toggle");
     if (!b) return;
-    b.textContent = state.muted ? "🔇" : "🔊";
+    if (window.PipiIcons) window.PipiIcons.set(b.querySelector(".ico") || b, state.muted ? "speaker-off" : "speaker");
     b.setAttribute("aria-label", state.muted ? "Activar sonido" : "Silenciar sonido");
   }
 
@@ -1046,7 +1073,7 @@
   function greet() {
     glowHeart(1800);
     if (state.muted) {
-      showToast("🔇 El sonido está apagado. Toca el altavoz.");
+      showToast("El sonido está apagado. Toca el altavoz.");
       return;
     }
     var p = randomPhrase();
@@ -1253,7 +1280,7 @@
     var nameInput = $("#name-input");
     if (nameInput) nameInput.value = state.name || "";
     if (state.name) {
-      var wt = $("#welcome-title"); if (wt) wt.textContent = "¡Hola de nuevo! 🐨";
+      var wt = $("#welcome-title"); if (wt) wt.textContent = "¡Hola de nuevo!";
       var sb = $("#start-btn"); if (sb) sb.textContent = "¡Continuar!";
     }
     updateHomeGreeting();

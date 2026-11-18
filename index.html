@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content="PIPI, el koala que ayuda a los niños a aprender a leer y a dar sus primeras clases de inglés." />
-  <meta name="theme-color" content="#7ec8e3" />
+  <meta name="theme-color" content="#f2f2f7" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -22,10 +22,12 @@
     <section id="screen-welcome" class="screen is-active" aria-label="Bienvenida">
       <div class="welcome-hero">
         <div id="koala-welcome" class="koala-welcome" aria-hidden="true"></div>
-        <h1 id="welcome-title" class="welcome-title">¡Hola! Soy PIPI 🐨</h1>
+        <h1 id="welcome-title" class="welcome-title">¡Hola! Soy PIPI</h1>
         <p class="welcome-sub">¿Cómo te llamas?</p>
-        <input id="name-input" class="name-input" type="text" maxlength="20" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" />
-        <button id="start-btn" class="big-btn big-btn--read welcome-btn">¡Empezar!</button>
+        <div class="welcome-form">
+          <input id="name-input" class="field" type="text" maxlength="20" placeholder="Escribe tu nombre" autocomplete="off" autocapitalize="words" />
+          <button id="start-btn" class="btn btn--filled btn--large btn--orange btn--block">¡Empezar!</button>
+        </div>
       </div>
     </section>
 
@@ -33,91 +35,77 @@
     <section id="screen-home" class="screen" aria-label="Inicio">
       <header class="topbar">
         <div class="topbar-group">
-          <button id="sound-toggle" class="pill-btn" aria-label="Activar o silenciar sonido">🔊</button>
-          <button id="settings-btn" class="pill-btn" aria-label="Ajustes">⚙️</button>
+          <button id="sound-toggle" class="circle-btn" aria-label="Silenciar sonido"><span class="ico" data-icon="speaker"></span></button>
+          <button id="settings-btn" class="circle-btn" aria-label="Ajustes"><span class="ico" data-icon="gear"></span></button>
         </div>
-        <button class="pill-btn pill-btn--stars" data-go="rewards" aria-label="Ver mis estrellas">
-          ⭐ <span id="home-stars">0</span>
+        <button class="star-capsule" data-go="rewards" aria-label="Ver mis estrellas">
+          <span class="ico" data-icon="star"></span><span id="home-stars">0</span>
         </button>
       </header>
 
       <div class="home-hero">
-        <div class="home-scene" aria-hidden="true">
-          <span class="scene-sun">☀️</span>
-          <span class="scene-cloud scene-cloud--1">☁️</span>
-          <span class="scene-cloud scene-cloud--2">☁️</span>
-          <span class="scene-star scene-star--1">⭐</span>
-          <span class="scene-star scene-star--2">✨</span>
-          <span class="scene-star scene-star--3">🌟</span>
-          <span class="scene-rainbow">🌈</span>
-          <span class="scene-butterfly">🦋</span>
-          <span class="scene-flower scene-flower--1">🌸</span>
-          <span class="scene-flower scene-flower--2">🌷</span>
-          <span class="scene-heart scene-heart--1">💖</span>
-          <span class="scene-heart scene-heart--2">❤️</span>
-        </div>
-
-        <h1 id="home-greeting" class="home-greeting">¡Hola! 🐨</h1>
+        <h1 id="home-greeting" class="home-greeting">¡Hola!</h1>
         <p class="home-sub">¿Qué quieres hacer hoy?</p>
-
-        <button id="koala-home" class="koala-holder" aria-label="Saludar a PIPI"></button>
-        <div class="speech" id="speech" aria-live="polite">
-          <p id="speech-text">¡Hola! Soy PIPI 🐨</p>
+        <div class="pipi-widget">
+          <button id="koala-home" class="koala-holder" aria-label="Saludar a PIPI"></button>
+          <div class="speech" id="speech" aria-live="polite">
+            <p id="speech-text">¡Hola! Soy PIPI</p>
+          </div>
         </div>
       </div>
 
-      <div class="home-grid">
-        <button class="tile-btn tile-btn--read" data-go="menu" data-module="lectura">
-          <span class="tile-btn__emoji">📖</span>
-          <span class="tile-btn__text">Aprender a leer</span>
+      <nav class="home-grid" aria-label="Actividades">
+        <button class="app-tile" data-go="menu" data-module="lectura">
+          <span class="app-icon app-icon--orange"><span class="ico" data-icon="book"></span></span>
+          <span class="app-tile__label">Aprender a leer</span>
         </button>
-        <button class="tile-btn tile-btn--english" data-go="menu" data-module="ingles">
-          <span class="tile-btn__emoji">🌎</span>
-          <span class="tile-btn__text">Inglés</span>
+        <button class="app-tile" data-go="menu" data-module="ingles">
+          <span class="app-icon app-icon--teal"><span class="ico" data-icon="globe"></span></span>
+          <span class="app-tile__label">Inglés</span>
         </button>
-        <button class="tile-btn tile-btn--stories" data-go="stories">
-          <span class="tile-btn__emoji">📚</span>
-          <span class="tile-btn__text">Cuentos</span>
+        <button class="app-tile" data-go="stories">
+          <span class="app-icon app-icon--pink"><span class="ico" data-icon="books"></span></span>
+          <span class="app-tile__label">Cuentos</span>
         </button>
-        <button class="tile-btn tile-btn--games" data-go="games">
-          <span class="tile-btn__emoji">🧩</span>
-          <span class="tile-btn__text">Juegos</span>
-          <span class="tile-btn__badge">Nuevo</span>
+        <button class="app-tile" data-go="games">
+          <span class="app-icon app-icon--blue"><span class="ico" data-icon="puzzle"></span><span class="app-badge">Nuevo</span></span>
+          <span class="app-tile__label">Juegos</span>
         </button>
-        <button class="tile-btn tile-btn--chat tile-btn--wide" data-go="chat">
-          <span class="tile-btn__emoji">💬</span>
-          <span class="tile-btn__text">Hablar con PIPI</span>
+        <button class="chat-row" data-go="chat">
+          <span class="app-icon app-icon--small app-icon--indigo"><span class="ico" data-icon="bubble"></span></span>
+          <span class="chat-row__label">Hablar con PIPI</span>
+          <span class="ico chat-row__chev" data-icon="chevron-right"></span>
         </button>
-      </div>
+      </nav>
     </section>
 
     <!-- ================= MENÚ DE CATEGORÍAS ================= -->
     <section id="screen-menu" class="screen" aria-label="Menú de lecciones">
-      <header class="screen-head">
-        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
-        <h2 id="menu-title">Elige</h2>
-        <span class="head-stars">⭐ <span id="menu-stars">0</span></span>
+      <header class="navbar">
+        <button class="nav-back" data-back aria-label="Volver al inicio"><span class="ico" data-icon="chevron-left"></span><span>Inicio</span></button>
+        <span class="nav-trailing star-capsule star-capsule--static"><span class="ico" data-icon="star"></span><span id="menu-stars">0</span></span>
       </header>
-      <p id="menu-subtitle" class="menu-subtitle"></p>
+      <h1 id="menu-title" class="large-title">Elige</h1>
+      <p id="menu-subtitle" class="large-sub"></p>
       <div id="menu-grid" class="menu-grid"></div>
     </section>
 
     <!-- ================= ACTIVIDAD ================= -->
     <section id="screen-activity" class="screen" aria-label="Lección">
-      <header class="screen-head">
-        <button class="icon-btn" data-back aria-label="Volver al menú">⬅</button>
-        <h2 id="activity-title">Letras</h2>
-        <span id="activity-progress" class="progress-text">1 / 1</span>
+      <header class="navbar">
+        <button class="nav-back" data-back aria-label="Volver al menú"><span class="ico" data-icon="chevron-left"></span><span>Atrás</span></button>
+        <h2 id="activity-title" class="nav-title">Letras</h2>
+        <span id="activity-progress" class="nav-trailing progress-pill">1 / 1</span>
       </header>
 
       <div class="activity-stage" id="activity-stage"></div>
 
       <div class="activity-controls">
-        <button id="btn-listen" class="listen-btn">🔊 Escuchar</button>
+        <button id="btn-listen" class="btn btn--filled btn--large btn--blue btn--block"><span class="ico" data-icon="speaker"></span><span>Escuchar</span></button>
         <div class="activity-nav">
-          <button class="icon-btn round" data-nav="prev" aria-label="Anterior">◀</button>
-          <button id="btn-star" class="star-btn">⭐ ¡Lo logré!</button>
-          <button class="icon-btn round" data-nav="next" aria-label="Siguiente">▶</button>
+          <button class="circle-btn circle-btn--large" data-nav="prev" aria-label="Anterior"><span class="ico" data-icon="chevron-left"></span></button>
+          <button id="btn-star" class="btn btn--filled btn--large btn--yellow"><span class="ico" data-icon="star"></span><span>¡Lo logré!</span></button>
+          <button class="circle-btn circle-btn--large" data-nav="next" aria-label="Siguiente"><span class="ico" data-icon="chevron-right"></span></button>
         </div>
       </div>
 
@@ -125,13 +113,16 @@
     </section>
 
     <!-- ================= CHAT CON PIPI ================= -->
-    <section id="screen-chat" class="screen" aria-label="Hablar con PIPI">
-      <header class="screen-head">
-        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
-        <h2>Hablar con PIPI</h2>
-        <div class="chat-head-actions">
-          <button id="chat-mute" class="icon-btn" aria-label="Silenciar">🔊</button>
-          <button id="parent-btn" class="icon-btn" aria-label="Modo padres">🔒</button>
+    <section id="screen-chat" class="screen screen--chat" aria-label="Hablar con PIPI">
+      <header class="navbar navbar--chat">
+        <button class="nav-back" data-back aria-label="Volver al inicio"><span class="ico" data-icon="chevron-left"></span><span>Inicio</span></button>
+        <div class="chat-contact">
+          <span class="chat-avatar"><img src="assets/icons/icon-192.png" alt="" /></span>
+          <span class="chat-name">PIPI</span>
+        </div>
+        <div class="nav-trailing chat-head-actions">
+          <button id="chat-mute" class="circle-btn circle-btn--small" aria-label="Silenciar"><span class="ico" data-icon="speaker"></span></button>
+          <button id="parent-btn" class="circle-btn circle-btn--small circle-btn--parent" aria-label="Modo padres"><span class="ico" data-icon="lock"></span></button>
         </div>
       </header>
 
@@ -140,80 +131,82 @@
       <div id="chat-quick" class="chat-quick"></div>
 
       <div class="chat-input-row">
-        <button id="chat-mic" class="chat-mic" aria-label="Hablar por micrófono">🎤</button>
-        <input id="chat-input" class="chat-input" type="text" placeholder="Escribe tu pregunta..." maxlength="200" autocomplete="off" />
-        <button id="chat-send" class="chat-send" aria-label="Enviar">➤</button>
+        <button id="chat-mic" class="chat-mic" aria-label="Hablar por micrófono"><span class="ico" data-icon="mic"></span></button>
+        <div class="chat-field">
+          <input id="chat-input" class="chat-input" type="text" placeholder="Escribe tu pregunta…" maxlength="200" autocomplete="off" />
+          <button id="chat-send" class="chat-send" aria-label="Enviar"><span class="ico" data-icon="arrow-up"></span></button>
+        </div>
       </div>
 
       <div id="parent-panel" class="parent-panel" hidden>
-        <h3>Modo padres</h3>
-        <p class="parent-note">La IA en la nube es opcional. La clave se guarda solo en este teléfono y no se publica.</p>
-
-        <label class="parent-row">
-          <input type="checkbox" id="ai-toggle" />
-          Usar IA en la nube (Gemini)
-        </label>
-
-        <input id="gemini-key" class="name-input" type="password" placeholder="Pega aquí tu API key de Gemini" autocomplete="off" />
-
-        <div class="parent-actions">
-          <button id="parent-save" class="mini-btn">Guardar</button>
-          <button id="parent-close" class="ghost-btn">Cerrar</button>
+        <div class="sheet">
+          <div class="sheet-head">
+            <h3>Modo padres</h3>
+            <button id="parent-close" class="sheet-close">Cerrar</button>
+          </div>
+          <p class="group-footer">La IA en la nube es opcional. La clave se guarda solo en este teléfono y no se publica.</p>
+          <div class="group">
+            <label class="group-row">
+              <span class="group-row__text">Usar IA en la nube (Gemini)</span>
+              <input type="checkbox" id="ai-toggle" class="switch" />
+            </label>
+            <div class="group-row group-row--field">
+              <input id="gemini-key" class="field field--plain" type="password" placeholder="Pega aquí tu API key de Gemini" autocomplete="off" aria-label="API key de Gemini" />
+            </div>
+          </div>
+          <button id="parent-save" class="btn btn--filled btn--blue btn--block">Guardar</button>
+          <p id="parent-status" class="parent-status"></p>
+          <p class="group-footer">Consigue una clave gratis en <strong>aistudio.google.com/app/apikey</strong>.</p>
         </div>
-
-        <p id="parent-status" class="parent-status"></p>
-        <p class="parent-note">Consigue una clave gratis en <strong>aistudio.google.com/app/apikey</strong>.</p>
       </div>
     </section>
 
     <!-- ================= CUENTOS ================= -->
     <section id="screen-stories" class="screen" aria-label="Cuentos">
-      <header class="screen-head">
-        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
-        <h2>Cuentos</h2>
-        <span></span>
+      <header class="navbar">
+        <button class="nav-back" data-back aria-label="Volver al inicio"><span class="ico" data-icon="chevron-left"></span><span>Inicio</span></button>
       </header>
-      <p class="menu-subtitle">Elige un cuento para leer</p>
-      <div id="stories-grid" class="stories-grid"></div>
+      <h1 class="large-title">Cuentos</h1>
+      <p class="large-sub">Elige un cuento para leer</p>
+      <div id="stories-grid" class="group stories-grid"></div>
     </section>
 
     <section id="screen-story" class="screen" aria-label="Leer cuento">
-      <header class="screen-head">
-        <button class="icon-btn" id="story-back" aria-label="Volver a cuentos">⬅</button>
-        <h2 id="story-head-title">Cuento</h2>
-        <span></span>
+      <header class="navbar">
+        <button class="nav-back" id="story-back" aria-label="Volver a cuentos"><span class="ico" data-icon="chevron-left"></span><span>Cuentos</span></button>
       </header>
-      <div id="story-page" class="story-page">
+      <article id="story-page" class="story-page">
         <div id="story-emoji" class="story-emoji"></div>
-        <h2 id="story-title" class="story-title"></h2>
+        <h1 id="story-title" class="story-title"></h1>
         <div id="story-text" class="story-text"></div>
-        <div class="story-actions">
-          <button id="story-listen" class="listen-btn">🔊 Escuchar</button>
-          <button id="story-done" class="star-btn">⭐ ¡Lo leí!</button>
-        </div>
+        <span id="story-head-title" hidden></span>
+      </article>
+      <div class="story-actions">
+        <button id="story-listen" class="btn btn--filled btn--large btn--blue"><span class="ico" data-icon="speaker"></span><span>Escuchar</span></button>
+        <button id="story-done" class="btn btn--filled btn--large btn--yellow"><span class="ico" data-icon="star"></span><span>¡Lo leí!</span></button>
       </div>
     </section>
 
     <!-- ================= JUEGOS ================= -->
     <section id="screen-games" class="screen" aria-label="Juegos">
-      <header class="screen-head">
-        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
-        <h2>Juegos</h2>
-        <span class="head-stars">⭐ <span id="games-stars">0</span></span>
+      <header class="navbar">
+        <button class="nav-back" data-back aria-label="Volver al inicio"><span class="ico" data-icon="chevron-left"></span><span>Inicio</span></button>
+        <span class="nav-trailing star-capsule star-capsule--static"><span class="ico" data-icon="star"></span><span id="games-stars">0</span></span>
       </header>
-      <p class="menu-subtitle">Elige un juego</p>
+      <h1 class="large-title">Juegos</h1>
+      <p class="large-sub">Elige un juego</p>
       <div id="games-grid" class="games-grid"></div>
     </section>
 
     <section id="screen-wordsearch" class="screen" aria-label="Sopa de letras">
-      <header class="screen-head">
-        <button class="icon-btn" id="ws-back" aria-label="Volver a juegos">⬅</button>
-        <h2>Sopa de letras</h2>
-        <button class="icon-btn" id="ws-new" aria-label="Nueva partida">🔄</button>
+      <header class="navbar">
+        <button class="nav-back" id="ws-back" aria-label="Volver a juegos"><span class="ico" data-icon="chevron-left"></span><span>Juegos</span></button>
+        <h2 class="nav-title">Sopa de letras</h2>
+        <button class="nav-trailing circle-btn circle-btn--small" id="ws-new" aria-label="Nueva partida"><span class="ico" data-icon="refresh"></span></button>
       </header>
       <div class="ws-top">
         <div id="koala-games" class="koala-games" aria-hidden="true"></div>
-        <p id="ws-msg" class="ws-msg" aria-live="polite">Busca las palabras ➡️ ⬇️</p>
+        <p id="ws-msg" class="ws-msg" aria-live="polite">Busca las palabras</p>
       </div>
       <div id="ws-grid" class="ws-grid" aria-label="Cuadrícula de letras"></div>
       <ul id="ws-words" class="ws-words"></ul>
@@ -221,33 +214,32 @@
 
     <!-- ================= AJUSTES ================= -->
     <section id="screen-settings" class="screen" aria-label="Ajustes">
-      <header class="screen-head">
-        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
-        <h2>Ajustes</h2>
-        <span></span>
+      <header class="navbar">
+        <button class="nav-back" data-back aria-label="Volver al inicio"><span class="ico" data-icon="chevron-left"></span><span>Inicio</span></button>
       </header>
+      <h1 class="large-title">Ajustes</h1>
 
       <div id="koala-settings" class="koala-settings" aria-hidden="true"></div>
 
-      <div class="settings-block">
-        <label class="settings-label" for="settings-name">Nombre</label>
-        <div class="settings-row">
-          <input id="settings-name" class="name-input" type="text" maxlength="20" autocomplete="off" autocapitalize="words" />
-          <button id="settings-save-name" class="mini-btn">Guardar</button>
+      <p class="group-header">Nombre</p>
+      <div class="group">
+        <div class="group-row group-row--field">
+          <input id="settings-name" class="field field--plain" type="text" maxlength="20" autocomplete="off" autocapitalize="words" aria-label="Nombre" />
+          <button id="settings-save-name" class="btn btn--tinted btn--blue btn--small">Guardar</button>
         </div>
       </div>
 
-      <div class="settings-block">
-        <span class="settings-label">Expresiones de PIPI</span>
-        <div class="chips" id="rate-chips">
+      <p class="group-header">Expresiones de PIPI</p>
+      <div class="group group--pad">
+        <div class="segmented" id="rate-chips" role="group" aria-label="Expresiones de PIPI">
           <button class="chip" data-rate="low">Pocas</button>
           <button class="chip" data-rate="normal">Normal</button>
           <button class="chip" data-rate="high">Muchas</button>
         </div>
       </div>
 
-      <div class="settings-block">
-        <span class="settings-label">Color de PIPI</span>
+      <p class="group-header">Color de PIPI</p>
+      <div class="group group--pad">
         <div class="swatches" id="color-swatches">
           <button class="swatch" data-color="#a9a7a1" style="--c:#a9a7a1" aria-label="Gris"></button>
           <button class="swatch" data-color="#a8897a" style="--c:#a8897a" aria-label="Marrón"></button>
@@ -260,25 +252,30 @@
         </div>
       </div>
 
-      <button class="ghost-btn" id="settings-test">Probar expresión</button>
+      <div class="group">
+        <button class="group-row group-row--action" id="settings-test"><span class="ico" data-icon="sparkles"></span><span>Probar expresión</span></button>
+      </div>
     </section>
 
     <!-- ================= RECOMPENSAS ================= -->
     <section id="screen-rewards" class="screen" aria-label="Mis estrellas">
-      <header class="screen-head">
-        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
-        <h2>Mis estrellas</h2>
-        <span></span>
+      <header class="navbar">
+        <button class="nav-back" data-back aria-label="Volver al inicio"><span class="ico" data-icon="chevron-left"></span><span>Inicio</span></button>
       </header>
+      <h1 class="large-title">Mis estrellas</h1>
 
       <div class="rewards-hero">
-        <div class="rewards-count"><span id="rewards-stars">0</span> ⭐</div>
+        <div class="rewards-star"><span class="ico" data-icon="star"></span></div>
+        <div class="rewards-count" id="rewards-stars">0</div>
         <p class="rewards-msg" id="rewards-msg">¡Sigue jugando para ganar estrellas!</p>
       </div>
 
+      <p class="group-header">Pegatinas</p>
       <div id="stickers" class="stickers"></div>
 
-      <button class="ghost-btn ghost-btn--danger" id="reset-btn">Empezar de nuevo</button>
+      <div class="group">
+        <button class="group-row group-row--action group-row--danger" id="reset-btn"><span class="ico" data-icon="trash"></span><span>Empezar de nuevo</span></button>
+      </div>
     </section>
 
   </div>
@@ -291,10 +288,11 @@
       <h2 id="party-title" class="party-title">¡FELICIDADES!</h2>
       <p id="party-sub" class="party-sub"></p>
       <div id="party-grade" class="party-grade"></div>
-      <button id="party-continue" class="big-btn big-btn--read party-btn">¡Seguir!</button>
+      <button id="party-continue" class="btn btn--filled btn--large btn--white btn--block">¡Seguir!</button>
     </div>
   </div>
 
+  <script src="js/icons.js"></script>
   <script src="js/vendor/three.min.js"></script>
   <script src="js/pipi3d.js"></script>
   <script src="js/lessons.js"></script>

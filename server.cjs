@@ -17,7 +17,8 @@ const TYPES = {
   ".jpeg": "image/jpeg",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
-  ".mp3": "audio/mpeg"
+  ".mp3": "audio/mpeg",
+  ".woff2": "font/woff2"
 };
 
 http.createServer(function (req, res) {

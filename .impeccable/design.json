@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T00:00:00Z",
+  "title": "Design System: PIPI",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Gris Sistema",
+        "tonalRamp": [
+          "#21212c",
+          "#37374e",
+          "#4b4b71",
+          "#5e5e97",
+          "#8484ae",
+          "#ababc4",
+          "#d0d0dc",
+          "#f1f1f4"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Blanco Tarjeta",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5e5e5e",
+          "#7a7a7a",
+          "#999999",
+          "#b8b8b8",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Blanco Hueco",
+        "tonalRamp": [
+          "#21212b",
+          "#37374d",
+          "#4c4c71",
+          "#5f5f96",
+          "#8484ae",
+          "#ababc4",
+          "#d1d1dc",
+          "#f1f1f4"
+        ]
+      },
+      "fill": {
+        "role": "neutral",
+        "displayName": "Relleno",
+        "tonalRamp": [
+          "#232329",
+          "#3c3c48",
+          "#545469",
+          "#6b6b8a",
+          "#8d8da5",
+          "#b1b1be",
+          "#d3d3d9",
+          "#f1f1f3"
+        ]
+      },
+      "fill-strong": {
+        "role": "neutral",
+        "displayName": "Relleno Fuerte",
+        "tonalRamp": [
+          "#242428",
+          "#3e3e47",
+          "#575766",
+          "#6f6f86",
+          "#9191a1",
+          "#b3b3bd",
+          "#d4d4d8",
+          "#f2f2f3"
+        ]
+      },
+      "separator": {
+        "role": "neutral",
+        "displayName": "Separador",
+        "tonalRamp": [
+          "#252527",
+          "#404045",
+          "#5a5a63",
+          "#747481",
+          "#94949e",
+          "#b5b5ba",
+          "#d5d5d8",
+          "#f2f2f3"
+        ],
+        "canonical": "rgba(60, 60, 67, 0.16)"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "tonalRamp": [
+          "#252527",
+          "#414144",
+          "#5c5c61",
+          "#76767f",
+          "#96969c",
+          "#b6b6b9",
+          "#d5d5d7",
+          "#f2f2f2"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Tinta 2",
+        "tonalRamp": [
+          "#262627",
+          "#414144",
+          "#5c5c61",
+          "#77777e",
+          "#96969c",
+          "#b6b6b9",
+          "#d5d5d7",
+          "#f2f2f2"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Tinta 3",
+        "tonalRamp": [
+          "#262627",
+          "#414143",
+          "#5d5d60",
+          "#78787d",
+          "#97979b",
+          "#b6b6b9",
+          "#d6d6d7",
+          "#f2f2f2"
+        ]
+      },
+      "blue": {
+        "role": "primary",
+        "displayName": "Azul Sistema",
+        "tonalRamp": [
+          "#10253c",
+          "#134072",
+          "#0f5bae",
+          "#0375f2",
+          "#3f95f3",
+          "#83b5ec",
+          "#bed5ee",
+          "#ecf2f8"
+        ]
+      },
+      "blue-ink": {
+        "role": "primary",
+        "displayName": "Azul Tinta",
+        "tonalRamp": [
+          "#10253c",
+          "#134072",
+          "#0f5bae",
+          "#0375f2",
+          "#3f95f3",
+          "#83b5ec",
+          "#bed5ee",
+          "#ecf2f8"
+        ]
+      },
+      "orange": {
+        "role": "secondary",
+        "displayName": "Naranja Leer",
+        "tonalRamp": [
+          "#3c2410",
+          "#723d13",
+          "#ae550f",
+          "#f26d03",
+          "#f38f3f",
+          "#ecb283",
+          "#eed3be",
+          "#f8f2ec"
+        ]
+      },
+      "orange-ink": {
+        "role": "secondary",
+        "displayName": "Naranja Leer (tinta)",
+        "tonalRamp": [
+          "#3c2510",
+          "#723f13",
+          "#ae580f",
+          "#f27103",
+          "#f3923f",
+          "#ecb483",
+          "#eed4be",
+          "#f8f2ec"
+        ]
+      },
+      "teal": {
+        "role": "secondary",
+        "displayName": "Turquesa Inglés",
+        "tonalRamp": [
+          "#163236",
+          "#215b64",
+          "#268797",
+          "#25b8cf",
+          "#59c7d9",
+          "#92d3dd",
+          "#c5e3e7",
+          "#eef5f6"
+        ]
+      },
+      "teal-ink": {
+        "role": "secondary",
+        "displayName": "Turquesa Inglés (tinta)",
+        "tonalRamp": [
+          "#143338",
+          "#1c5e69",
+          "#1e8d9f",
+          "#1ac0db",
+          "#50cde2",
+          "#8dd6e2",
+          "#c3e4ea",
+          "#edf6f7"
+        ]
+      },
+      "pink": {
+        "role": "secondary",
+        "displayName": "Rosa Cuentos",
+        "tonalRamp": [
+          "#381520",
+          "#681d36",
+          "#9e1f4a",
+          "#da1b5b",
+          "#e15182",
+          "#e28eaa",
+          "#eac3d0",
+          "#f7eef1"
+        ]
+      },
+      "pink-ink": {
+        "role": "secondary",
+        "displayName": "Rosa Cuentos (tinta)",
+        "tonalRamp": [
+          "#371521",
+          "#661e38",
+          "#9b224c",
+          "#d61f5f",
+          "#de5485",
+          "#e08fac",
+          "#e9c4d1",
+          "#f7eef1"
+        ]
+      },
+      "indigo": {
+        "role": "secondary",
+        "displayName": "Índigo Chat",
+        "tonalRamp": [
+          "#1b1636",
+          "#2a2164",
+          "#362597",
+          "#3d25d0",
+          "#6b59d9",
+          "#9d92dd",
+          "#cac5e7",
+          "#efeef6"
+        ]
+      },
+      "green": {
+        "role": "tertiary",
+        "displayName": "Verde Logro",
+        "tonalRamp": [
+          "#19341f",
+          "#255f33",
+          "#2d8f44",
+          "#31c453",
+          "#62d07b",
+          "#97d8a6",
+          "#c7e5ce",
+          "#eff6f0"
+        ]
+      },
+      "green-ink": {
+        "role": "tertiary",
+        "displayName": "Verde Logro (tinta)",
+        "tonalRamp": [
+          "#18341f",
+          "#256033",
+          "#2c9045",
+          "#2fc554",
+          "#61d17c",
+          "#97d9a7",
+          "#c7e5ce",
+          "#eff6f0"
+        ]
+      },
+      "yellow": {
+        "role": "tertiary",
+        "displayName": "Amarillo Estrella",
+        "tonalRamp": [
+          "#3c3410",
+          "#725f13",
+          "#ae8e0f",
+          "#f2c203",
+          "#f3cf3f",
+          "#ecd783",
+          "#eee5be",
+          "#f8f6ec"
+        ]
+      },
+      "yellow-ink": {
+        "role": "tertiary",
+        "displayName": "Amarillo Estrella (tinta)",
+        "tonalRamp": [
+          "#3c3110",
+          "#725913",
+          "#ae840f",
+          "#f2b303",
+          "#f3c43f",
+          "#ecd183",
+          "#eee2be",
+          "#f8f5ec"
+        ]
+      },
+      "red": {
+        "role": "tertiary",
+        "displayName": "Rojo Aviso",
+        "tonalRamp": [
+          "#351718",
+          "#622324",
+          "#94292b",
+          "#cb2a2d",
+          "#d55d5f",
+          "#db9496",
+          "#e6c6c7",
+          "#f6eeee"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Letra, sílaba o palabra grande de la tarjeta de actividad."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Títulos grandes de pantalla y bienvenida."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Etiquetas de íconos de app y títulos de tarjetas y filas."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Botones, filas, burbujas y campos."
+      },
+      "reading": {
+        "displayName": "Reading",
+        "purpose": "Texto de los cuentos, máximo 34em."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Encabezados de grupo, píldora de progreso y chips."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-card",
+        "value": "0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(28, 28, 50, 0.07)",
+        "purpose": "Tarjetas, grupos, botones circulares, cápsula de estrellas."
+      },
+      {
+        "name": "shadow-float",
+        "value": "0 2px 6px rgba(0, 0, 0, 0.06), 0 18px 40px rgba(28, 28, 50, 0.14)",
+        "purpose": "Tarjeta de actividad, rejilla de la sopa, celebración, sílaba arrastrada."
+      },
+      {
+        "name": "shadow-key",
+        "value": "0 1px 1px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.06)",
+        "purpose": "Fichas de sílabas arrastrables, como teclas de iOS."
+      },
+      {
+        "name": "tint-glow",
+        "value": "0 6px 16px color-mix(in srgb, var(--tint) 28%, transparent)",
+        "purpose": "Brillo del propio tinte bajo botones rellenos e íconos de app."
+      },
+      {
+        "name": "material-blur",
+        "value": "backdrop-filter: saturate(180%) blur(20px)",
+        "purpose": "Barra de navegación y celebración translúcidas."
+      },
+      {
+        "name": "focus-ring",
+        "value": "outline: 3px solid rgba(0, 122, 255, 0.55); outline-offset: 2px",
+        "purpose": "Foco visible de botones y campos."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+        "purpose": "Entrada de pantallas (0.32s), hojas, presión de botones."
+      },
+      {
+        "name": "spring",
+        "value": "cubic-bezier(0.34, 1.4, 0.5, 1)",
+        "purpose": "Rebote al tocar tarjetas, íconos, burbujas, interruptor y marcador encontrado."
+      },
+      {
+        "name": "press-scale",
+        "value": "scale(0.88) a scale(0.97)",
+        "purpose": "Respuesta táctil al presionar."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: duraciones a 0.01ms, sin confeti",
+        "purpose": "Accesibilidad obligatoria."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "short",
+        "value": "max-height: 700px"
+      },
+      {
+        "name": "tablet",
+        "value": "min-width: 700px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón relleno",
+      "kind": "button",
+      "refersTo": "button-filled-large",
+      "description": "Acción principal en cápsula con el tinte de la sección.",
+      "html": "<button class=\"ds-btn-filled\">Siguiente</button>",
+      "css": ".ds-btn-filled { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 60px; padding: 14px 26px; border: none; border-radius: 999px; background: var(--orange, #dd6200); color: #fff; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; box-shadow: 0 6px 16px color-mix(in srgb, #dd6200 28%, transparent); cursor: pointer; transition: transform 0.22s cubic-bezier(0.2,0.8,0.2,1), filter 0.15s; } .ds-btn-filled:hover { filter: brightness(1.04); } .ds-btn-filled:active { transform: scale(0.96); filter: brightness(0.92); } .ds-btn-filled:focus-visible { outline: 3px solid rgba(0,122,255,0.55); outline-offset: 2px; }"
+    },
+    {
+      "name": "Botón tintado",
+      "kind": "button",
+      "refersTo": "button-tinted",
+      "description": "Acción secundaria: tinte al 14% con texto en su variante -ink.",
+      "html": "<button class=\"ds-btn-tinted\">Escuchar otra vez</button>",
+      "css": ".ds-btn-tinted { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; min-height: 50px; padding: 12px 22px; border: none; border-radius: 999px; background: color-mix(in srgb, #007aff 14%, transparent); color: var(--blue-ink, #0064d1); font-size: 17px; font-weight: 700; cursor: pointer; transition: transform 0.22s cubic-bezier(0.2,0.8,0.2,1); } .ds-btn-tinted:active { transform: scale(0.96); filter: brightness(0.92); } .ds-btn-tinted:focus-visible { outline: 3px solid rgba(0,122,255,0.55); outline-offset: 2px; }"
+    },
+    {
+      "name": "Cápsula de estrellas",
+      "kind": "chip",
+      "refersTo": "star-capsule",
+      "description": "Contador de estrellas de la barra superior.",
+      "html": "<button class=\"ds-star\"><svg class=\"ds-star__ico\" viewBox=\"0 0 24 24\" width=\"22\" height=\"22\"><path fill=\"currentColor\" d=\"M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z\"/></svg><span>6</span></button>",
+      "css": ".ds-star { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 8px 16px 8px 12px; border: none; border-radius: 999px; background: rgba(255,255,255,0.92); color: var(--yellow-ink, #6b4f00); font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(28,28,50,0.07); cursor: pointer; transition: transform 0.22s cubic-bezier(0.2,0.8,0.2,1); } .ds-star__ico { color: #ffb800; } .ds-star:active { transform: scale(0.94); } .ds-star:focus-visible { outline: 3px solid rgba(0,122,255,0.55); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ícono de app",
+      "kind": "custom",
+      "refersTo": "app-icon",
+      "description": "Squircle con degradado de la sección, glifo blanco y etiqueta: la firma de la portada.",
+      "html": "<button class=\"ds-tile\"><span class=\"ds-app-icon\"><svg viewBox=\"0 0 24 24\" width=\"50\" height=\"50\"><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5v13\"/></svg></span><span class=\"ds-tile__label\">Aprender a leer</span></button>",
+      "css": ".ds-tile { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 4px; border: none; border-radius: 24px; background: transparent; cursor: pointer; transition: transform 0.25s cubic-bezier(0.34,1.4,0.5,1); } .ds-tile:active { transform: scale(0.92); } .ds-tile:active .ds-app-icon { filter: brightness(0.92); } .ds-tile:focus-visible { outline: 3px solid rgba(0,122,255,0.55); outline-offset: 2px; } .ds-app-icon { display: grid; place-items: center; width: 96px; height: 96px; border-radius: 22.5%; color: #fff; background: linear-gradient(160deg, #ffb547, #ff7a00); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 6px 14px rgba(255,122,0,0.32); } .ds-tile__label { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; color: #1c1c1e; }"
+    },
+    {
+      "name": "Lista agrupada",
+      "kind": "card",
+      "refersTo": "group",
+      "description": "Grupo de Ajustes al estilo iOS con encabezado, filas e interruptor.",
+      "html": "<div class=\"ds-wrap\"><div class=\"ds-gh\">Sonido</div><div class=\"ds-group\"><label class=\"ds-row\"><span class=\"ds-row__t\">Voz de PIPI</span><input type=\"checkbox\" class=\"ds-switch\" checked></label><button class=\"ds-row ds-row--action\">Probar voz</button></div></div>",
+      "css": ".ds-wrap { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; background: #f2f2f7; padding: 8px 16px 16px; } .ds-gh { margin: 14px 4px 8px; font-size: 15px; font-weight: 700; color: #5a5a60; } .ds-group { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(28,28,50,0.07); } .ds-row { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 54px; padding: 8px 16px; border: none; background: none; font: inherit; font-size: 17px; font-weight: 600; text-align: left; color: #1c1c1e; } .ds-row + .ds-row::before { content: ''; position: absolute; top: 0; left: 16px; right: 0; height: 1px; background: rgba(60,60,67,0.16); } .ds-row__t { flex: 1; } .ds-row--action { color: #0064d1; cursor: pointer; } .ds-row--action:active { background: #e9e9ee; } .ds-row--action:focus-visible { outline: 3px solid rgba(0,122,255,0.55); outline-offset: -3px; } .ds-switch { appearance: none; -webkit-appearance: none; position: relative; width: 52px; height: 32px; margin: 0; border-radius: 999px; background: #dcdce2; cursor: pointer; transition: background-color 0.25s; } .ds-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 28px; height: 28px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 1px rgba(0,0,0,0.16); transition: transform 0.3s cubic-bezier(0.34,1.4,0.5,1); } .ds-switch:checked { background: #34c759; } .ds-switch:checked::after { transform: translateX(20px); } .ds-switch:focus-visible { outline: 3px solid rgba(0,122,255,0.55); outline-offset: 2px; }"
+    },
+    {
+      "name": "Control segmentado",
+      "kind": "chip",
+      "refersTo": "segmented",
+      "description": "Selector de opciones en pista gris con segmento blanco.",
+      "html": "<div class=\"ds-seg\"><button class=\"ds-seg__c is-active\">Uno</button><button class=\"ds-seg__c\">Dos</button><button class=\"ds-seg__c\">Tres</button></div>",
+      "css": ".ds-seg { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; display: flex; gap: 2px; padding: 3px; border-radius: 13px; background: #e9e9ee; max-width: 360px; } .ds-seg__c { flex: 1; min-height: 42px; border: none; border-radius: 10px; background: transparent; font: inherit; font-size: 16px; font-weight: 700; color: #5a5a60; cursor: pointer; transition: background-color 0.2s, color 0.2s, box-shadow 0.2s; } .ds-seg__c:hover { color: #1c1c1e; } .ds-seg__c.is-active { background: #fff; color: #1c1c1e; box-shadow: 0 2px 6px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.04); } .ds-seg__c:focus-visible { outline: 3px solid rgba(0,122,255,0.55); outline-offset: 2px; }"
+    },
+    {
+      "name": "Barra de navegación",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "Barra translúcida con atrás, título centrado y acción.",
+      "html": "<nav class=\"ds-nav\"><button class=\"ds-nav__back\"><svg viewBox=\"0 0 24 24\" width=\"26\" height=\"26\"><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 4.5 7.5 12 15 19.5\"/></svg>Juegos</button><h2 class=\"ds-nav__title\">Sopa de letras</h2><span></span></nav>",
+      "css": ".ds-nav { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 56px; padding: 6px 16px; background: rgba(242,242,247,0.82); -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); } .ds-nav__back { justify-self: start; display: inline-flex; align-items: center; gap: 2px; min-height: 52px; padding: 0 12px 0 2px; border: none; background: none; font: inherit; color: #0064d1; font-size: 18px; font-weight: 600; cursor: pointer; border-radius: 12px; transition: opacity 0.15s; } .ds-nav__back:active { opacity: 0.45; } .ds-nav__back:focus-visible { outline: 3px solid rgba(0,122,255,0.55); outline-offset: 2px; } .ds-nav__title { margin: 0; font-size: 17px; font-weight: 700; color: #1c1c1e; }"
+    },
+    {
+      "name": "Burbujas de chat",
+      "kind": "custom",
+      "refersTo": "bubble-pipi",
+      "description": "Conversación al estilo iMessage: PIPI en gris, la niña en azul.",
+      "html": "<div class=\"ds-chat\"><div class=\"ds-msg ds-msg--pipi\">¡Hola! ¿Jugamos?</div><div class=\"ds-msg ds-msg--user\">¡Sí!</div></div>",
+      "css": ".ds-chat { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; display: flex; flex-direction: column; gap: 6px; max-width: 360px; } .ds-msg { position: relative; max-width: 80%; padding: 10px 15px; border-radius: 21px; font-size: 17px; font-weight: 600; line-height: 1.35; } .ds-msg::before { content: ''; position: absolute; bottom: 3px; width: 14px; height: 14px; border-radius: 3px; background: inherit; transform: rotate(45deg); } .ds-msg--pipi { align-self: flex-start; margin-left: 6px; background: #e9e9ee; color: #1c1c1e; border-bottom-left-radius: 8px; } .ds-msg--pipi::before { left: -5px; } .ds-msg--user { align-self: flex-end; margin-right: 6px; background: #007aff; color: #fff; border-bottom-right-radius: 8px; } .ds-msg--user::before { right: -5px; }"
+    },
+    {
+      "name": "Marcador de la sopa de letras",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Cápsula que se desliza bajo las letras y queda pintada en las palabras encontradas.",
+      "html": "<div class=\"ds-ws\"><span class=\"ds-ws__pill ds-ws__pill--found\"></span><span class=\"ds-ws__pill ds-ws__pill--live\"></span><span class=\"ds-ws__c\">S</span><span class=\"ds-ws__c\">O</span><span class=\"ds-ws__c\">L</span><span class=\"ds-ws__c\">M</span><span class=\"ds-ws__c\">A</span><span class=\"ds-ws__c\">R</span></div>",
+      "css": ".ds-ws { font-family: ui-rounded, 'SF Pro Rounded', 'PIPI Rounded', -apple-system, system-ui, sans-serif; position: relative; display: grid; grid-template-columns: repeat(3, 56px); gap: 4px; width: max-content; padding: 10px; border-radius: 30px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.06), 0 18px 40px rgba(28,28,50,0.14); } .ds-ws__c { position: relative; z-index: 1; display: grid; place-items: center; height: 56px; font-size: 32px; font-weight: 800; color: #1c1c1e; border-radius: 50%; } .ds-ws__pill { position: absolute; z-index: 0; left: 10px; width: 176px; height: 56px; border-radius: 999px; transition: left 0.12s, width 0.12s; } .ds-ws__pill--found { top: 10px; background: rgba(255,204,0,0.5); } .ds-ws__pill--live { top: 70px; background: rgba(0,122,255,0.2); box-shadow: inset 0 0 0 2px rgba(0,122,255,0.35); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Una app de Apple para niños",
+    "overview": "PIPI vive en la pantalla de inicio de un iPhone o iPad y debe leerse como una app de primera parte de Apple hecha para una niña: fondo de sistema gris claro, tarjetas blancas agrupadas, tipografía SF Rounded, íconos de trazo al estilo SF Symbols, botones cápsula, control segmentado, interruptor, barras de navegación translúcidas y burbujas de iMessage. El mundo es el de iOS en modo claro; lo infantil está en la escala (todo es grande y fácil de tocar), en el color de los íconos de \"app\" y en PIPI 3D, que es el protagonista de la portada.\n\nLa densidad es baja: una columna de 560px como máximo en teléfono (720px en tableta), gutter de 20px, tarjetas con mucho aire y objetivos táctiles de 48px o más. Cada actividad se reconoce por su ícono de color (squircle con degradado y glifo blanco), no por el texto. La profundidad es suave y difusa, como en iOS; el mundo rechaza explícitamente el aspecto de \"tienda de juguetes\" del diseño anterior: botones gruesos con sombra dura inferior y teclas grises cuadradas.\n\nEl movimiento es de resorte y breve: los elementos tocables se encogen al presionarse (escala 0.88 a 0.97) y regresan con la curva `--spring`; las pantallas entran con un desliz de 8px. Todo se apaga con \"reducir movimiento\".",
+    "keyCharacteristics": [
+      "Fondo de sistema #F2F2F7 con tarjetas blancas agrupadas y sombras suaves en dos capas.",
+      "Una sola familia tipográfica redondeada, en pesos 600 a 900.",
+      "Íconos de app en squircle (radio 22.5%) con degradado a 160° y glifo SVG blanco.",
+      "Botones cápsula; controles nativos de iOS (segmentado, interruptor, hoja inferior, lista agrupada).",
+      "Firma: el marcador de la sopa de letras, una cápsula que se desliza bajo las letras."
+    ],
+    "rules": [
+      {
+        "name": "The Tinte Legible Rule",
+        "body": "Los tintes de sistema se usan en sus versiones oscurecidas (`orange` #dd6200, `teal` #1fa3b8, `pink` #e8306e) cuando llevan texto blanco, y en su variante `-ink` cuando son el texto. El contrato pedía los tonos puros de Apple (#FF9500, #30B0C7, #FF2D55); el build los oscureció por legibilidad, y esa es la regla.",
+        "section": "colors"
+      },
+      {
+        "name": "The Una Sección, Un Color Rule",
+        "body": "Cada sección tiene su tinte (Leer naranja, Inglés turquesa, Cuentos rosa, Juegos azul, Chat índigo) y lo repite en su ícono, su menú y su tarjeta. No se mezclan tintes de secciones distintas en una misma pantalla de actividad.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sin Mayúsculas Forzadas Rule",
+        "body": "Ningún texto usa `text-transform: uppercase` ni espaciado ancho; las palabras de la sopa de letras están en mayúsculas porque así son el contenido del juego, no por estilo.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sombra Blanda Rule",
+        "body": "Toda sombra es difusa y con desenfoque; ninguna es un bloque sólido desplazado. La sombra dura inferior es exactamente el aspecto anterior que este mundo reemplazó.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Vidrio Arriba Rule",
+        "body": "Lo que flota sobre el contenido (barra, aviso, celebración) es translúcido con `saturate(180%) blur(20px)` o similar; las tarjetas del contenido son opacas.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do poner el contenido en tarjetas blancas sobre el gris de sistema `bg` (#f2f2f7), con la sombra Tarjeta.",
+      "Do dar a cada actividad un ícono squircle (22.5%) con el degradado de su sección y un glifo SVG blanco.",
+      "Do hacer cápsula todo botón con texto y círculo todo botón de solo ícono, con al menos 48px de alto.",
+      "Do usar los tintes oscurecidos con texto blanco y las variantes `-ink` cuando el tinte es texto.",
+      "Do usar controles de iOS (lista agrupada, segmentado, interruptor, hoja inferior) para lo que configura el adulto.",
+      "Do responder al toque con escala y la curva `--spring`, y apagar todo movimiento con \"reducir movimiento\".",
+      "Do mantener los emoji como dibujos del contenido (la palabra, el cuento, la pegatina) y los SVG de trazo para los controles."
+    ],
+    "donts": [
+      "Don't usar sombras duras desplazadas ni botones gruesos con borde inferior: es el aspecto anterior que este mundo reemplazó.",
+      "Don't usar teclas grises cuadradas para letras o sílabas; las fichas son blancas, de 16px, con la sombra Tecla.",
+      "Don't usar emoji ni caracteres como íconos de controles (atrás, sonido, ajustes, enviar).",
+      "Don't poner texto blanco sobre amarillo.",
+      "Don't añadir etiquetas pequeñas en mayúsculas sobre los títulos; los encabezados de grupo de Ajustes son de iOS, en tipo de oración."
+    ]
+  }
+}

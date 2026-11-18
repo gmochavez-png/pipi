@@ -4,3 +4,8 @@
 # Dependencias y registros (no se publican)
 node_modules/
 *.log
+
+# Archivos de trabajo del diseño (capturas con nombre de prueba, cachés)
+.impeccable/review/
+.impeccable/hook.cache.json
+.impeccable/questions/

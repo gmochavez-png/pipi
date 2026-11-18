@@ -9,13 +9,14 @@
    reciban la versión nueva.
    ========================================================= */
 
-var CACHE = "pipi-v20";
+var CACHE = "pipi-v21";
 
 var APP_FILES = [
   "./",
   "./index.html",
   "./manifest.json",
   "./css/styles.css",
+  "./js/icons.js",
   "./js/lessons.js",
   "./js/stories.js",
   "./js/chat.js",
@@ -25,6 +26,7 @@ var APP_FILES = [
   "./js/pipi3d.js",
   "./js/vendor/three.min.js",
   "./assets/koala.jpg",
+  "./assets/fonts/nunito-latin.woff2",
   "./assets/icons/apple-touch-icon.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",

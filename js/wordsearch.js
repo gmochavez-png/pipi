@@ -13,7 +13,14 @@
   var WORDS_PER_GAME = 4;
   // Letras de relleno: sin K, W, X, Y, Ñ para no confundir a quien empieza a leer.
   var FILLER = "ABCDEFGHIJLMNOPRSTUV";
-  var COLORS = ["#ffb4a2", "#9ee6c9", "#ffd166", "#b9b2ff", "#8fd3ff"];
+  // Colores del marcador de cada palabra encontrada (cápsula y tarjeta).
+  var COLORS = [
+    { pill: "rgba(255, 159, 10, 0.42)", card: "#fff1dc" },
+    { pill: "rgba(52, 199, 89, 0.40)", card: "#e3f8e8" },
+    { pill: "rgba(255, 45, 85, 0.32)", card: "#ffe4ea" },
+    { pill: "rgba(90, 120, 255, 0.36)", card: "#e6ebff" },
+    { pill: "rgba(48, 176, 199, 0.40)", card: "#e0f6f9" }
+  ];
 
   var $ = function (sel) { return document.querySelector(sel); };
   function app() { return window.PipiApp || {}; }
@@ -99,6 +106,8 @@
     var gridEl = $("#ws-grid");
     gridEl.innerHTML = "";
     gridEl.style.setProperty("--n", SIZE);
+    livePill = null;
+    pills = [];
     for (var r = 0; r < SIZE; r++) {
       for (var c = 0; c < SIZE; c++) {
         var d = document.createElement("div");
@@ -130,14 +139,64 @@
       tx.textContent = w.word.toUpperCase();
       var sp = document.createElement("span");
       sp.className = "ws-word__listen";
-      sp.textContent = "🔊";
+      sp.innerHTML = window.PipiIcons ? window.PipiIcons.svg("speaker") : "";
       b.appendChild(em);
       b.appendChild(tx);
       b.appendChild(sp);
       li.appendChild(b);
       list.appendChild(li);
     });
-    setMsg("Busca las palabras ➡️ ⬇️");
+    setMsgHtml("Busca las palabras " + arrows());
+  }
+
+  /* ---------- Marcador (cápsula bajo las letras) ---------- */
+  var livePill = null;
+  var pills = [];   // [{ el, cells }]
+
+  function placePill(el, cells) {
+    if (!cells.length) return;
+    var a = cellEl(cells[0].r, cells[0].c);
+    var b = cellEl(cells[cells.length - 1].r, cells[cells.length - 1].c);
+    if (!a || !b) return;
+    var pad = 2;
+    var left = Math.min(a.offsetLeft, b.offsetLeft) + pad;
+    var top = Math.min(a.offsetTop, b.offsetTop) + pad;
+    var right = Math.max(a.offsetLeft + a.offsetWidth, b.offsetLeft + b.offsetWidth) - pad;
+    var bottom = Math.max(a.offsetTop + a.offsetHeight, b.offsetTop + b.offsetHeight) - pad;
+    el.style.left = left + "px";
+    el.style.top = top + "px";
+    el.style.width = (right - left) + "px";
+    el.style.height = (bottom - top) + "px";
+  }
+
+  function newPill(cls) {
+    var el = document.createElement("div");
+    el.className = "ws-pill " + cls;
+    $("#ws-grid").appendChild(el);
+    return el;
+  }
+
+  function showLive(cells) {
+    if (!livePill) livePill = newPill("ws-pill--live");
+    livePill.className = "ws-pill ws-pill--live";
+    livePill.hidden = false;
+    placePill(livePill, cells);
+  }
+
+  function hideLive() { if (livePill) livePill.hidden = true; }
+
+  window.addEventListener("resize", function () {
+    pills.forEach(function (p) { placePill(p.el, p.cells); });
+  });
+
+  function arrows() {
+    var I = window.PipiIcons;
+    return I ? '<span class="inline-ico">' + I.svg("arrow-right") + '</span><span class="inline-ico">' + I.svg("arrow-down") + "</span>" : "";
+  }
+
+  function setMsgHtml(h) {
+    var m = $("#ws-msg");
+    if (m) m.innerHTML = h;
   }
 
   function setMsg(t) {
@@ -178,14 +237,17 @@
   }
 
   function clearMarks() {
-    Array.prototype.forEach.call(document.querySelectorAll(".ws-cell.is-selecting, .ws-cell.is-start"), function (el) {
-      el.classList.remove("is-selecting", "is-start");
+    Array.prototype.forEach.call(document.querySelectorAll(".ws-cell.is-start"), function (el) {
+      el.classList.remove("is-start");
     });
+    hideLive();
   }
 
   function markSelecting(cells) {
-    clearMarks();
-    cells.forEach(function (p) { var el = cellEl(p.r, p.c); if (el) el.classList.add("is-selecting"); });
+    Array.prototype.forEach.call(document.querySelectorAll(".ws-cell.is-start"), function (el) {
+      el.classList.remove("is-start");
+    });
+    showLive(cells);
   }
 
   function evaluate(cells) {
@@ -197,12 +259,9 @@
     }
     var a = app();
     if (a.playSfx) a.playSfx("wrong");
-    cells.forEach(function (p) {
-      var el = cellEl(p.r, p.c);
-      if (!el) return;
-      el.classList.add("is-wrong");
-      setTimeout(function () { el.classList.remove("is-wrong"); }, 450);
-    });
+    var bad = newPill("ws-pill--wrong");
+    placePill(bad, cells);
+    setTimeout(function () { bad.remove(); }, 450);
     setMsg("Casi... ¡inténtalo otra vez!");
   }
 
@@ -211,14 +270,17 @@
     var w = game.targets[i];
     var color = COLORS[game.colorIdx++ % COLORS.length];
     game.found[i] = true;
-    cells.forEach(function (p) {
-      var el = cellEl(p.r, p.c);
-      if (!el) return;
-      el.classList.add("is-found");
-      el.style.setProperty("--found", color);
-    });
+    var pill = newPill("ws-pill--found");
+    pill.style.setProperty("--pill", color.pill);
+    placePill(pill, cells);
+    pills.push({ el: pill, cells: cells });
     var li = document.querySelector('.ws-word[data-i="' + i + '"]');
-    if (li) { li.classList.add("is-found"); li.style.setProperty("--found", color); }
+    if (li) {
+      li.classList.add("is-found");
+      li.style.setProperty("--found-bg", color.card);
+      var ic = li.querySelector(".ws-word__listen");
+      if (ic && window.PipiIcons) ic.innerHTML = window.PipiIcons.svg("check");
+    }
 
     if (a.playSfx) a.playSfx("correct");
     if (a.celebrate) a.celebrate();
@@ -239,7 +301,7 @@
     var name = a.childName ? a.childName() : "";
     if (a.showParty) {
       a.showParty("¡FELICIDADES, " + name + "!", "¡Encontraste todas las palabras! 🔍",
-        "⭐ ¡Ganaste una estrella!", function () { start(); });
+        (window.PipiIcons ? '<span class="score-stars">' + window.PipiIcons.svg("star") + "</span> " : "") + "¡Ganaste una estrella!", function () { start(); });
     } else {
       start();
     }
@@ -301,7 +363,7 @@
       // No está en la misma fila ni columna: empezamos desde esta letra.
       tapStart = p;
       cellEl(p.r, p.c).classList.add("is-start");
-      setMsg("Toca letras en la misma fila ➡️ o columna ⬇️");
+      setMsgHtml("Toca letras en la misma fila " + arrows());
       return;
     }
     evaluate(cells);

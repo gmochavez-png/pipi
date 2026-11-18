@@ -13,8 +13,9 @@
       title: "Sopa de letras",
       emoji: "🔤",
       desc: "Busca las palabras",
-      color: "#ffe3c4",
-      color2: "#ffc2d6",
+      color: "#5cb6ff",
+      color2: "#1a66e8",
+      icon: "grid",
       start: function () { if (window.PipiWordSearch) window.PipiWordSearch.start(); }
     }
   ];
@@ -31,22 +32,30 @@
       b.style.setProperty("--game-b", g.color2);
       var em = document.createElement("span");
       em.className = "game-card__emoji";
-      em.textContent = g.emoji;
+      if (g.icon && window.PipiIcons) em.innerHTML = window.PipiIcons.svg(g.icon);
+      else em.textContent = g.emoji;
       var tt = document.createElement("span");
       tt.className = "game-card__title";
       tt.textContent = g.title;
       var ds = document.createElement("span");
       ds.className = "game-card__desc";
       ds.textContent = g.desc;
+      var body = document.createElement("span");
+      body.className = "game-card__body";
+      body.appendChild(tt);
+      body.appendChild(ds);
+      var chev = document.createElement("span");
+      chev.className = "game-card__chev";
+      chev.innerHTML = window.PipiIcons ? window.PipiIcons.svg("chevron-right") : "";
       b.appendChild(em);
-      b.appendChild(tt);
-      b.appendChild(ds);
+      b.appendChild(body);
+      b.appendChild(chev);
       b.addEventListener("click", g.start);
       grid.appendChild(b);
     });
     var soon = document.createElement("div");
     soon.className = "game-card game-card--soon";
-    soon.innerHTML = '<span class="game-card__emoji">🎁</span><span class="game-card__title">Pronto, más juegos</span>';
+    soon.innerHTML = '<span class="game-card__emoji">' + (window.PipiIcons ? window.PipiIcons.svg("sparkles") : "") + '</span><span class="game-card__body"><span class="game-card__title">Pronto, más juegos</span></span>';
     grid.appendChild(soon);
   }
 
