@@ -1483,3 +1483,89 @@ input:focus-visible {
   .app-icon--small { width: 56px; height: 56px; }
   .app-icon--small .ico { width: 32px; height: 32px; }
 }
+
+/* =========================================================
+   Fondo difuminado de la portada y la bienvenida
+   Manchas de color pastel muy difuminadas (como un fondo de
+   pantalla de iOS), luces suaves y destellos. Colores poco
+   saturados para que los íconos y PIPI resalten.
+   ========================================================= */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, #f7f4fb 0%, #f3f6fb 55%, #f4f8f6 100%);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+#app:has(#screen-home.is-active) .backdrop,
+#app:has(#screen-welcome.is-active) .backdrop { opacity: 1; }
+.screen { position: relative; z-index: 1; }
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.85;
+  will-change: transform;
+}
+.blob--peach  { width: 62vmax; height: 62vmax; left: -22vmax; top: -18vmax; background: #ffd9c7; animation: drift-a 26s ease-in-out infinite alternate; }
+.blob--lilac  { width: 56vmax; height: 56vmax; right: -24vmax; top: 8vh;     background: #e4dcff; animation: drift-b 30s ease-in-out infinite alternate; }
+.blob--mint   { width: 54vmax; height: 54vmax; left: -20vmax; bottom: -16vmax; background: #d3f0e4; animation: drift-b 28s ease-in-out infinite alternate-reverse; }
+.blob--sky    { width: 50vmax; height: 50vmax; right: -18vmax; bottom: -20vmax; background: #d5e8fb; animation: drift-a 32s ease-in-out infinite alternate-reverse; }
+.blob--butter { width: 34vmax; height: 34vmax; left: 30%; top: 32%;          background: #fff0cf; opacity: 0.7; animation: drift-c 24s ease-in-out infinite alternate; }
+
+@keyframes drift-a { from { transform: translate(0, 0) scale(1); } to { transform: translate(6vmax, 4vmax) scale(1.08); } }
+@keyframes drift-b { from { transform: translate(0, 0) scale(1.05); } to { transform: translate(-5vmax, 6vmax) scale(0.95); } }
+@keyframes drift-c { from { transform: translate(-3vmax, 0) scale(0.95); } to { transform: translate(4vmax, -3vmax) scale(1.1); } }
+
+/* Luces suaves (bokeh) */
+.bokeh {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.35) 55%, rgba(255, 255, 255, 0) 72%);
+  filter: blur(2px);
+  animation: float-soft 9s ease-in-out infinite;
+}
+.bokeh--1 { width: 120px; height: 120px; left: 6%;  top: 14%; animation-duration: 11s; }
+.bokeh--2 { width: 70px;  height: 70px;  right: 10%; top: 9%;  animation-duration: 9s; animation-delay: -3s; }
+.bokeh--3 { width: 160px; height: 160px; right: -30px; top: 46%; opacity: 0.8; animation-duration: 13s; animation-delay: -5s; }
+.bokeh--4 { width: 90px;  height: 90px;  left: -20px; bottom: 22%; animation-duration: 10s; animation-delay: -2s; }
+.bokeh--5 { width: 54px;  height: 54px;  left: 46%; bottom: 6%; animation-duration: 8s; animation-delay: -4s; }
+@keyframes float-soft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+/* Destellos tipo estrella, en tonos suaves */
+.sparkle { position: absolute; width: 22px; height: 22px; animation: twinkle-soft 4s ease-in-out infinite; }
+.sparkle path { fill: currentColor; }
+.sparkle--1 { left: 12%; top: 30%; color: #f3c8a8; width: 20px; height: 20px; }
+.sparkle--2 { right: 16%; top: 22%; color: #c9bdf2; width: 26px; height: 26px; animation-delay: -1.2s; }
+.sparkle--3 { right: 8%; bottom: 30%; color: #a9dcc6; width: 18px; height: 18px; animation-delay: -2.4s; }
+.sparkle--4 { left: 8%; bottom: 12%; color: #b4d3f2; width: 24px; height: 24px; animation-delay: -0.6s; }
+@keyframes twinkle-soft { 0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.55; } 50% { transform: scale(1.1) rotate(12deg); opacity: 1; } }
+
+/* Tarjetas de vidrio esmerilado sobre el fondo de la portada */
+#screen-home .pipi-widget,
+#screen-home .chat-row {
+  background: rgba(255, 255, 255, 0.62);
+  -webkit-backdrop-filter: saturate(160%) blur(24px);
+  backdrop-filter: saturate(160%) blur(24px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 10px 30px rgba(90, 80, 140, 0.10);
+}
+#screen-home .speech,
+#screen-home .speech::before { background: rgba(255, 255, 255, 0.85); }
+#screen-home .circle-btn,
+#screen-home .star-capsule {
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: saturate(160%) blur(16px);
+  backdrop-filter: saturate(160%) blur(16px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 6px 18px rgba(90, 80, 140, 0.10);
+}
+#screen-welcome .field { background: rgba(255, 255, 255, 0.78); }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob, .bokeh, .sparkle { animation: none !important; }
+}
+/* Fuera de la portada el fondo se oculta y sus animaciones se pausan. */
+#app:not(:has(#screen-home.is-active)):not(:has(#screen-welcome.is-active)) .backdrop * { animation-play-state: paused; }
