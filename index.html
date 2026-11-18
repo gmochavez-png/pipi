@@ -66,25 +66,28 @@
         </div>
       </div>
 
-      <div class="home-actions">
-        <button class="big-btn big-btn--read" data-go="menu" data-module="lectura">
-          <span class="big-btn__emoji">📖</span>
-          <span class="big-btn__text">Aprender a leer</span>
+      <div class="home-grid">
+        <button class="tile-btn tile-btn--read" data-go="menu" data-module="lectura">
+          <span class="tile-btn__emoji">📖</span>
+          <span class="tile-btn__text">Aprender a leer</span>
         </button>
-        <button class="big-btn big-btn--english" data-go="menu" data-module="ingles">
-          <span class="big-btn__emoji">🌎</span>
-          <span class="big-btn__text">Inglés</span>
+        <button class="tile-btn tile-btn--english" data-go="menu" data-module="ingles">
+          <span class="tile-btn__emoji">🌎</span>
+          <span class="tile-btn__text">Inglés</span>
         </button>
-        <button class="big-btn big-btn--chat" data-go="chat">
-          <span class="big-btn__emoji">💬</span>
-          <span class="big-btn__text">Hablar con PIPI</span>
-          <span class="big-btn__badge">Nuevo</span>
+        <button class="tile-btn tile-btn--stories" data-go="stories">
+          <span class="tile-btn__emoji">📚</span>
+          <span class="tile-btn__text">Cuentos</span>
         </button>
-      </div>
-
-      <div class="home-secondary">
-        <button class="ghost-btn ghost-btn--stars" data-go="rewards">⭐ Mis estrellas</button>
-        <button class="ghost-btn ghost-btn--stories" data-go="stories">📚 Cuentos</button>
+        <button class="tile-btn tile-btn--games" data-go="games">
+          <span class="tile-btn__emoji">🧩</span>
+          <span class="tile-btn__text">Juegos</span>
+          <span class="tile-btn__badge">Nuevo</span>
+        </button>
+        <button class="tile-btn tile-btn--chat tile-btn--wide" data-go="chat">
+          <span class="tile-btn__emoji">💬</span>
+          <span class="tile-btn__text">Hablar con PIPI</span>
+        </button>
       </div>
     </section>
 
@@ -191,6 +194,31 @@
       </div>
     </section>
 
+    <!-- ================= JUEGOS ================= -->
+    <section id="screen-games" class="screen" aria-label="Juegos">
+      <header class="screen-head">
+        <button class="icon-btn" data-back aria-label="Volver al inicio">⬅</button>
+        <h2>Juegos</h2>
+        <span class="head-stars">⭐ <span id="games-stars">0</span></span>
+      </header>
+      <p class="menu-subtitle">Elige un juego</p>
+      <div id="games-grid" class="games-grid"></div>
+    </section>
+
+    <section id="screen-wordsearch" class="screen" aria-label="Sopa de letras">
+      <header class="screen-head">
+        <button class="icon-btn" id="ws-back" aria-label="Volver a juegos">⬅</button>
+        <h2>Sopa de letras</h2>
+        <button class="icon-btn" id="ws-new" aria-label="Nueva partida">🔄</button>
+      </header>
+      <div class="ws-top">
+        <div id="koala-games" class="koala-games" aria-hidden="true"></div>
+        <p id="ws-msg" class="ws-msg" aria-live="polite">Busca las palabras ➡️ ⬇️</p>
+      </div>
+      <div id="ws-grid" class="ws-grid" aria-label="Cuadrícula de letras"></div>
+      <ul id="ws-words" class="ws-words"></ul>
+    </section>
+
     <!-- ================= AJUSTES ================= -->
     <section id="screen-settings" class="screen" aria-label="Ajustes">
       <header class="screen-head">
@@ -272,6 +300,8 @@
   <script src="js/lessons.js"></script>
   <script src="js/stories.js"></script>
   <script src="js/chat.js"></script>
+  <script src="js/wordsearch.js"></script>
+  <script src="js/games.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

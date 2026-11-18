@@ -24,8 +24,18 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - **La familia**: mom, dad, sister…
 - **El cuerpo**: head, eyes, nose…
 
+### 🧩 Juegos
+- Sección **Juegos** con su propio menú (se agregan más juegos en `js/games.js`).
+- **Sopa de letras**: cuadrícula de 6×6 con letras grandes y 4 palabras cortas
+  de "Las palabras" (sol, luna, gato, perro…). Las palabras van solo de
+  izquierda a derecha ➡️ o de arriba hacia abajo ⬇️.
+  - Se juega **arrastrando el dedo** o **tocando la primera y la última letra**.
+  - Cada palabra de la lista tiene su emoji y se puede **oír** tocándola.
+  - Al encontrarla se pinta de color y PIPI la festeja; al terminar todas hay
+    **fiesta 🎉** y se gana **una estrella ⭐**. Cada partida es diferente.
+
 ### ⭐ Recompensas
-- Cada tarjeta que la niña marca con **"¡Lo logré!"** da una estrella.
+- Cada tarjeta que la niña marca con **"¡Lo logré!"**, cada cuento leído y cada sopa de letras terminada dan una estrella.
 - Las estrellas desbloquean **pegatinas** (a las 5, 15, 30, 50, 80 y 100 estrellas).
 - Cada logro se celebra con **corazones, flores, confeti y un cartel de "¡Lo lograste!"**.
 - Al completar un nivel de sílabas, PIPI hace una **fiesta** con música, colores, confeti y la **calificación**.
@@ -45,15 +55,15 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - El botón **⚙️ Ajustes** permite cambiar el nombre, la **frecuencia de expresiones** (pocas / normal / muchas) y el **color del pelaje** de PIPI (gris, marrón, blanco, rosa, azul, verde, naranja y morado).
 
 ### 💬 Chat con PIPI
-- PIPI conversa con **respuestas escolares curadas** y busca en **Vikidia / Wikipedia**.
+- PIPI conversa con **respuestas escolares curadas** y busca en **Vikidia** (enciclopedia escrita para niños). No usa Wikipedia.
 - Juegos: chistes, adivinanzas, sumas, cuentos y "veo veo".
-- **Funciona sin clave** con el cerebro seguro (curado + Wikipedia + juegos).
+- **Funciona sin clave** con el cerebro seguro (respuestas curadas + Vikidia + juegos).
 - 🎤 **Micrófono:** toca 🎤 y habla; el navegador convierte tu voz en texto y PIPI responde. Solo escucha cuando tocas el botón.
-- **IA en la nube opcional:** en el chat toca **🔒**, PIN **1234**, y pega una **API key gratis de Google Gemini** (aistudio.google.com/app/apikey). Se guarda solo en el teléfono.
+- **IA en la nube opcional:** en el chat toca **🔒**. La primera vez se te pide **crear un PIN de padres** (4 a 8 números); después se pide ese PIN para entrar. Ahí puedes pegar una **API key gratis de Google Gemini** (aistudio.google.com/app/apikey). La clave y el PIN se guardan solo en ese teléfono.
 - Incluye filtros de seguridad y modo padres.
 
 ### 🔊 Voz (ElevenLabs)
-- Los 170 audios se generaron con **ElevenLabs** (modelo `eleven_v4`):
+- Los 170 audios se generaron con **ElevenLabs** (modelo `eleven_v4`) para uso personal:
   - Español: voz **Liz** (dulce y cálida).
   - Inglés: voz **Jessica** (juguetona y brillante).
 - Así suena igual en cualquier teléfono, sin depender de las voces del sistema.
@@ -82,7 +92,7 @@ cualquier lugar, sin depender de la computadora.
    - Abre la app en el navegador con un servidor local (permite instalar y usar sin conexión).
 
 ### Opción B · En el teléfono, por WiFi (para probar)
-1. En la computadora, ejecuta **`iniciar-app.bat`** (o `python -m http.server 8000`).
+1. En la computadora, ejecuta **`iniciar-app.bat`** (o `node server.cjs`, o `python -m http.server 8000`).
 2. Averigua la IP de la PC: abre una consola y escribe `ipconfig`.
    Busca **"Dirección IPv4"** (ejemplo: `192.168.1.50`).
 3. En el teléfono, abre `http://192.168.1.50:8000`.
@@ -141,7 +151,9 @@ pipi-app/
 ├─ js/lessons.js       → contenido educativo (editable)
 ├─ js/stories.js       → cuentos cortos
 ├─ js/app.js           → lógica: navegación, voz, estrellas
-├─ js/chat.js          → chat seguro, Wikipedia/Vikidia y juegos
+├─ js/chat.js          → chat seguro, Vikidia y juegos del chat
+├─ js/games.js         → menú de Juegos (aquí se agregan juegos nuevos)
+├─ js/wordsearch.js    → juego de sopa de letras
 ├─ js/pipi3d.js        → koala 3D (Three.js) y expresiones
 ├─ js/vendor/three.min.js → librería 3D (local, sin conexión)
 ├─ tools/              → scripts para regenerar los audios con ElevenLabs
@@ -149,29 +161,37 @@ pipi-app/
 ├─ .env.local          → clave de ElevenLabs (privada, no se publica)
 ├─ manifest.json       → datos para instalar la app
 ├─ sw.js               → modo sin conexión
-├─ server.js           → servidor local opcional (Node.js)
+├─ server.cjs          → servidor local opcional (Node.js)
 ├─ iniciar-app.bat     → abre la app en la PC con un doble clic
 └─ assets/
    ├─ koala.jpg        → logo (recorte de la foto de PIPI)
    ├─ koala-source.jpg → foto original que enviaste
    ├─ icons/           → iconos de la app (192, 512, etc.)
-   └─ audio/           → 170 audios MP3 (español, inglés, cuentos y nombre)
+   └─ audio/           → 170 audios MP3 (español, inglés, cuentos y nombre.mp3)
 ```
 
 ---
 
 ## 📝 Notas importantes
 
-- **Voz**: los audios vienen incluidos en `assets/audio/` (generados con Edge TTS,
-  de Microsoft) y se usan solo para uso personal. Si algún audio faltara, la app
-  recurre a la voz del dispositivo como respaldo.
-- **Sin conexión**: después de la primera visita, el *service worker* guarda la app.
-  Para ver cambios en el contenido, recarga la página (o vuelve a instalar).
-- **Privacidad**: la app **no envía datos a ningún servidor**. Las estrellas se
-  guardan solo en el propio teléfono (`localStorage`).
+- **Voz**: los audios vienen incluidos en `assets/audio/` (generados con ElevenLabs)
+  y son para uso personal. Si algún audio faltara, la app recurre a la voz del
+  dispositivo como respaldo.
+- **Nombre de la niña**: el audio de su nombre está en `assets/audio/ui/nombre.mp3`.
+  El nombre no se escribe en el código: para regenerarlo agrega `PIPI_NAME=...`
+  a `.env.local`, ejecuta `npm run voices:name` y copia la huella que imprime en
+  `NAME_AUDIO` (`js/app.js`).
+- **Sin conexión**: en la primera visita, el *service worker* (`sw.js`) guarda la
+  app, todos los JS y los 170 audios. No guarda respuestas de Vikidia ni de otras
+  APIs. Al publicar cambios, sube el número de `CACHE` en `sw.js` (por ejemplo
+  `pipi-v18` → `pipi-v19`) para que los teléfonos reciban la versión nueva.
+- **Privacidad**: las estrellas, el nombre y el PIN de padres se guardan solo en
+  el propio teléfono (`localStorage`). La app solo se conecta a internet cuando
+  en el chat se pregunta algo que PIPI no sabe (Vikidia) o si los padres activan
+  la IA de Gemini.
 - **Derechos**: los dibujos son *emojis* del propio dispositivo. La foto del koala
-  es la que tú aportaste. Los audios se generaron con un servicio TTS gratuito
-  para uso personal; no se usa música ni voces con licencia.
+  es la que tú aportaste. Los audios se generaron con ElevenLabs para uso
+  personal; no se usa música con licencia.
 - **Accesibilidad**: botones grandes, alto contraste, textos legibles y respeto a
   la opción "reducir movimiento" del teléfono.
 - **Uso**: pensada para uso personal/familiar.
@@ -180,10 +200,10 @@ pipi-app/
 
 ## 🔜 Ideas para crecer
 
-- Practicar pronunciación con micrófono (reconocimiento de voz).
-- Cuentos cortos leídos por PIPI.
+- Practicar la pronunciación de las palabras con el micrófono (hoy el micrófono solo se usa en el chat).
+- Más juegos en la sección Juegos (memoria, une la palabra con el dibujo…).
 - Ajustes de velocidad de la voz y modo solo lectura.
-- Más idiomas o más lecciones.
+- Más idiomas, más lecciones y más cuentos.
 
 ---
 

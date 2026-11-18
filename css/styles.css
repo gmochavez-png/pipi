@@ -349,14 +349,16 @@ body::before {
 /* ---------- Inicio ---------- */
 .home-hero {
   position: relative;
-  flex: 1;
+  /* Crece si sobra espacio, pero nunca se encoge: así nada se desborda
+     encima de la barra de arriba ni de los botones. */
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  justify-content: safe center;
   gap: 4px;
-  padding: 6px 0 10px;
-  min-height: 0;
+  padding: 6px 0 8px;
 }
 
 /* Escena decorativa de la portada */
@@ -411,7 +413,8 @@ body::before {
 @keyframes flutter { 0%, 100% { transform: translate(0, 0) rotate(-8deg); } 50% { transform: translate(8px, -10px) rotate(8deg); } }
 
 .koala-holder {
-  width: min(64vw, 250px);
+  width: min(52vw, 24vh, 240px);
+  width: min(52vw, 24dvh, 240px);
   border: none;
   background: none;
   padding: 0;
@@ -433,7 +436,7 @@ body::before {
   font-size: 1.15rem;
   font-weight: 800;
   line-height: 1.3;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 .speech p { margin: 0; }
 .speech::after {
@@ -449,12 +452,6 @@ body::before {
   border-bottom: 12px solid #fff;
 }
 
-.home-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding-bottom: 8px;
-}
 
 .big-btn {
   display: flex;
@@ -527,19 +524,76 @@ body::before {
   border-radius: 999px;
   box-shadow: var(--shadow-sm);
 }
-.home-secondary {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding-top: 4px;
+
+/* ---------- Botones de la portada (cuadrícula 2×2 + chat) ---------- */
+.home-grid {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 4px 0 8px;
 }
-.ghost-btn--stories {
-  background: #e8f0ff;
-  color: #3d6a8f;
-  padding: 12px 22px;
+.tile-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 104px;
+  border: none;
+  border-radius: var(--radius);
+  padding: 14px 8px;
+  font-family: inherit;
+  font-size: 1.22rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.16), 0 12px 22px rgba(60, 110, 150, 0.2);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.tile-btn:active {
+  transform: translateY(5px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.16), 0 6px 12px rgba(60, 110, 150, 0.18);
+}
+.tile-btn__emoji {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  font-size: 2rem;
+  text-shadow: none;
+}
+.tile-btn__text { overflow-wrap: anywhere; }
+.tile-btn--read { background: linear-gradient(135deg, #ff9f4a, #e8562a); }
+.tile-btn--english { background: linear-gradient(135deg, #3cc4b2, #17877b); }
+.tile-btn--stories { background: linear-gradient(135deg, #f477b0, #c93f86); }
+.tile-btn--games { background: linear-gradient(135deg, #4fa3f7, #2264c9); }
+.tile-btn--chat { background: linear-gradient(135deg, #9d7ff7, #6a45e0); }
+.tile-btn--wide {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  min-height: 62px;
+  gap: 12px;
+}
+.tile-btn--wide .tile-btn__emoji { width: 44px; height: 44px; font-size: 1.5rem; }
+.tile-btn__badge {
+  position: absolute;
+  top: -8px;
+  right: 10px;
+  background: #ffd166;
+  color: #6b4e00;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 4px 9px;
   border-radius: 999px;
-  box-shadow: var(--shadow-sm);
+  text-shadow: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* ---------- Cabecera de pantalla ---------- */
@@ -1120,7 +1174,9 @@ body::before {
 
 /* ---------- Pantallas muy pequeñas ---------- */
 @media (max-height: 680px) {
-  .koala-holder { width: min(46vw, 180px); }
+  .koala-holder { width: min(44vw, 22vh, 170px); }
+  .tile-btn { min-height: 96px; }
+  .home-greeting { font-size: 1.3rem; }
   .big-btn { padding: 16px 20px; font-size: 1.22rem; }
   .card__emoji { font-size: 3.4rem; }
   .card__big { font-size: 3.1rem; }
@@ -1131,4 +1187,158 @@ body::before {
 @media (min-width: 700px) {
   .screen { max-width: 600px; }
   .menu-grid { grid-template-columns: repeat(3, 1fr); }
+  .tile-btn { min-height: 140px; font-size: 1.45rem; }
+  .tile-btn__emoji { width: 66px; height: 66px; font-size: 2.4rem; }
+
+}
+
+/* =========================================================
+   JUEGOS
+   ========================================================= */
+.games-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding-bottom: 10px;
+}
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  border-radius: 24px;
+  padding: 22px 16px;
+  font-family: inherit;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--game-a, #fff), var(--game-b, #fff));
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  text-align: center;
+}
+.game-card:active { transform: scale(0.97); }
+.game-card__emoji { font-size: 3rem; line-height: 1; }
+.game-card__title { font-size: 1.4rem; font-weight: 900; }
+.game-card__desc { font-size: 1rem; font-weight: 700; color: var(--ink-soft); }
+.game-card--soon {
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: none;
+  border: 3px dashed #cfe4f5;
+  cursor: default;
+  padding: 16px;
+}
+.game-card--soon .game-card__emoji { font-size: 2rem; }
+.game-card--soon .game-card__title { font-size: 1.05rem; color: var(--ink-soft); }
+
+/* ---------- Sopa de letras ---------- */
+#screen-wordsearch .screen-head { padding-bottom: 6px; }
+.ws-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 72px;
+}
+.koala-games {
+  flex: 0 0 auto;
+  width: 72px;
+  height: 72px;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 8px rgba(70, 110, 150, 0.18));
+}
+.koala-games canvas { display: block; width: 100% !important; height: 100% !important; }
+.ws-msg {
+  flex: 1;
+  margin: 0;
+  background: #fff;
+  border-radius: 18px;
+  padding: 10px 14px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.25;
+  box-shadow: var(--shadow-sm);
+}
+.ws-grid {
+  --n: 6;
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  gap: 5px;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px auto 12px;
+  padding: 8px;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.ws-cell {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #f1f8ff;
+  font-size: clamp(1.5rem, 7.5vw, 2.3rem);
+  font-weight: 900;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.12s, transform 0.12s;
+}
+.ws-cell.is-found { background: var(--found, #9ee6c9); }
+.ws-cell.is-selecting { background: #ffe27a; transform: scale(1.06); }
+.ws-cell.is-start { background: #ffd166; box-shadow: inset 0 0 0 3px #e0a100; }
+.ws-cell.is-wrong { background: #ffd0d0; animation: shake 0.4s; }
+
+.ws-words {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.ws-word { min-width: 0; }
+.ws-word__btn {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: #fff;
+  border-radius: 18px;
+  padding: 6px 8px;
+  font-family: inherit;
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  text-align: left;
+}
+.ws-word__btn:active { transform: scale(0.96); }
+.ws-word__emoji { font-size: 1.4rem; line-height: 1; }
+.ws-word__text {
+  flex: 1;
+  min-width: 0;
+  font-size: clamp(1rem, 4.6vw, 1.3rem);
+  font-weight: 900;
+  white-space: nowrap;
+}
+.ws-word__listen { font-size: 1.05rem; }
+.ws-word.is-found .ws-word__btn { background: var(--found, #9ee6c9); }
+.ws-word.is-found .ws-word__text { text-decoration: line-through; text-decoration-thickness: 3px; }
+
+@media (min-width: 700px) {
+  .ws-grid { max-width: 460px; }
+  .ws-cell { font-size: 2.6rem; }
+  .ws-words { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Botón ancho del chat: más bajo que los 4 principales en cualquier tamaño. */
+@media (max-height: 680px) {
+  .tile-btn--wide { min-height: 56px; }
+  .tile-btn__emoji { width: 46px; height: 46px; font-size: 1.7rem; }
+}
+@media (min-width: 700px) {
+  .tile-btn--wide { min-height: 84px; }
 }

@@ -36,5 +36,5 @@ exit /b
 
 :noderun
 start "" http://localhost:8000
-node server.js
+node server.cjs
 exit /b

@@ -189,7 +189,19 @@
     });
   }
 
-  var NAME_AUDIO = { antonella: "name-antonella.mp3" };
+  /* Audio grabado del nombre de la niña. Para no escribir su nombre en el
+     código (el repositorio es público) guardamos solo una "huella" (hash
+     FNV-1a) del nombre normalizado. tools/generate-name.mjs la calcula. */
+  var NAME_AUDIO = { "f589a39d": "nombre.mp3" };
+
+  function nameHash(s) {
+    var x = 0x811c9dc5;
+    for (var i = 0; i < s.length; i++) {
+      x ^= s.charCodeAt(i);
+      x = Math.imul(x, 0x01000193) >>> 0;
+    }
+    return ("0000000" + x.toString(16)).slice(-8);
+  }
 
   function normalizeName(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]/g, "").trim();
@@ -197,7 +209,7 @@
 
   function speakName(name) {
     if (!name || state.muted) return;
-    var key = normalizeName(name);
+    var key = nameHash(normalizeName(name));
     var file = NAME_AUDIO[key];
     if (!file) return;
     try {
@@ -357,6 +369,7 @@
       else if (name === "welcome") { pipi3d.attach($("#koala-welcome")); pipi3d.setExpression("happy", 4000); }
       else if (name === "activity") pipi3d.attach($("#koala-mini"));
       else if (name === "settings") { pipi3d.attach($("#koala-settings")); pipi3d.setExpression("idle"); }
+      else if (name === "wordsearch") { pipi3d.attach($("#koala-games")); pipi3d.setExpression("happy", 2000); }
       else pipi3d.hide();
     }
 
@@ -371,6 +384,7 @@
     var a = $("#home-stars"); if (a) a.textContent = n;
     var b = $("#menu-stars"); if (b) b.textContent = n;
     var c = $("#rewards-stars"); if (c) c.textContent = n;
+    var d = $("#games-stars"); if (d) d.textContent = n;
   }
 
   function isDone(mod, cat, idx) {
@@ -1075,6 +1089,7 @@
         if (go === "menu") openModule(el.getAttribute("data-module"));
         else if (go === "rewards") { renderRewards(); show("rewards"); }
         else if (go === "stories") openStories();
+        else if (go === "games" && window.PipiGames) window.PipiGames.open();
         else show(go);
       });
     });
@@ -1243,7 +1258,27 @@
         return state.muted;
       },
       getName: function () { return state.name || ""; },
-      showToast: showToast
+      childName: childName,
+      showToast: showToast,
+      // Utilidades para los juegos (js/games.js, js/wordsearch.js)
+      show: show,
+      playAudio: playAudio,
+      speak: speak,
+      stopAll: stopAll,
+      playSfx: playSfx,
+      burstStars: burstStars,
+      showParty: showParty,
+      audioBase: audioBase,
+      randomPraise: randomPraise,
+      expression: function (mood, ms) { if (pipi3d) pipi3d.setExpression(mood, ms); },
+      celebrate: function () { if (pipi3d) pipi3d.celebrate(); },
+      addStar: function (key) {
+        if (!key || state.done[key]) return false;
+        state.done[key] = true;
+        saveState();
+        updateStars();
+        return true;
+      }
     };
     if (window.PipiChat) window.PipiChat.init();
 

@@ -1,7 +1,7 @@
 /* =========================================================
    PIPI · Chat híbrido y seguro
    - Respuestas escolares curadas
-   - Vikidia / Wikipedia (gratis, sin clave)
+   - Vikidia (enciclopedia para niños, gratis y sin clave)
    - Juegos: chistes, adivinanzas, sumas, cuentos, veo veo
    - Modo padres: activa IA en la nube (Gemini) con clave local
    ========================================================= */
@@ -10,7 +10,7 @@
   "use strict";
 
   var STORE = "pipi.chat.v1";
-  var DEFAULT_PIN = "1234";
+  var PIN_KEY = "pipi.chat.pin";
 
   var state = {
     settings: { useAI: false, geminiKey: "" },
@@ -233,7 +233,7 @@
     }
   }
 
-  /* ---------------- Vikidia / Wikipedia ---------------- */
+  /* ---------------- Vikidia (solo enciclopedia infantil) ---------------- */
   function extractTopic(question) {
     var raw = question.toLowerCase().replace(/[¿?¡!.,;:]/g, " ").replace(/\s+/g, " ").trim();
     var prefixes = [
@@ -261,15 +261,6 @@
     return first && first.extract ? first.extract : null;
   }
 
-  async function searchTitles(topic) {
-    var url = "https://es.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srsearch=" + encodeURIComponent(topic) + "&srlimit=3";
-    var res = await fetch(url);
-    if (!res.ok) return [];
-    var data = await res.json();
-    var s = data.query && data.query.search ? data.query.search : [];
-    return s.map(function (x) { return x.title; });
-  }
-
   function isKidSafe(text) {
     if (containsBlocked(text)) return false;
     var n = normalize(text);
@@ -293,22 +284,12 @@
     return s;
   }
 
-  async function wikiAnswer(text) {
+  async function vikidiaAnswer(text) {
     var topic = extractTopic(text);
     if (!topic) return null;
 
     var extract = await fetchExtract("es.vikidia.org", topic);
     if (extract && isKidSafe(extract)) return simplify(extract);
-
-    var titles = await searchTitles(topic);
-    for (var i = 0; i < titles.length; i++) {
-      var e = await fetchExtract("es.wikipedia.org", titles[i]);
-      if (e && isKidSafe(e)) return simplify(e);
-    }
-
-    var exact = await fetchExtract("es.wikipedia.org", topic);
-    if (exact && isKidSafe(exact)) return simplify(exact);
-
     return null;
   }
 
@@ -405,7 +386,7 @@
     state.busy = true;
     setThinking(true);
     try {
-      var wiki = await wikiAnswer(text);
+      var wiki = await vikidiaAnswer(text);
       if (wiki) { respond(wiki); return; }
       var ai = await geminiAnswer(text);
       if (ai) { respond(ai); return; }
@@ -438,7 +419,32 @@
   }
 
   function getPin() {
-    try { return localStorage.getItem("pipi.chat.pin") || DEFAULT_PIN; } catch (e) { return DEFAULT_PIN; }
+    try { return localStorage.getItem(PIN_KEY) || ""; } catch (e) { return ""; }
+  }
+
+  function setPin(pin) {
+    try { localStorage.setItem(PIN_KEY, pin); return true; } catch (e) { return false; }
+  }
+
+  /* La primera vez, el adulto elige su propio PIN (4 a 8 números).
+     Después, se pide ese PIN para entrar al modo padres. */
+  function askParentPin() {
+    var saved = getPin();
+    if (!saved) {
+      var p1 = prompt("Modo padres: crea un PIN de 4 a 8 números. Guárdalo, lo necesitarás para volver a entrar.");
+      if (p1 === null) return false;
+      p1 = p1.trim();
+      if (!/^\d{4,8}$/.test(p1)) { alert("El PIN debe tener de 4 a 8 números."); return false; }
+      var p2 = prompt("Escribe el PIN otra vez para confirmarlo:");
+      if (p2 === null) return false;
+      if (p2.trim() !== p1) { alert("Los PIN no coinciden. Inténtalo de nuevo."); return false; }
+      if (!setPin(p1)) { alert("No se pudo guardar el PIN en este teléfono."); return false; }
+      return true;
+    }
+    var pin = prompt("PIN de padres:");
+    if (pin === null) return false;
+    if (pin.trim() !== saved) { alert("PIN incorrecto"); return false; }
+    return true;
   }
 
   function openParent() {
@@ -523,10 +529,7 @@
 
     var parentBtn = $("#parent-btn");
     if (parentBtn) parentBtn.addEventListener("click", function () {
-      var pin = prompt("PIN de padres (por defecto 1234):");
-      if (pin === null) return;
-      if (pin.trim() !== getPin()) { alert("PIN incorrecto"); return; }
-      openParent();
+      if (askParentPin()) openParent();
     });
 
     var close = $("#parent-close");
