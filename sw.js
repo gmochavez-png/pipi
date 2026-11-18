@@ -9,7 +9,7 @@
    reciban la versión nueva.
    ========================================================= */
 
-var CACHE = "pipi-v18";
+var CACHE = "pipi-v19";
 
 var APP_FILES = [
   "./",

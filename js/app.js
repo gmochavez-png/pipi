@@ -21,7 +21,7 @@
     muted: false,
     name: "",
     expressionRate: "normal",
-    furColor: "#8b93a2",
+    furColor: "#a9a7a1",
     unlockedSyllableLevel: 1,
     syllableStats: { byLevel: {} }
   };
@@ -37,7 +37,9 @@
           state.muted = !!saved.muted;
           state.name = typeof saved.name === "string" ? saved.name.slice(0, 20) : "";
           state.expressionRate = saved.expressionRate === "low" || saved.expressionRate === "high" ? saved.expressionRate : "normal";
-          state.furColor = typeof saved.furColor === "string" && /^#[0-9a-fA-F]{6}$/.test(saved.furColor) ? saved.furColor : "#8b93a2";
+          state.furColor = typeof saved.furColor === "string" && /^#[0-9a-fA-F]{6}$/.test(saved.furColor) ? saved.furColor : "#a9a7a1";
+          // El gris antiguo se cambia por el gris real del peluche.
+          if (state.furColor.toLowerCase() === "#8b93a2") state.furColor = "#a9a7a1";
           state.unlockedSyllableLevel = (saved.unlockedSyllableLevel >= 1 && saved.unlockedSyllableLevel <= 4) ? saved.unlockedSyllableLevel : 1;
           state.syllableStats = (saved.syllableStats && typeof saved.syllableStats === "object") ? saved.syllableStats : { byLevel: {} };
           if (!state.syllableStats.byLevel) state.syllableStats.byLevel = {};
@@ -289,61 +291,64 @@
     }
   }
 
-  /* ---------------- Personaje koala (SVG) ---------------- */
+  /* ---------------- Personaje PIPI (SVG de respaldo, sin 3D) ----------------
+     Dibujo igual al peluche real: huevo gris, cuerno de unicornio rosa,
+     orejas de borrego, ojos y nariz bordados y corazón de brillantina. */
   function koalaSVG() {
     return (
-      '<svg class="koala" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PIPI, el koala">' +
+      '<svg class="koala" viewBox="0 0 320 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PIPI, el koala unicornio">' +
         '<defs>' +
-          '<radialGradient id="fur" cx="50%" cy="35%" r="72%">' +
-            '<stop offset="0%" stop-color="#d6dae1"/>' +
-            '<stop offset="60%" stop-color="#bfc4cd"/>' +
-            '<stop offset="100%" stop-color="#a5abb6"/>' +
+          '<radialGradient id="pipiFur" cx="45%" cy="35%" r="75%">' +
+            '<stop offset="0%" stop-color="#c4c2bc"/>' +
+            '<stop offset="100%" stop-color="#97958f"/>' +
           '</radialGradient>' +
-          '<radialGradient id="belly" cx="50%" cy="40%" r="70%">' +
-            '<stop offset="0%" stop-color="#ffffff"/>' +
-            '<stop offset="100%" stop-color="#eceff0"/>' +
+          '<linearGradient id="pipiHorn" x1="0" y1="1" x2="0" y2="0">' +
+            '<stop offset="0%" stop-color="#e8458a"/>' +
+            '<stop offset="65%" stop-color="#f2b9b0"/>' +
+            '<stop offset="100%" stop-color="#f8d3c6"/>' +
+          '</linearGradient>' +
+          '<radialGradient id="pipiHeart" cx="45%" cy="40%" r="70%">' +
+            '<stop offset="0%" stop-color="#f070ad"/>' +
+            '<stop offset="100%" stop-color="#c94a8a"/>' +
           '</radialGradient>' +
         '</defs>' +
 
-        /* Orejas */
-        '<g class="ear ear-left">' +
-          '<circle cx="86" cy="76" r="56" fill="#b3b8c1"/>' +
-          '<circle cx="86" cy="76" r="41" fill="#eef1f0"/>' +
-          '<circle cx="86" cy="76" r="30" fill="#fbfcfb"/>' +
-        '</g>' +
-        '<g class="ear ear-right">' +
-          '<circle cx="234" cy="76" r="56" fill="#b3b8c1"/>' +
-          '<circle cx="234" cy="76" r="41" fill="#eef1f0"/>' +
-          '<circle cx="234" cy="76" r="30" fill="#fbfcfb"/>' +
-        '</g>' +
+        /* Orejas de borrego */
+        '<g class="ear ear-left"><ellipse cx="66" cy="140" rx="34" ry="46" fill="#d3cec2" stroke="#bdb7aa" stroke-width="4" stroke-dasharray="3 5"/></g>' +
+        '<g class="ear ear-right"><ellipse cx="254" cy="140" rx="34" ry="46" fill="#d3cec2" stroke="#bdb7aa" stroke-width="4" stroke-dasharray="3 5"/></g>' +
 
-        /* Cuerpo y barriga */
-        '<ellipse class="body" cx="160" cy="178" rx="122" ry="116" fill="url(#fur)"/>' +
-        '<ellipse class="belly" cx="160" cy="212" rx="80" ry="74" fill="url(#belly)"/>' +
+        /* Cuerpo en forma de huevo */
+        '<path class="body" d="M160 62 C238 62 282 150 282 222 C282 292 228 330 160 330 C92 330 38 292 38 222 C38 150 82 62 160 62 Z" fill="url(#pipiFur)"/>' +
 
-        /* Mejillas */
-        '<circle class="cheek" cx="100" cy="182" r="20" fill="#f6a8c0" opacity="0.8"/>' +
-        '<circle class="cheek" cx="220" cy="182" r="20" fill="#f6a8c0" opacity="0.8"/>' +
+        /* Cuerno (encima del cuerpo, como en el peluche) */
+        '<path d="M140 74 L157 8 Q161 1 165 8 L182 74 Q161 82 140 74 Z" fill="url(#pipiHorn)"/>' +
 
-        /* Ojos */
+        /* Ojos bordados */
         '<g class="eye eye-left">' +
-          '<ellipse cx="120" cy="146" rx="18" ry="21" fill="#20242b"/>' +
-          '<circle cx="113" cy="138" r="6" fill="#ffffff"/>' +
-          '<circle cx="127" cy="153" r="2.6" fill="#ffffff" opacity="0.85"/>' +
+          '<circle cx="110" cy="140" r="24" fill="#8f908b"/>' +
+          '<circle cx="110" cy="140" r="21" fill="#23272a"/>' +
+          '<ellipse cx="117" cy="131" rx="7" ry="6" fill="#f6f6f0"/>' +
+          '<circle cx="103" cy="149" r="2.6" fill="#f6f6f0"/>' +
         '</g>' +
         '<g class="eye eye-right">' +
-          '<ellipse cx="200" cy="146" rx="18" ry="21" fill="#20242b"/>' +
-          '<circle cx="193" cy="138" r="6" fill="#ffffff"/>' +
-          '<circle cx="207" cy="153" r="2.6" fill="#ffffff" opacity="0.85"/>' +
+          '<circle cx="210" cy="140" r="24" fill="#8f908b"/>' +
+          '<circle cx="210" cy="140" r="21" fill="#23272a"/>' +
+          '<ellipse cx="217" cy="131" rx="7" ry="6" fill="#f6f6f0"/>' +
+          '<circle cx="203" cy="149" r="2.6" fill="#f6f6f0"/>' +
         '</g>' +
 
-        /* Nariz */
-        '<path class="nose" d="M160 162 c-16 0 -27 11 -27 20 c0 11 12 18 27 18 c15 0 27 -7 27 -18 c0 -9 -11 -20 -27 -20 z" fill="#20242b"/>' +
-        '<path d="M160 176 v16" stroke="#20242b" stroke-width="3.2" stroke-linecap="round"/>' +
+        /* Nariz bordada */
+        '<path class="nose" d="M160 118 C184 118 190 138 185 154 C181 168 171 178 160 178 C149 178 139 168 135 154 C130 138 136 118 160 118 Z" fill="#7f8183" stroke="#3f4245" stroke-width="4"/>' +
+        '<path d="M152 172 q8 -5 16 0" stroke="#3f4245" stroke-width="3" fill="none" stroke-linecap="round"/>' +
 
-        /* Boca */
-        '<path class="mouth-closed" d="M145 208 q15 13 30 0" stroke="#20242b" stroke-width="5" fill="none" stroke-linecap="round"/>' +
-        '<ellipse class="mouth-open" cx="160" cy="212" rx="16" ry="9" fill="#3a2b2f"/>' +
+        /* Boca: el peluche no tiene; solo se ve al hablar */
+        '<path class="mouth-closed" d="M160 190 v0" stroke="none" fill="none"/>' +
+        '<ellipse class="mouth-open" cx="160" cy="194" rx="11" ry="7" fill="#4a2f3a"/>' +
+
+        /* Corazón de brillantina */
+        '<path d="M160 214 C170 186 246 186 244 232 C242 262 196 286 160 314 C124 286 78 262 76 232 C74 186 150 186 160 214 Z" fill="#b98096"/>' +
+        '<path d="M160 222 C169 198 234 198 232 234 C230 258 192 280 160 302 C128 280 90 258 88 234 C86 198 151 198 160 222 Z" fill="url(#pipiHeart)"/>' +
+        '<g fill="#ffffff" opacity="0.8"><circle cx="120" cy="230" r="2"/><circle cx="196" cy="226" r="2.2"/><circle cx="150" cy="262" r="1.8"/><circle cx="182" cy="250" r="2"/><circle cx="135" cy="246" r="1.5"/><circle cx="210" cy="240" r="1.6"/><circle cx="165" cy="284" r="1.8"/></g>' +
       '</svg>'
     );
   }

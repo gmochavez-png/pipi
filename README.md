@@ -1,7 +1,7 @@
 # 🐨 PIPI · Aprende jugando
 
 App para que una niña de 6 años aprenda a leer y sus primeras palabras en inglés,
-acompañada por **PIPI**, un koala de peluche simpático que habla y la anima.
+acompañada por **PIPI**, su koala-unicornio de peluche, que habla y la anima.
 
 Funciona como **PWA**: se instala en el teléfono (Android o iPhone), tiene su
 propio icono y, una vez cargada, funciona **sin conexión**.
@@ -46,7 +46,9 @@ propio icono y, una vez cargada, funciona **sin conexión**.
 - Botón **⭐ ¡Lo leí!** para guardar el cuento leído y ganar una estrella.
 
 ### 🐨 PIPI en 3D
-- PIPI es un koala **3D** (Three.js) con **expresiones**: parpadeo, sonrisa, habla, celebración, sorpresa, tristeza, pensativo y dormido.
+- PIPI es un modelo **3D** (Three.js) hecho a partir de la foto del peluche real: cuerpo de terciopelo gris en forma de huevo, **cuerno de unicornio** rosa con brillantina, orejas de borrego, ojos y nariz bordados y un **corazón de brillantina** que destella.
+- Tiene **expresiones**: parpadeo, ojitos felices, habla, celebración, sorpresa, tristeza, pensativo y dormido. Como el peluche no tiene boca, la boca solo aparece cuando habla o cambia de expresión.
+- Si el teléfono no puede mostrar 3D, se usa un dibujo del mismo PIPI.
 - En **Aprender a leer** y en **Inglés**, PIPI **no dice la respuesta** hasta que pulses **🔊 Escuchar**.
 - Al acertar dice **frases distintas**, en **español e inglés**: "¡Excelente!", "¡Bravo!", "Great job!", "Well done!"…
 
@@ -164,9 +166,9 @@ pipi-app/
 ├─ server.cjs          → servidor local opcional (Node.js)
 ├─ iniciar-app.bat     → abre la app en la PC con un doble clic
 └─ assets/
-   ├─ koala.jpg        → logo (recorte de la foto de PIPI)
-   ├─ koala-source.jpg → foto original que enviaste
-   ├─ icons/           → iconos de la app (192, 512, etc.)
+   ├─ koala.jpg        → logo (PIPI en 3D)
+   ├─ koala-source.jpg → foto de referencia anterior (ya no se usa)
+   ├─ icons/           → iconos de la app con PIPI en 3D (192, 512, etc.)
    └─ audio/           → 170 audios MP3 (español, inglés, cuentos y nombre.mp3)
 ```
 
@@ -189,8 +191,8 @@ pipi-app/
   el propio teléfono (`localStorage`). La app solo se conecta a internet cuando
   en el chat se pregunta algo que PIPI no sabe (Vikidia) o si los padres activan
   la IA de Gemini.
-- **Derechos**: los dibujos son *emojis* del propio dispositivo. La foto del koala
-  es la que tú aportaste. Los audios se generaron con ElevenLabs para uso
+- **Derechos**: los dibujos son *emojis* del propio dispositivo. PIPI está modelado
+  en 3D a partir de la foto del peluche de la familia. Los audios se generaron con ElevenLabs para uso
   personal; no se usa música con licencia.
 - **Accesibilidad**: botones grandes, alto contraste, textos legibles y respeto a
   la opción "reducir movimiento" del teléfono.
